@@ -1,7 +1,7 @@
 
 <div align="center">
     <img src="docs/images/logo.png"
-        width="400"
+        width="250"
         alt="Logo." algin="center"/>
 </div>
 
