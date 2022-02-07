@@ -1,6 +1,6 @@
 // server/src/index.js
 import express from 'express';
-import { NumbersDB } from './db.js';
+import {NumbersDB} from './db.js';
 
 const PORT = 3001;
 const server = express();
@@ -12,7 +12,7 @@ server.get('/api/get', (request, result) => {
 });
 
 server.put('/api/insert', (request, result) => {
-  let number = Math.floor(Math.random() * 100);
+  const number = Math.floor(Math.random() * 100);
   db.insertNumber(number);
   result.send();
 });
