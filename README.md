@@ -24,3 +24,9 @@ command | description
 `npm run client:test` | Runs client unit tests (Jest)
 `npm run cypress` | Runs end to end tests (Cypress)
 `npm run lint:fix` | Analyses and fixes code style (ESLint)
+
+
+## Documentation
+- [Project structure](docs/project_structure.md)
+- [Database](docs/database.md)
+

@@ -1,0 +1,30 @@
+@startuml project_structure
+
+  class User {
+    string username
+    --
+    string password
+  }
+
+  class Group {
+    string groupname
+    --
+    string description
+  }
+
+  class Interest {
+    string name
+    --
+    string description
+  }
+
+  User }|--o{ Group: IsMember
+
+  User ||--o{ Group : IsAdmin
+
+  User }o--o{ Interest: HasInterest
+
+  Group }o--o{ Group: HasMatchedWith
+
+  Group }o--o{ Interest: HasInterest
+@enduml
