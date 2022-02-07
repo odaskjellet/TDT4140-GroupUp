@@ -1,4 +1,11 @@
-# groupup
+
+<div align="center">
+    <img src="docs/images/logo.png"
+        width="400"
+        alt="Logo." algin="center"/>
+</div>
+
+# TDT4140 - GroupUp
 
 
 ## Get started
