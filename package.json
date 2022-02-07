@@ -1,0 +1,24 @@
+{
+  "name": "groupup",
+  "version": "1.0.0",
+  "description": "test :)\r :O\r endelig :D",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install:all": "npm i && cd server && npm i && cd ../client && npm i",
+    "server": "cd server && npm run start",
+    "server:test": "cd server && npm run start:test",
+    "client": "cd client && npm run start",
+    "start": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://token:glpat-kLSHU_pptiubNs2_UtXf@gitlab.stud.idi.ntnu.no/tdt4140-2022/landsby-2/gruppe_26/groupup.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^7.0.0"
+  }
+}
