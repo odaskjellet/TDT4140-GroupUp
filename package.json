@@ -11,7 +11,9 @@
     "client": "cd client && npm run start",
     "client:test": "cd client && npm test",
     "cypress": "concurrently \"npm run server:test\" \"npm run client\" \"cd client && npm run cypress\"",
-    "start": "concurrently \"npm run server\" \"npm run client\""
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "lint": "concurrently \"cd server && npm run lint\" \"cd client && npm run lint\"",
+    "lint:fix": "concurrently \"cd server && npm run lint:fix\" \"cd client && npm run lint:fix\""
   },
   "repository": {
     "type": "git",
