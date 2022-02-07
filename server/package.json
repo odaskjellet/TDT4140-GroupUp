@@ -5,13 +5,14 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start" : "nodemon node",
+    "start": "nodemon node",
     "start:test": "nodemon node test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "better-sqlite3": "^7.5.0",
     "express": "^4.17.2"
   },
   "devDependencies": {
