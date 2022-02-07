@@ -10,6 +10,7 @@
     "server:test": "cd server && npm run start:test",
     "client": "cd client && npm run start",
     "client:test": "cd client && npm test",
+    "cypress": "concurrently \"npm run server:test\" \"npm run client\" \"cd client && npm run cypress\"",
     "start": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
