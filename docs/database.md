@@ -7,6 +7,8 @@
 
 ### Tables
 
+#### Entities
+
 ##### User
 **username** | password
 --- | ---
@@ -22,11 +24,12 @@ primary key | | foreign key 👉 User
 --- | ---
 primary key | 
 
+#### Relations
 
 ##### IsMemberOf
 **username** | **groupname**
 --- | ---
-primary key | 
+foreign key 👉 User | foreign key 👉 Group
 
 ##### HasMatchedWith
 **groupnameA** | **groupnameB**
