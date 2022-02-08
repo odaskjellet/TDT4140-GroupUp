@@ -1,4 +1,3 @@
-// client/src/components/Numbers.jsx
 import {React, useEffect, useState} from 'react';
 
 export function Numbers() {

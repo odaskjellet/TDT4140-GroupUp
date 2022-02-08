@@ -1,4 +1,3 @@
-// client/src/App.jsx
 import {React} from 'react';
 import logo from './logo.svg';
 import './App.css';

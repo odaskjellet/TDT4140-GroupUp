@@ -1,4 +1,3 @@
-// client/src/components/Numbers.test.js
 import React from 'react';
 import {render, screen} from '@testing-library/react';
 import {act} from 'react-dom/test-utils';
