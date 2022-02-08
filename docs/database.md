@@ -13,20 +13,25 @@
 primary key |
 
 ##### Group
-**groupname** | description | adminusername
+**groupname** | description | adminUsername
 --- | --- | ---
 primary key | | foreign key 👉 User
-
 
 ##### Interest
 **interestname** | description
 --- | ---
 primary key | 
 
+
 ##### IsMemberOf
 **username** | **groupname**
 --- | ---
 primary key | 
+
+##### HasMatchedWith
+**groupnameA** | **groupnameB**
+--- | ---
+foreign key 👉 Group | foreign key 👉 Group
 
 ##### UserHasInterest
 **username** | **interestname**
