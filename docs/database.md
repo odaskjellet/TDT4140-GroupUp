@@ -1,9 +1,11 @@
 
 # Database
 
+## First draft
+
 ![](plantuml/png/database.png)
 
-## Tables
+### Tables
 
 ##### User
 **username** | password
@@ -35,3 +37,6 @@ foreign key 👉 User | foreign key 👉 Interest
 **groupname** | **interestname**
 --- | ---
 foreign key 👉 Group | foreign key 👉 Interest
+
+## Comments
+- Suggestion: [UUIDs](https://www.cockroachlabs.com/blog/what-is-a-uuid/) as primary keys instead of unique names. They are [easy to generate in javascript](https://www.npmjs.com/package/uuid).
