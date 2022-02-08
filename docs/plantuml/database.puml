@@ -1,0 +1,31 @@
+@startuml database
+
+  class User {
+    string username
+    --
+    string password
+  }
+
+  class Group {
+    string groupname
+    --
+    string description
+  }
+
+  class Interest {
+    string name
+    --
+    string description
+  }
+
+  User }|--o{ Group: IsMember
+
+  User ||--o{ Group : IsAdmin
+
+  User }o--o{ Interest: UserHasInterest
+
+  Group }o--o{ Group: HasMatchedWith
+
+  Group }o--o{ Interest: GroupHasInterest
+  
+@enduml

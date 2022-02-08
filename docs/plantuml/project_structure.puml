@@ -1,0 +1,31 @@
+@startuml project_structure
+  
+  component backend [
+    <b>Backend
+    ....
+    Express
+    Node
+  ]
+
+  component frontend [
+    <b>Frontend
+    ....
+    React
+  ]
+
+  database database [
+    <b>Database
+    ....
+    SQLite
+  ]
+
+  actor user [
+    User
+
+  ]
+
+  backend <--> frontend: API
+  backend <--> database: SQL
+  user <--> frontend
+  
+@enduml
