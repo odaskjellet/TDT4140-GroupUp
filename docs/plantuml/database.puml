@@ -1,4 +1,4 @@
-@startuml project_structure
+@startuml database
 
   class User {
     string username
@@ -22,9 +22,10 @@
 
   User ||--o{ Group : IsAdmin
 
-  User }o--o{ Interest: HasInterest
+  User }o--o{ Interest: UserHasInterest
 
   Group }o--o{ Group: HasMatchedWith
 
-  Group }o--o{ Interest: HasInterest
+  Group }o--o{ Interest: GroupHasInterest
+  
 @enduml
