@@ -1,7 +1,6 @@
-// server/src/db.js
-import Database from 'better-sqlite3';
+const Database = require('better-sqlite3');
 
-export class NumbersDB {
+class NumbersDB {
   constructor(filename) {
     this.db = new Database(filename,
         {verbose: (msg) => console.log('[DB] ' + msg)});
@@ -29,3 +28,5 @@ export class NumbersDB {
     this.stmt_clear.run();
   }
 }
+
+module.exports = {NumbersDB};

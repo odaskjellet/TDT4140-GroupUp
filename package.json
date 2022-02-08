@@ -4,12 +4,11 @@
   "description": "test :)\r :O\r endelig :D",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "cd server && npm run test && cd ../client && npm run test",
     "install:all": "npm i && cd server && npm i && cd ../client && npm i",
     "server": "cd server && npm run start",
     "server:test": "cd server && npm run start:test",
     "client": "cd client && npm run start",
-    "client:test": "cd client && npm test",
     "cypress": "concurrently \"npm run server:test\" \"npm run client\" \"cd client && npm run cypress\"",
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "lint": "concurrently \"cd server && npm run lint\" \"cd client && npm run lint\"",

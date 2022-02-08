@@ -1,6 +1,5 @@
-// server/src/index.js
-import express from 'express';
-import {NumbersDB} from './db.js';
+const express = require('express');
+const {NumbersDB} = require('./db.js');
 
 const PORT = 3001;
 const server = express();
