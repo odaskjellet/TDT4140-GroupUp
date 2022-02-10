@@ -3,7 +3,7 @@ import classes from './LoginForm.module.css';
 
 
 /**
- * Returns a login form wrapped in custom card div.
+ * Returns a register form wrapped in custom card div.
  * @return {JSX.Element}
  * @constructor
  */
