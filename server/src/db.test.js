@@ -50,4 +50,20 @@ test('get group', () => {
   ]);
   });
 
+test('get group memebers', () => {
+  db.insertGroup(1, "Gruppe");
+  db.insertUser("henrik", "henrik123", 20);
+  db.insertUser("per", "henrik123", 20);
+  db.addUserToGroup("per", 1);
+  db.addUserToGroup("henrik", 1);
+  expect(db.getGroupMembers(1)).toEqual([
+  {"username": "per"},
+  {"username": "henrik"}
+  ])
+})
 
+/*
+User (username, password, age)
+Group (id, name)
+MemberOfGroup(username, groupID)
+*/

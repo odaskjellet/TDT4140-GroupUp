@@ -15,6 +15,10 @@ class Database {
       'CREATE TABLE IF NOT EXISTS Groups (id integer, name string)');
       this.stmt_create_group.run();
 
+    this.stmt_create_groupUser_realtionTable = this.db.prepare(
+      'CREATE TABLE IF NOT EXISTS GroupMembers (groupID integer, username string)');
+      this.stmt_create_groupUser_realtionTable.run();
+
     this.stmt_get = this.db.prepare(
       'SELECT (username) FROM Users');
     
@@ -22,14 +26,19 @@ class Database {
       'SELECT username, age FROM Users');
     
     this.stmt_get_group = this.db.prepare(
-      'SELECT id, name FROM Groups'
-    )
+      'SELECT id, name FROM Groups');
+
+    this.stmt_get_group_members = this.db.prepare(
+      'SELECT username FROM GroupMembers WHERE (groupID == ?)');
 
     this.stmt_insert = this.db.prepare(
       'INSERT INTO Users (username, password, age) VALUES (?, ?, ?)');
 
     this.stmt_insert_group = this.db.prepare(
       'INSERT INTO Groups (id, name) VALUES (?, ?)');
+    
+    this.stmt_insert_groupUser_relation = this.db.prepare(
+      'INSERT INTO GroupMembers (groupID, username) VALUES (?, ?)');
 
     this.stmt_try_login = this.db.prepare(
       'SELECT * FROM Users WHERE (username == ? AND password == ?)');
@@ -57,6 +66,14 @@ class Database {
 
   getGroups() {
     return this.stmt_get_group.all();
+  }
+
+  addUserToGroup(username, groupID) {
+    return this.stmt_insert_groupUser_relation.run(groupID, username);
+  }
+
+  getGroupMembers(groupID) {
+    return this.stmt_get_group_members.all(groupID);
   }
 
 }
