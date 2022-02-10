@@ -11,8 +11,10 @@ server.get('/api/get', (request, result) => {
 });
 
 server.put('/api/insert', (request, result) => {
-  db.insertUser(request.params.username, request.params.password);
-  result.send('OK');
+  if (validUsername(request.params.username)){
+    db.insertUser(request.params.username, request.params.password);
+    result.send('OK');
+  }
 });
 
 server.put('/api/try_login', (request, result) => {
@@ -24,3 +26,13 @@ server.put('/api/try_login', (request, result) => {
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
+
+function validUsername(username) {
+  let regexPattern = '/^[A-Za-z]+$/';      //Think this works, only letters for now. 
+  if (regexPattern.test(username)) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
