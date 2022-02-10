@@ -62,8 +62,25 @@ test('get group memebers', () => {
   ])
 })
 
+test('get groupinterest', () => {
+  db.insertGroup(1, "Gruppe");
+  db.addGroupInterest(1, "skiing");
+  expect(db.getGroupInterests(1)).toEqual([
+    {"interest": "skiing"}
+  ])
+  db.addGroupInterest(1, "chess");
+  db.addGroupInterest(1, "running");
+  expect(db.getGroupInterests(1)).toEqual([
+    {"interest": "skiing"},
+    {"interest": "chess"},
+    {"interest": "running"}
+  ])
+})
+
 /*
 User (username, password, age)
 Group (id, name)
 MemberOfGroup(username, groupID)
+Interests (interest)
+GroupInterest (groupID, interest)
 */

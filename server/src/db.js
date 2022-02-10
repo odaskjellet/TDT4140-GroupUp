@@ -15,10 +15,14 @@ class Database {
       'CREATE TABLE IF NOT EXISTS Groups (id integer, name string)');
       this.stmt_create_group.run();
 
-    this.stmt_create_groupUser_realtionTable = this.db.prepare(
+    this.stmt_create_groupUser_relationTable = this.db.prepare(
       'CREATE TABLE IF NOT EXISTS GroupMembers (groupID integer, username string)');
-      this.stmt_create_groupUser_realtionTable.run();
+      this.stmt_create_groupUser_relationTable.run();
 
+    this.stmt_create_group_interest_relation_table = this.db.prepare(
+      'CREATE TABLE IF NOT EXISTS GroupInterests (groupID integer, interest string)');
+    this.stmt_create_group_interest_relation_table.run();
+    
     this.stmt_get = this.db.prepare(
       'SELECT (username) FROM Users');
     
@@ -30,6 +34,9 @@ class Database {
 
     this.stmt_get_group_members = this.db.prepare(
       'SELECT username FROM GroupMembers WHERE (groupID == ?)');
+    
+    this.stmt_get_group_interests = this.db.prepare( 
+      'SELECT interest FROM GroupInterests WHERE (groupID == ?)');
 
     this.stmt_insert = this.db.prepare(
       'INSERT INTO Users (username, password, age) VALUES (?, ?, ?)');
@@ -42,7 +49,13 @@ class Database {
 
     this.stmt_try_login = this.db.prepare(
       'SELECT * FROM Users WHERE (username == ? AND password == ?)');
+
+    this.stmt_insert_group_interests = this.db.prepare(
+      'INSERT INTO GroupInterests (groupID, interest) VALUES (?, ?)');
   }
+  
+
+  
 
   getUsers() {
     return this.stmt_get.all();
@@ -74,6 +87,14 @@ class Database {
 
   getGroupMembers(groupID) {
     return this.stmt_get_group_members.all(groupID);
+  }
+
+  getGroupInterests(groupID) {
+    return this.stmt_get_group_interests.all(groupID);
+  }
+
+  addGroupInterest(groupID, interest) {
+    return this.stmt_insert_group_interests.run(groupID, interest);
   }
 
 }
