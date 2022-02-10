@@ -18,7 +18,7 @@ server.get('/api/get_userinfo', (request, result) => {
 });
 
 server.put('/api/insert', (request, result) => {
-  if (validUsername(request.params.username)){
+  if (validUsername(request.params.username) && validPassword(request.params.password)){
     db.insertUser(request.params.username, request.params.password);
     result.send('OK');
   }
@@ -31,8 +31,10 @@ server.put('/api/try_login', (request, result) => {
 });
 
 server.put('/api/insert_group', (request, result) => {
-  db.insertGroup(request.params.id, request.params.name);
-  result.send('OK');
+  if(validGroupname(request.params.groupname)){
+    db.insertGroup(request.params.id, request.params.name);
+    result.send('OK');
+  }
 });
 
 server.get('/api/get_group', (request, result) => {
@@ -55,8 +57,27 @@ server.listen(PORT, () => {
 });
 
 function validUsername(username) {
-  let regexPattern = '/^[A-Za-z]+$/';      //Think this works, only letters for now. 
+  let regexPattern = '/^[A-Za-z]+$/';   //Regex only letters
   if (regexPattern.test(username)) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+function validPassword(password) {
+  if (password.length > 6) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+function validGroupname(groupname) {
+  let regexPattern = '/^[A-Za-z]+$/';   
+  if (regexPattern.test(groupname)) {
     return true;
   }
   else {
