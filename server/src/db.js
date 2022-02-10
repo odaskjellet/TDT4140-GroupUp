@@ -7,14 +7,17 @@ class Database {
     this.db = new SQLiteDB(filename,
       {verbose: (msg) => console.log('[DB] ' + msg)});
     this.stmt_create = this.db.prepare(
-      'CREATE TABLE IF NOT EXISTS Users (username string, password string)');
+      'CREATE TABLE IF NOT EXISTS Users (username string, password string, age integer)');
     this.stmt_create.run();
 
     this.stmt_get = this.db.prepare(
       'SELECT (username) FROM Users');
+    
+    this.stmt_get_userinfo = this.db.prepare(
+      'SELECT username, age FROM Users');
 
     this.stmt_insert = this.db.prepare(
-      'INSERT INTO Users (username, password) VALUES (?, ?)');
+      'INSERT INTO Users (username, password, age) VALUES (?, ?, ?)');
 
     this.stmt_try_login = this.db.prepare(
       'SELECT * FROM Users WHERE (username == ? AND password == ?)');
@@ -24,8 +27,12 @@ class Database {
     return this.stmt_get.all();
   }
 
-  insertUser(username, password) {
-    this.stmt_insert.run(username, password);
+  getUserInfo() {
+    return this.stmt_get_userinfo.all();
+  }
+
+  insertUser(username, password, age) {
+    this.stmt_insert.run(username, password, age);
   }
 
   tryLogin(username, password) {
