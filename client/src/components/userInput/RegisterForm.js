@@ -25,6 +25,12 @@ function RegisterForm() {
         <label htmlFor={'password'}>Password</label>
         <input type={'password'} required id={'password'} placeholder={'6 characters'}/>
       </div>
+
+      <div className={classes.control}>
+        <label htmlFor={'password'}>Re-enter password</label>
+        <input type={'password'} required id={'password'}/>
+      </div>
+
       <div className={classes.actions}>
         <button>Create account</button>
       </div>
@@ -35,4 +41,4 @@ function RegisterForm() {
 }
 
 
-export default LoginForm;
+export default RegisterForm;

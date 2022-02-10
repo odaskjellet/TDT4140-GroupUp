@@ -1,5 +1,6 @@
 import Card from '../../ui/Card';
 import classes from './LoginForm.module.css';
+import {Link} from 'react-router-dom';
 
 
 /**
@@ -23,6 +24,8 @@ function LoginForm() {
 
       <div className={classes.actions}>
         <button>Login</button>
+        <Link to ={'/register'}> <button>Register</button> </Link>
+
       </div>
 
     </form>
