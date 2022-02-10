@@ -41,7 +41,7 @@ server.get('/api/get_group', (request, result) => {
   result.send(JSON.stringify(db.getGroups()));
 });
 
-server.put('/api/insert_groupUser_relation', (request, result) {
+server.put('/api/insert_groupUser_relation', (request, result) => {
   db.addUserToGroup(request.params.username, request.params.groupID);
   result.send('OK');
 });
