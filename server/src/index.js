@@ -1,4 +1,3 @@
-const { request } = require('express');
 const express = require('express');
 const {Database} = require('./db.js');
 
@@ -7,8 +6,11 @@ const server = express();
 const db = new Database(
   process.argv[2] === 'test' ? ':memory:' : './data/database.db');
 
+server.use(express.json());
+server.use(express.urlencoded({ extended: true }));
 
-//TODO: API IS YET TO BE TESTED!
+// API tests: client/cypress/integration/api.test.js
+
 server.get('/api/get', (request, result) => {
   result.send(JSON.stringify(db.getUsers()));
 });
@@ -18,10 +20,11 @@ server.get('/api/get_userinfo', (request, result) => {
 });
 
 server.put('/api/insert', (request, result) => {
-  if (validUsername(request.params.username) && validPassword(request.params.password)){
-    db.insertUser(request.params.username, request.params.password);
-    result.send('OK');
+  if (validUsername(request.body.username)
+      && validPassword(request.body.password)) {
+    db.insertUser(request.body.username, request.body.password);
   }
+  result.send('OK');
 });
 
 server.put('/api/try_login', (request, result) => {
@@ -51,36 +54,21 @@ server.get('/api/get_group_members', (request, result) => {
 });
 
 
-
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
 
+
 function validUsername(username) {
-  let regexPattern = '/^[A-Za-z]+$/';   //Regex only letters
-  if (regexPattern.test(username)) {
-    return true;
-  }
-  else {
-    return false;
-  }
+  let regexPattern = /[A-Za-z]+/i;   //Regex only letters
+  return regexPattern.test(username);
 }
 
 function validPassword(password) {
-  if (password.length > 6) {
-    return true;
-  }
-  else {
-    return false;
-  }
+  return password.length > 6;
 }
 
 function validGroupname(groupname) {
-  let regexPattern = '/^[A-Za-z]+$/';   
-  if (regexPattern.test(groupname)) {
-    return true;
-  }
-  else {
-    return false;
-  }
+  let regexPattern = /[A-Za-z]+/i;   
+  return regexPattern.test(groupname);
 }
