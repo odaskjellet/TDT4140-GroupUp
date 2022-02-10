@@ -1,12 +1,17 @@
-import React from 'react';
+import {Route, Routes} from 'react-router-dom';
 import './App.css';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
 
 function App() {
   return (
-    <LoginPage/>
-
+    <div>
+      <Routes>
+        <Route path="/" element={<LoginPage/>}/>
+        <Route path="/register" element={<RegisterPage />}/>
+      </Routes>
+    </div>
   );
 }
 export default App;
