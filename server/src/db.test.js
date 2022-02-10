@@ -1,4 +1,4 @@
-const {NumbersDB} = require('./db.js');
+const {Database} = require('./db.js');
 
 /**
  * Jest docs: https://jestjs.io/docs/getting-started
@@ -7,29 +7,27 @@ const {NumbersDB} = require('./db.js');
 let db;
 
 beforeEach(() => {
-  db = new NumbersDB(':memory:'); // Running DB in memory to skip file handling
+  db = new Database(':memory:'); // Running DB in memory to skip file handling
 });
+
 
 test('db starts empty', () => {
-  expect(db.getNumbers()).toEqual([]);
+  expect(db.getUsers()).toEqual([]);
 });
 
-test('a number can be inserted into db', () => {
-  db.insertNumber(42);
-  expect(db.getNumbers()).toEqual([{number: 42}]);
+test('get user with username and password', () => {
+  db.insertUser("henrik", "henrik123");
+  expect(db.getUsers()).toEqual([
+    {
+      username: "henrik"
+    }
+  ]);
 });
 
-test('multiple numbers can be inserted into db', () => {
-  db.insertNumber(0);
-  db.insertNumber(5);
-  expect(db.getNumbers()).toEqual([{number: 0}, {number: 5}]);
+test('try to login', () => {
+  expect(db.tryLogin("henrik", "henrik123")).toBe(false);
+  db.insertUser("henrik", "henrik123");
+  expect(db.tryLogin("henrik", "henrik123")).toBe(true);
 });
 
-test('all numbers can be cleared from db', () => {
-  expect(db.getNumbers()).toEqual([]);
-  db.insertNumber(19);
-  db.insertNumber(23);
-  expect(db.getNumbers()).toEqual([{number: 19}, {number: 23}]);
-  db.clearNumbers();
-  expect(db.getNumbers()).toEqual([]);
-});
+
