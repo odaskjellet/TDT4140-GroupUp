@@ -11,20 +11,15 @@ server.get('/api/get', (request, result) => {
 });
 
 server.put('/api/insert', (request, result) => {
-  db.insertUser(username,password);
-  result.send();
+  db.insertUser(request.params.username, request.params.password);
+  result.send('OK');
 });
 
-//Is this correct?:)
 server.put('/api/try_login', (request, result) => {
-  db.tryLogin(username,password);
-  result.send();
+  result.send(
+    db.tryLogin(request.params.username, request.params.password)
+  );
 })
-
-server.delete('/api/clear', (request, result) => {
-  db.clearNumbers();
-  result.send();
-});
 
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
