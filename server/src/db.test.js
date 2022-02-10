@@ -40,4 +40,14 @@ test('try to get user info', () => {
   ]);
 });
 
+test('get group', () => {
+  db.insertGroup(1, "Gruppe");
+  expect(db.getGroups()).toEqual([
+    {
+     id: 1,
+     name: "Gruppe",
+    }
+  ]);
+  });
+
 
