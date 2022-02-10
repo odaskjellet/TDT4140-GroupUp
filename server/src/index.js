@@ -50,6 +50,14 @@ server.get('/api/get_group_members', (request, result) => {
   result.send(JSON.stringify(db.getGroupMembers(request.params.groupID)));
 });
 
+server.get('/api/get_group_interests', (request, result) => {
+  result.send(JSON.stringify(db.getGroupInterests(request.params.groupID)));
+});
+
+server.put('/api/insert_group_interests', (request,result) => {
+  db.addGroupInterest(request.params.groupID, request.params.interest);
+  result.send('OK');
+});
 
 
 server.listen(PORT, () => {
