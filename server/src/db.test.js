@@ -77,10 +77,24 @@ test('get groupinterest', () => {
   ])
 })
 
+test('matching groups', () => {
+  db.insertGroup(1, "Gruppe 1");
+  db.insertGroup(2, "Gruppe 2");
+  db.makeMatch(1, 2);
+
+  expect(db.getGroupMatches(1)).toEqual([
+    {"secondaryID": 2}
+  ])
+  expect(db.getGroupMatches(2)).toEqual([
+    {"secondaryID": 1}
+  ])
+})
+
 /*
 User (username, password, age)
 Group (id, name)
 MemberOfGroup(username, groupID)
 Interests (interest)
 GroupInterest (groupID, interest)
+Matches (groupID, groupID)
 */
