@@ -17,6 +17,11 @@ function RegisterForm() {
       </div>
 
       <div className={classes.control}>
+        <label htmlFor={'age'}>Your age</label>
+        <input type={'number'} required id={'age'}/>
+      </div>
+
+      <div className={classes.control}>
         <label htmlFor={'Email'}>Email</label>
         <input type={'email'} required id={'Email'}/>
       </div>
