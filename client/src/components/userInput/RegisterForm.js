@@ -9,13 +9,17 @@ import classes from './LoginForm.module.css';
  * @constructor
  */
 function RegisterForm() {
-  const {register, formState: {errors}, handleSubmit} = useForm();
-  const onSubmit = (data) => console.log(data);
+  const {
+    register,
+    formState: {errors},
+    getValues,
+    handleSubmit,
+  } = useForm();
 
 
   return (
     <Card>
-      <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+      <form className={classes.form} onSubmit={handleSubmit((data) => console.log(data))}>
         <div className={classes.control}>
           <label htmlFor={'name'}>Your name</label>
           <input {...register('name', {required: true, maxLength: 40, pattern: /^[a-z ,.'-]+$/i})} />
@@ -51,9 +55,21 @@ function RegisterForm() {
         </div>
 
         <div className={classes.control}>
-          <label htmlFor={'password'}>Repeat password</label>
-          <input type={'password'} {...register('passwordRepeat', {required: true})} />
-          {errors.passwordRepeat && 'Repeat your password'}
+          <label>Confirm Password: </label>
+          <input type={'password'}
+            {...register('passwordConfirmation', {
+              required: true,
+              validate: {
+                matchesPreviousPassword: (value) => {
+                  const {password} = getValues();
+                  return password === value || 'Passwords should match!';
+                },
+              },
+            })}
+          />
+          {errors.passwordConfirmation && 'Password should match!'}
+
+
         </div>
 
         <div className={classes.actions}>
