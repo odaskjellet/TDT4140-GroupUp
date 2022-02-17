@@ -1,12 +1,14 @@
 import Card from '../../ui/Card';
 import classes from './HomePageLayout.module.css';
+import {useContext} from 'react';
+import {UserContext} from "../../";
 
 function HomePageLayout() {
-
-    return (
-        <Card>
-            <div className={classes.welcome}>
-                <p>Hello Firstname Lastname! How do you do.</p>
+    const [userState, userDispatch] = useContext(UserContext);
+        if (userState.verified) {
+            return <section>
+                <div className={classes.welcome}>
+                <p>Hello {userState.username}! How do you do.</p>
             </div>
             <div className={classes.row}>
                 <div className={classes.profile}>
@@ -22,8 +24,13 @@ function HomePageLayout() {
                     <h4>Information about my groups etc</h4>
                 </div>
             </div>
-        </Card>
-    )
+            </section>
+        }
+        else {
+            return <section>
+                <h1>Not signed in!</h1>
+            </section>
+        }
 }
 
 export default HomePageLayout;
