@@ -26,12 +26,13 @@ server.get('/api/get_userinfo', (request, result) => {
 });
 
 server.put('/api/insert', (request, result) => {
-  if (validUsername(request.body.username)
+  if (!db.tryLogin(request.body.username, request.body.password)
+      && validUsername(request.body.username)
       && validPassword(request.body.password)) {
     db.insertUser(request.body.username, request.body.password);
     result.send('OK');
   } else {
-    result.status(400).send();
+    result.status(400).send(); // TODO: Return info about why the registration failed?
   }
 });
 
@@ -89,7 +90,7 @@ server.listen(PORT, () => {
 
 
 function validUsername(username) {
-  let regexPattern = /[A-Za-z]+$/i;   //Regex only letters
+  let regexPattern = /[A-Za-z]+$/i; // Regex only letters
   return regexPattern.test(username);
 }
 
