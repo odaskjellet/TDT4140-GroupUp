@@ -17,13 +17,13 @@ fs.readdir(__dirname, (error, files) => {
   } 
   files.forEach((file) => {
     if (file.match(/.puml/i)) {
-      let inPath = 'docs/plantuml/' + file;
+      let inPath = 'plantuml/' + file;
       fs.readFile(inPath, 'utf8', (err, data) => {
         if (err) {
           console.log('Unable to read file: ' + err);
         } else {
           let gen = plantuml.generate(data);
-          let outPath = 'docs/plantuml/png/' + file.split('.')[0] + '.png'
+          let outPath = 'plantuml/png/' + file.split('.')[0] + '.png'
           gen.out.pipe(fs.createWriteStream(outPath));
         }
       });
