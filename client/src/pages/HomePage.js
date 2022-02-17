@@ -9,7 +9,7 @@ import {UserContext} from '../contexts/User';
 function HomePage() {
   const [userState, userDispatch] = useContext(UserContext);
 
-  if (userState.username !== null) {
+  if (userState.verified) {
     return <section>
       <h1>Hello world! {userState.username}</h1>
     </section>;
