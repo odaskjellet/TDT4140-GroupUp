@@ -1,4 +1,4 @@
-import HomePageLayout from "../components/userInput/HomePageLayout";
+import HomePageLayout from '../components/userInput/HomePageLayout';
 import {useContext} from 'react';
 import {UserContext} from '../contexts/User';
 
@@ -9,10 +9,10 @@ import {UserContext} from '../contexts/User';
  */
 
 
-//TODO:
-//Homepage layout:
+// TODO:
+// Homepage layout:
 //  Information about profile, groups? How much?
-//Add Navbar
+// Add Navbar
 //
 function HomePage() {
   return <section>

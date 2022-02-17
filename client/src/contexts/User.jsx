@@ -6,9 +6,9 @@ const initialState = {
 };
 
 const updateLocalStorage = (state) => {
-  localStorage.setItem('user.verified', state.verified)
-  localStorage.setItem('user.username', state.username)
-}
+  localStorage.setItem('user.verified', state.verified);
+  localStorage.setItem('user.username', state.username);
+};
 
 export const UserContext = React.createContext({
   state: initialState,
