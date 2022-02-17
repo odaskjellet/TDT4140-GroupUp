@@ -1,5 +1,5 @@
 const express = require('express');
-const {Database} = require('./db.js');
+const { Database } = require('./db.js');
 
 const PORT = 3001;
 const server = express();
@@ -27,8 +27,8 @@ server.get('/api/get_userinfo', (request, result) => {
 
 server.put('/api/insert', (request, result) => {
   if (!db.tryLogin(request.body.username, request.body.password)
-      && validUsername(request.body.username)
-      && validPassword(request.body.password)) {
+    && validUsername(request.body.username)
+    && validPassword(request.body.password)) {
     db.insertUser(request.body.username, request.body.password);
     result.send('OK');
   } else {
@@ -45,7 +45,7 @@ server.put('/api/try_login', (request, result) => {
 });
 
 server.put('/api/insert_group', (request, result) => {
-  if (validGroupname(request.body.groupname)){
+  if (validGroupname(request.body.groupname)) {
     db.insertGroup(request.body.id, request.body.name);
     result.send('OK');
   } else {
@@ -70,7 +70,7 @@ server.get('/api/get_group_interests', (request, result) => {
   result.send(JSON.stringify(db.getGroupInterests(request.body.groupID)));
 });
 
-server.put('/api/insert_group_interests', (request,result) => {
+server.put('/api/insert_group_interests', (request, result) => {
   db.addGroupInterest(request.body.groupID, request.body.interest);
   result.send('OK');
 });
@@ -89,6 +89,7 @@ server.listen(PORT, () => {
 });
 
 
+//Validation
 function validUsername(username) {
   let regexPattern = /[A-Za-z]+$/i; // Regex only letters
   return regexPattern.test(username);
@@ -99,6 +100,31 @@ function validPassword(password) {
 }
 
 function validGroupname(groupname) {
-  let regexPattern = /[A-Za-z]+$/i;   
+  let regexPattern = /[A-Za-z]+$/i;
   return regexPattern.test(groupname);
 }
+
+function validAge(age) {
+  return age >= 18;
+}
+
+function validEmail(email) {
+  //Splits on @, checks for two substrings
+  let substrings = email.split("@");
+  if (substrings.length == 2) {
+    if ((substrings[0].length > 1) && (substrings[1].length > 1)) {
+      //Splits on . Checks for two substrings
+      let domainsubstring = substrings[1].split(".");
+      if (domainsubstring.length == 2) {
+        if (domainsubstring[0].length > 1 && domainsubstring[1].length > 1) {
+          return true;
+        }
+      }
+    }
+  }
+  else{
+    return false;
+  }
+}
+
+
