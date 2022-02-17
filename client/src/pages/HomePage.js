@@ -1,3 +1,5 @@
+import HomePageLayout from "../components/userInput/HomePageLayout";
+
 
 /**
  * The home page: the page the user sees after logging in.
@@ -6,7 +8,8 @@
  */
 function HomePage() {
   return <section>
-    <h1>Hello world!</h1>
+    <h1>Homepage!</h1>
+    <HomePageLayout/>
   </section>;
 }
 
