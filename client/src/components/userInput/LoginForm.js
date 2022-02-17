@@ -13,7 +13,7 @@ function LoginForm() {
   const {register, formState: {errors}, handleSubmit} = useForm();
   const navigate = useNavigate();
   const onSubmit = async (data) => {
-    fetch('/api/try_login', {
+    fetch('/api/get_group', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
