@@ -1,7 +1,7 @@
 import Card from '../../ui/Card';
 import classes from './HomePageLayout.module.css';
 import {useContext} from 'react';
-import {UserContext} from "../../";
+import {UserContext} from "../../contexts/User";
 
 function HomePageLayout() {
     const [userState, userDispatch] = useContext(UserContext);
