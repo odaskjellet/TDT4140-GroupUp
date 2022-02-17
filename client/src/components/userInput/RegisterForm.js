@@ -2,6 +2,8 @@ import {useForm} from 'react-hook-form';
 import Card from '../../ui/Card';
 import classes from './LoginForm.module.css';
 import {useNavigate} from 'react-router-dom';
+import {UserContext} from '../../contexts/User';
+import {useContext} from 'react';
 
 /**
  * Returns a register form wrapped in custom card div.
@@ -15,7 +17,9 @@ function RegisterForm() {
     getValues,
     handleSubmit,
   } = useForm();
+
   const navigate = useNavigate();
+  const [userState, userDispatch] = useContext(UserContext);
   const onSubmit = async (data) => {
     fetch('/api/insert', {
       method: 'PUT',
@@ -23,6 +27,7 @@ function RegisterForm() {
       body: JSON.stringify(data),
     }).then((res) => {
       if (res.ok) {
+        userDispatch({type: 'login', username: data.username});
         navigate('../home');
       } else {
         console.log('Could not register user!'); // TODO
