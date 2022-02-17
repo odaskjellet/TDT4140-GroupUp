@@ -1,12 +1,17 @@
 
+.boxes {
+    border-radius: 20px;
+    background: #C4C4C4;
+}
+
 .profile {
     position: absolute;
     width: 47%;
     height: 30%;
     left: 51%;
     top: 15%;
-    background: #C4C4C4;
-    border-radius: 20px;
+    border-radius: inherit;
+    background: inherit;
 }
 
 .information{
@@ -16,9 +21,8 @@
     height: 82%;
     left: 2%;
     top: 15%;
-    
-    background: #C4C4C4;
-    border-radius: 20px;
+    border-radius: inherit;
+    background: inherit;
 }
 
 .groups{
@@ -28,19 +32,6 @@
     height: 48%;
     left: 51%;
     top: 49%;
-    
-    background: #C4C4C4;
-    border-radius: 20px;
-}
-
-.row:after{
-    display: table;
-}
-
-.welcome{
-    float: right;
-    color: green;
-    width: 100%;
-    text-align: right;
-
+    border-radius: inherit;
+    background: inherit;
 }
