@@ -1,11 +1,33 @@
-body{
-    background-color: aquamarine;
-}
-
 .profile {
     margin: auto;
     display: block;
-    width: 200px;
+    float: left;
+    width: 33.33%;
     text-align: center;
-    background-color: blue;
+    background-color: gray;
+    height: 500px;
+}
+
+.information{
+    margin: auto;
+    display: block;
+    float: left;
+    width: 33.33%;
+    text-align: center;
+    background-color: darkgrey;
+    height: 500px;
+}
+
+.groups{
+    margin: auto;
+    display: block;
+    float: left;
+    width: 33.33%;
+    text-align: center;
+    background-color: darkgreen;
+    height: 500px;
+}
+
+.row:after{
+    display: table;
 }
