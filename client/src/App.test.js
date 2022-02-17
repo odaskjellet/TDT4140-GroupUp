@@ -1,8 +1,13 @@
 import {render, screen} from '@testing-library/react';
 import App from './App';
+import {BrowserRouter} from 'react-router-dom';
 
-test('renders hello world', () => {
-  render(<App />);
-  const helloWorld = screen.getByText(/hello world/i);
-  expect(helloWorld).toBeInTheDocument();
+test('renders login', () => {
+  render(
+    <BrowserRouter>
+      <App/>
+    </BrowserRouter>
+  );
+  const loginText = screen.getByText(/login/i);
+  expect(loginText).toBeInTheDocument();
 });
