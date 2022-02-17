@@ -28,7 +28,9 @@ server.get('/api/get_userinfo', (request, result) => {
 server.put('/api/insert', (request, result) => {
   if (!db.tryLogin(request.body.username, request.body.password)
     && validUsername(request.body.username)
-    && validPassword(request.body.password)) {
+    && validPassword(request.body.password)
+    && validAge(request.body.age)
+    && validEmail(request.body.email)) {
     db.insertUser(request.body.username, request.body.password);
     result.send('OK');
   } else {
