@@ -1,11 +1,16 @@
 import Card from '../../ui/Card';
 import classes from './HomePageLayout.module.css';
+import ReactRoundedImage from "react-rounded-image";
+
 
 
 function HomePageLayout() {
 
     return (
         <Card>
+            <div className={classes.welcome}>
+                <p>Hello Firstname Lastname! How do you do.</p>
+            </div>
             <div className={classes.row}>
                 <div className={classes.profile}>
                     <h2>Column 1</h2>

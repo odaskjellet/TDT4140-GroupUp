@@ -8,7 +8,6 @@ import HomePageLayout from "../components/userInput/HomePageLayout";
  */
 function HomePage() {
   return <section>
-    <h1>Homepage!</h1>
     <HomePageLayout/>
   </section>;
 }

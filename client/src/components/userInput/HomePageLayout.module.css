@@ -24,10 +24,18 @@
     float: left;
     width: 33.33%;
     text-align: center;
-    background-color: darkgreen;
+    background-color: lightslategray;
     height: 500px;
 }
 
 .row:after{
     display: table;
+}
+
+.welcome{
+    float: right;
+    color: green;
+    width: 100%;
+    text-align: right;
+
 }
