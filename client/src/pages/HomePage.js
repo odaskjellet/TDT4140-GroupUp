@@ -7,6 +7,13 @@ import {UserContext} from '../contexts/User';
  * @return {JSX.Element}
  * @constructor
  */
+
+
+//TODO:
+//Homepage layout:
+//  Information about profile, groups? How much?
+//Add Navbar
+//
 function HomePage() {
   return <section>
     <HomePageLayout/>

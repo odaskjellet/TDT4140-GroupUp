@@ -1,31 +1,36 @@
+
 .profile {
-    margin: auto;
-    display: block;
-    float: left;
-    width: 33.33%;
-    text-align: center;
-    background-color: gray;
-    height: 500px;
+    position: absolute;
+    width: 47%;
+    height: 30%;
+    left: 51%;
+    top: 15%;
+    background: #C4C4C4;
+    border-radius: 20px;
 }
 
 .information{
-    margin: auto;
-    display: block;
-    float: left;
-    width: 33.33%;
-    text-align: center;
-    background-color: darkgrey;
-    height: 500px;
+
+    position: absolute;
+    width: 47%;
+    height: 82%;
+    left: 2%;
+    top: 15%;
+    
+    background: #C4C4C4;
+    border-radius: 20px;
 }
 
 .groups{
-    margin: auto;
-    display: block;
-    float: left;
-    width: 33.33%;
-    text-align: center;
-    background-color: lightslategray;
-    height: 500px;
+
+    position: absolute;
+    width: 47%;
+    height: 48%;
+    left: 51%;
+    top: 49%;
+    
+    background: #C4C4C4;
+    border-radius: 20px;
 }
 
 .row:after{

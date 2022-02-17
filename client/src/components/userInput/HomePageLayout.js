@@ -7,13 +7,10 @@ function HomePageLayout() {
     const [userState, userDispatch] = useContext(UserContext);
         if (userState.verified) {
             return <section>
-                <div className={classes.welcome}>
-                <p>Hello {userState.username}! How do you do.</p>
-            </div>
             <div className={classes.row}>
                 <div className={classes.profile}>
                     <h2>Column 1</h2>
-                    <h4>Information about profile etc!</h4>
+                    <p>Hello {userState.username}! How do you do.</p> 
                 </div>
                 <div className={classes.information}>
                     <h2>Column 2</h2>
