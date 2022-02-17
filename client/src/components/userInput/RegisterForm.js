@@ -1,7 +1,7 @@
 import {useForm} from 'react-hook-form';
 import Card from '../../ui/Card';
 import classes from './LoginForm.module.css';
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from 'react-router-dom';
 
 /**
  * Returns a register form wrapped in custom card div.
@@ -19,8 +19,8 @@ function RegisterForm() {
   const onSubmit = async (data) => {
     fetch('/api/insert', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data),
     }).then((res) => {
       if (res.ok) {
         navigate('../home');

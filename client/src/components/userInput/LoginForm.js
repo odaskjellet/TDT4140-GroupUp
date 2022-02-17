@@ -2,7 +2,7 @@ import {useForm} from 'react-hook-form';
 import classes from './LoginForm.module.css';
 import Card from '../../ui/Card';
 import {Link} from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from 'react-router-dom';
 
 /**
  * Returns a login form with client side validation.
@@ -15,8 +15,8 @@ function LoginForm() {
   const onSubmit = async (data) => {
     fetch('/api/try_login', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data),
     }).then((res) => {
       if (res.ok) {
         navigate('../home');
@@ -53,7 +53,6 @@ function LoginForm() {
     </Card>
   );
 }
-
 
 
 export default LoginForm;
