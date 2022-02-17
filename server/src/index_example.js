@@ -20,7 +20,7 @@ server.delete('/api/clear', (request, result) => {
   db.clearNumbers();
   result.send();
 });
- 
+
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
