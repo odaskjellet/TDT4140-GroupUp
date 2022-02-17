@@ -1,0 +1,26 @@
+* {
+
+}
+.userinfo {
+    background-color: lightgreen;
+    width: 500px;
+    height: min-content;
+    box-shadow: 10px 10px 26px 0px rgba(0, 0, 0, 0.35);
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.itembox {
+    border-bottom: 1px green solid;
+    display: flex;
+    padding: 20px 0 20px 0;
+    color: #f5fff3;
+}
+
+.interests {
+    background-color: blue;
+}
+
+.interest-box{
+    background-color: pink;
+}

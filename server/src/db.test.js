@@ -96,5 +96,5 @@ Group (id, name)
 MemberOfGroup(username, groupID)
 Interests (interest)
 GroupInterest (groupID, interest)
-Matches (groupID, groupID)
+Matches (primaryGroupID, secondaryGroupID)
 */

@@ -26,5 +26,8 @@
   "devDependencies": {
     "concurrently": "^7.0.0",
     "node-plantuml": "^0.9.0"
+  },
+  "dependencies": {
+    "antd": "^4.18.7"
   }
 }
