@@ -1,8 +1,5 @@
 import Card from '../../ui/Card';
 import classes from './HomePageLayout.module.css';
-import ReactRoundedImage from "react-rounded-image";
-
-
 
 function HomePageLayout() {
 
