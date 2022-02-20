@@ -1,4 +1,3 @@
-import MyProfileInfo from '../components/myProfileComponents/MyProfileInfo';
 import MyProfileDescription from '../components/myProfileComponents/MyProfileDescription';
 import MyProfilePicture from '../components/myProfileComponents/MyProfilePicture';
 import Settings from '../components/myProfileComponents/Settings';

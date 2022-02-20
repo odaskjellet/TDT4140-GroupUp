@@ -1,7 +1,4 @@
 import LoginForm from '../components/userInput/LoginForm';
-import 'antd/dist/antd.css';
-import {Avatar} from 'antd';
-
 
 /**
  * A page for user login.

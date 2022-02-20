@@ -1,6 +1,4 @@
 
-import 'antd/dist/antd.css';
-import {Avatar} from 'antd';
 import Picture from './picture.jpg';
  
 
