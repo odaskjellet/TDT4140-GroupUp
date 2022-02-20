@@ -1,4 +1,5 @@
 import RegisterForm from '../components/userInput/RegisterForm';
+import classes from './LoginPage.module.css';
 
 /**
  * A page for user registration.
@@ -6,10 +7,10 @@ import RegisterForm from '../components/userInput/RegisterForm';
  * @constructor
  */
 function RegisterPage() {
-  return <section>
+  return <div className={classes.wrapper}>
     <h1>Register a new user</h1>
     <RegisterForm/>
-  </section>;
+  </div>;
 }
 
 export default RegisterPage;

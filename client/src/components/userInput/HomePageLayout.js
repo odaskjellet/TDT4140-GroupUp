@@ -3,7 +3,7 @@ import classes from './HomePageLayout.module.css';
 import {useContext} from 'react';
 import {UserContext} from '../../contexts/User';
 
-function HomePageLayout() {
+function HomePageLayout() {
   const [userState, userDispatch] = useContext(UserContext);
   if (userState.verified) {
     return <section>

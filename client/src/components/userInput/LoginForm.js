@@ -17,7 +17,7 @@ function LoginForm() {
   const navigate = useNavigate();
   const [userState, userDispatch] = useContext(UserContext);
   const onSubmit = async (data) => {
-    fetch('/api/get_group', {
+    fetch('/api/try_login', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(data),
@@ -41,17 +41,15 @@ function LoginForm() {
         </div>
 
         <div className={classes.control}>
-          <label htmlFor={'password'}>Your password</label>
+          <label htmlFor={'password'}>Password</label>
           <input type={'password'} {...register('password',
               {required: true})} />
           {errors.password && 'Password is required'}
         </div>
 
         <div className={classes.actions}>
-          <button>Login</button>
-          <Link to={'/register'}>
-            <button>Register</button>
-          </Link>
+          <button className={classes.buttonPrimary}>Login</button>
+          <p>Don't have an account? <a href='/register'>Sign up</a></p>
         </div>
 
       </form>

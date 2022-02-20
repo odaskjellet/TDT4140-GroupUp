@@ -88,9 +88,9 @@ function RegisterForm() {
         </div>
 
         <div className={classes.actions}>
-          <button>Create account</button>
+          <button className={classes.buttonPrimary}>Create account</button>
+          <p>Already have an account? <a href='/login'>Login</a></p>
         </div>
-
       </form>
     </Card>
   );

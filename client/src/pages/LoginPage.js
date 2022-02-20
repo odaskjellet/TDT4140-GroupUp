@@ -1,4 +1,5 @@
 import LoginForm from '../components/userInput/LoginForm';
+import classes from './LoginPage.module.css';
 
 /**
  * A page for user login.
@@ -6,10 +7,10 @@ import LoginForm from '../components/userInput/LoginForm';
  * @constructor
  */
 function LoginPage() {
-  return <section>
+  return <div className={classes.wrapper}>
     <h1>Welcome to GroupUp</h1>
     <LoginForm/>
-  </section>;
+  </div>;
 }
 
 export default LoginPage;
