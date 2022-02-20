@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage';
 import {UserProvider} from './contexts/User';
 import GroupPage from './pages/GroupPage';
 import MainNavigation from "./components/navigation/MainNavigation";
+import MyProfilePage from './pages/MyProfilePage';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/register" element={<RegisterPage/>}/>
         <Route path="/home" element={<HomePage/>}/>
         <Route path="/groups" element={<GroupPage/>}/>
+        <Route path="/myprofile" element={<MyProfilePage/>}/>
       </Routes>
     </UserProvider>
   );
