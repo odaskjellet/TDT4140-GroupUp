@@ -4,7 +4,7 @@ import classes from './MyProfileDescription.module.css';
 
 function ProfileDescription() {
   const [interest, setInterest] = useState([
-    {interestName: skiing},
+    {interestName: 'skiing'},
   ]);
   return (
     <div style={{
@@ -24,7 +24,7 @@ function ProfileDescription() {
       <div className={classes.interests}>
         <h3>Interests</h3>
         {interest.map((interest, index) => (
-          <div className={classes.interest-box}></div>
+          <div className={classes.interest_box}></div>
         ))}
       </div>
     </div>

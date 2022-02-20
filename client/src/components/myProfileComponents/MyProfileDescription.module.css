@@ -1,6 +1,7 @@
 * {
 
 }
+
 .userinfo {
     background-color: lightgreen;
     width: 500px;
@@ -21,6 +22,6 @@
     background-color: blue;
 }
 
-.interest-box{
+.interest_box {
     background-color: pink;
 }
