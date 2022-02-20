@@ -7,13 +7,13 @@ import Settings from '../components/myProfileComponents/Settings';
  * A page for userprofile information.
  */
 function MyProfilePage() {
-    return <section>
-        <Settings/>
-        <MyProfilePicture />
-        <MyProfileDescription />
-    </section>;
+  return <section>
+    <Settings/>
+    <MyProfilePicture />
+    <MyProfileDescription />
+  </section>;
 }
 
 export default MyProfilePage;
 
-//TODO: Må inneholde en settingsknapp, slik at man får endret brukerinfo :)
+// TODO: Må inneholde en settingsknapp, slik at man får endret brukerinfo :)

@@ -5,7 +5,7 @@ import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import {UserProvider} from './contexts/User';
 import GroupPage from './pages/GroupPage';
-import MainNavigation from "./components/navigation/MainNavigation";
+import MainNavigation from './components/navigation/MainNavigation';
 import MyProfilePage from './pages/MyProfilePage';
 
 function App() {
