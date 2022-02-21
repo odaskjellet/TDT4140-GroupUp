@@ -1,3 +1,4 @@
+import React from 'react';
 import SettingsPicture from './settingsWheel.png';
 
 function Settings() {

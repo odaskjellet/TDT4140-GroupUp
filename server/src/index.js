@@ -32,7 +32,8 @@ server.put('/api/insert-user', (request, result) => {
     db.insertUser(request.body.username, request.body.password);
     result.send('OK');
   } else {
-    result.status(400).send(); // TODO: Return info about why the registration failed?
+    result.status(400).send();
+    // TODO: Return info about why the registration failed?
   }
 });
 

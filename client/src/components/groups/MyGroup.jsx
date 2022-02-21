@@ -1,3 +1,4 @@
+import React from 'react';
 import Card from '../../ui/Card';
 import classes from './MyGroup.module.css';
 import CreateGroupForm from '../userInput/CreateGroupForm';
@@ -18,8 +19,6 @@ export default function MyGroup() {
 
   return (
     <div className={classes.test}>
-
-
       <div className={classes.group}>
         <Card>
           <h2>My groups</h2>
@@ -29,14 +28,11 @@ export default function MyGroup() {
             </Card>,
           )}
         </Card>
-
       </div>
       <Card>
         <h2>Create a group</h2>
-
         <CreateGroupForm/>
       </Card>
-
     </div>
   );
 }

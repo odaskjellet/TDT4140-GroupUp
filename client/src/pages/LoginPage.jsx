@@ -1,4 +1,5 @@
-import { Container } from '@mui/material';
+import React from 'react';
+import {Container} from '@mui/material';
 import LoginForm from '../components/userInput/LoginForm';
 
 /**
@@ -10,7 +11,7 @@ function LoginPage() {
   return <Container>
     <h1 style={{textAlign: 'center', margin: '4rem'}}>Welcome to GroupUp</h1>
     <LoginForm/>
-  </Container>
+  </Container>;
 }
 
 export default LoginPage;

@@ -1,9 +1,9 @@
-
+import React from 'react';
 import {useState} from 'react';
 import classes from './MyProfileDescription.module.css';
 
 function ProfileDescription() {
-  const [interest, setInterest] = useState([
+  const [interest, _] = useState([
     {interestName: 'skiing'},
   ]);
   return (

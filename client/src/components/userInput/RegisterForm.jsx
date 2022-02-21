@@ -1,3 +1,4 @@
+import React from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../../contexts/User';
@@ -19,7 +20,7 @@ function RegisterForm() {
   } = useForm();
 
   const navigate = useNavigate();
-  const [userState, userDispatch] = useContext(UserContext);
+  const [_, userDispatch] = useContext(UserContext);
   const onSubmit = async (data) => {
     console.log(data);
     fetch('/api/insert-user', {
@@ -88,7 +89,7 @@ function RegisterForm() {
               labelId="gender-label"
               defaultValue=''
               control={control}
-              render={({ field }) => (
+              render={({field}) => (
                 <Select {...field}>
                   <MenuItem value={'female'}>Female</MenuItem>
                   <MenuItem value={'male'}>Male</MenuItem>
@@ -98,7 +99,7 @@ function RegisterForm() {
             />
           </FormControl>
         </div>
-        
+
         <div>
           <TextField
             label="Password"

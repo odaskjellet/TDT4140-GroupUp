@@ -1,10 +1,10 @@
-import Card from '../../ui/Card';
+import React from 'react';
 import classes from './HomePageLayout.module.css';
 import {useContext} from 'react';
 import {UserContext} from '../../contexts/User';
 
 function HomePageLayout() {
-  const [userState, userDispatch] = useContext(UserContext);
+  const [userState, _] = useContext(UserContext);
   if (userState.verified) {
     return <section>
       <div className={classes.boxes}>

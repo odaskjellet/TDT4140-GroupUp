@@ -1,3 +1,4 @@
+import React from 'react';
 import {Container, Stack, Card, Avatar, Grid, Button} from '@mui/material';
 import {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
@@ -9,7 +10,7 @@ import {UserContext} from '../contexts/User';
  * @constructor
  */
 function HomePage() {
-  const [userState, userDispatch] = useContext(UserContext);
+  const [userState, _] = useContext(UserContext);
   const navigate = useNavigate();
   const [groups, setGroups] = useState([]);
 
@@ -46,7 +47,11 @@ function HomePage() {
 
         <h1>My groups</h1>
         <Card sx={{padding: '2rem'}} variant="outlined">
-          <Grid container spacing={{xs: 2, md: 3}} columns={{xs: 4, sm: 8, md: 12}}>
+          <Grid
+            container
+            spacing={{xs: 2, md: 3}}
+            columns={{xs: 4, sm: 8, md: 12}}
+          >
             {Array.from(groups).map((group) =>
               <Grid item xs={2} sm={4} md={4} key={group.id}>
                 <Card sx={{padding: '1rem'}} elevation={3}>
@@ -55,7 +60,7 @@ function HomePage() {
               </Grid>,
             )}
           </Grid>
-          
+
           <Stack
             sx={{padding: '1rem'}}
             spacing={2}

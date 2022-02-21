@@ -1,5 +1,5 @@
-import {createTheme, ThemeProvider, useMediaQuery} from '@mui/material';
 import React from 'react';
+import {createTheme, ThemeProvider, useMediaQuery} from '@mui/material';
 
 export const ColorModeContext = React.createContext(
     {toggleColorMode: () => {}},
@@ -7,12 +7,13 @@ export const ColorModeContext = React.createContext(
 
 export const ColorModeProvider = ({children}) => {
   const storedMode = localStorage.getItem('colormode');
-  const [mode, setMode] = React.useState(storedMode == 'null' ? '' : storedMode);
+  const [mode, setMode] = React.useState(
+      storedMode == 'null' ? '' : storedMode);
   const colorMode = React.useMemo(
       () => ({
         toggleColorMode: () => {
           setMode((prevMode) => {
-            const newMode = prevMode === 'light' ? 'dark' : 'light'
+            const newMode = prevMode === 'light' ? 'dark' : 'light';
             localStorage.setItem('colormode', newMode);
             return newMode;
           });
@@ -34,7 +35,7 @@ export const ColorModeProvider = ({children}) => {
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
-    	  { children }
+        { children }
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

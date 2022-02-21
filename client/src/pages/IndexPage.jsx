@@ -1,3 +1,4 @@
+import React from 'react';
 import {useContext, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../contexts/User';
@@ -8,7 +9,7 @@ import {UserContext} from '../contexts/User';
  * @constructor
  */
 function IndexPage() {
-  const [userState, userDispatch] = useContext(UserContext);
+  const [userState, _] = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {

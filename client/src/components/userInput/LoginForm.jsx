@@ -1,3 +1,4 @@
+import React from 'react';
 import {useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../../contexts/User';
@@ -13,7 +14,7 @@ function LoginForm() {
   const {register, formState: {errors}, handleSubmit} = useForm();
 
   const navigate = useNavigate();
-  const [userState, userDispatch] = useContext(UserContext);
+  const [_, userDispatch] = useContext(UserContext);
   const onSubmit = async (data) => {
     fetch('/api/try-login', {
       method: 'PUT',
@@ -43,7 +44,9 @@ function LoginForm() {
             helperText={errors.username && 'A username is required.'}
             label="Username"
             type={'text'}
-            {...register('username', {required: true, maxLength: 40, pattern: /^[a-z ,.'-]+$/i})}
+            {...register('username',
+                {required: true, maxLength: 40, pattern: /^[a-z ,.'-]+$/i})
+            }
           />
         </div>
 

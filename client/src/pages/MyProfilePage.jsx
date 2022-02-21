@@ -1,7 +1,10 @@
+import React from 'react';
 import {useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
-import MyProfileDescription from '../components/myProfileComponents/MyProfileDescription';
-import MyProfilePicture from '../components/myProfileComponents/MyProfilePicture';
+import MyProfileDescription
+  from '../components/myProfileComponents/MyProfileDescription';
+import MyProfilePicture
+  from '../components/myProfileComponents/MyProfilePicture';
 import Settings from '../components/myProfileComponents/Settings';
 import {UserContext} from '../contexts/User';
 
@@ -10,7 +13,7 @@ import {UserContext} from '../contexts/User';
  * A page for userprofile information.
  */
 function MyProfilePage() {
-  const [userState, userDispatch] = useContext(UserContext);
+  const [_, userDispatch] = useContext(UserContext);
   const navigate = useNavigate();
   const onSignOutButton = () => {
     userDispatch({type: 'logout'});
