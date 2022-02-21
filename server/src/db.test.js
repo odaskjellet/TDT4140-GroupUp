@@ -31,13 +31,13 @@ test('try to login', () => {
 });
 
 test('try to get user info', () => {
-  db.insertUser('henrik', 'henrik123', 20);
-  expect(db.getUserInfo()).toEqual([
-    {
+  db.insertUser('henrik', 'henrik123', 20, 'henrik@gmail.com', 'male');
+  expect(db.getUser('henrik')).toEqual({
       username: 'henrik',
       age: 20,
-    },
-  ]);
+      email: 'henrik@gmail.com',
+      gender: 'male'
+    });
 });
 
 test('get group', () => {
@@ -50,12 +50,12 @@ test('get group', () => {
   ]);
 });
 
-test('get group memebers', () => {
+test('get group members', () => {
   db.insertGroup(1, 'Gruppe');
   db.insertUser('henrik', 'henrik123', 20);
   db.insertUser('per', 'henrik123', 20);
-  db.addUserToGroup('per', 1);
-  db.addUserToGroup('henrik', 1);
+  db.addUserToGroup(1, 'per');
+  db.addUserToGroup(1, 'henrik');
   expect(db.getGroupMembers(1)).toEqual([
     {'username': 'per'},
     {'username': 'henrik'},
@@ -83,10 +83,10 @@ test('matching groups', () => {
   db.makeMatch(1, 2);
 
   expect(db.getGroupMatches(1)).toEqual([
-    {'secondaryID': 2},
+    {'id': 2},
   ]);
   expect(db.getGroupMatches(2)).toEqual([
-    {'secondaryID': 1},
+    {'id': 1},
   ]);
 });
 

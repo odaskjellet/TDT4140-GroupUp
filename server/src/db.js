@@ -57,8 +57,8 @@ class Database {
         'SELECT interest FROM GroupInterests WHERE (groupId = ?)');
 
     this.stmt_get_group_matches = this.db.prepare(
-        'SELECT secondaryId FROM GroupMatches WHERE primaryId = ? UNION ' +
-        'SELECT primaryId FROM GroupMatches WHERE secondaryId = ?');
+        'SELECT secondaryId AS id FROM GroupMatches WHERE primaryId = ?' +
+        'UNION SELECT primaryId AS id FROM GroupMatches WHERE secondaryId = ?');
 
     this.stmt_insert_user = this.db.prepare(
         'INSERT INTO Users (username, password, age, email, gender) ' +
@@ -136,7 +136,7 @@ class Database {
   }
 
   getGroupMatches(id) {
-    return this.stmt_get_group_matches.all(id);
+    return this.stmt_get_group_matches.all(id, id);
   }
 }
 
