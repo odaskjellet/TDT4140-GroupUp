@@ -1,8 +1,7 @@
 import classes from './CreateGroupForm.module.css';
-import Card from '../../ui/Card';
 import {Link, useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
-import { Button, Stack, TextField } from '@mui/material';
+import { Card, Button, Stack, TextField } from '@mui/material';
 
 export default function CreateGroupForm() {
   const {register, formState: {errors}, handleSubmit} = useForm();

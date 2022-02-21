@@ -1,7 +1,6 @@
 import {Container, Stack, Paper, Avatar, ImageList, Grid, Button} from '@mui/material';
 import {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import HomePageLayout from '../components/userInput/HomePageLayout';
 import {UserContext} from '../contexts/User';
 import Card from '../ui/Card';
 
