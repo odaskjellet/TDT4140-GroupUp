@@ -7,10 +7,12 @@ import {UserProvider} from './contexts/User';
 import CreateGroupPage from './pages/CreateGroupPage';
 import MyProfilePage from './pages/MyProfilePage';
 import IndexPage from './pages/IndexPage';
+import { CssBaseline } from '@mui/material';
 
 function App() {
   return (
     <UserProvider>
+      <CssBaseline />
       <Routes>
         <Route path="/" element={<IndexPage/>}/>
         <Route path="/login" element={<LoginPage/>}/>
