@@ -11,7 +11,7 @@ export default function GroupPage() {
   useEffect(async () => {
     await fetchGroupInfo();
     await fetchMatches();
-  }, []);
+  }, [id]);
 
   const fetchGroupInfo = async () => {
     fetch('/api/get-group', {
