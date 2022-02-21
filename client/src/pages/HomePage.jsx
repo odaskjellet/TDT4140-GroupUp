@@ -3,6 +3,7 @@ import {Container, Stack, Card, Avatar, Grid, Button} from '@mui/material';
 import {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../contexts/User';
+import AddIcon from '@mui/icons-material/Add';
 
 /**
  * The home page: the page the user sees after logging in.
@@ -21,9 +22,12 @@ function HomePage() {
   }, []);
 
   const fetchGroups = async () => {
-    fetch('/api/get-groups')
-        .then((res) => res.json())
-        .then((result) => {
+    fetch('/api/get-groups-with-user', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username: userState.username}),
+    }).then((res) => res.json())
+      .then((result) => {
       setGroups(result);
     });
   };
@@ -33,8 +37,8 @@ function HomePage() {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({username: userState.username}),
-    })  .then((res) => res.json())
-        .then((result) => {
+    }).then((res) => res.json())
+      .then((result) => {
       setUserInfo(result);
     });
   };
@@ -131,10 +135,16 @@ function HomePage() {
             alignItems="center"
           >
             <Button
-              variant="contained"
+              startIcon={<AddIcon/>}
+              variant="outlined"
               onClick={() => navigate('/create-group')}
             >
               Create new group
+            </Button>
+            <Button
+              variant="contained"
+            >
+              Explore matches
             </Button>
           </Stack>
         </Card>

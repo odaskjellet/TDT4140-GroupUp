@@ -46,6 +46,10 @@ class Database {
     this.stmt_get_groups = this.db.prepare(
         'SELECT id, name FROM Groups');
 
+    this.stmt_get_groups_with_user = this.db.prepare(
+        'SELECT id, name FROM GroupMembers JOIN Groups WHERE ' +
+        'GroupMembers.groupId = Groups.id AND GroupMembers.username = ?');
+
     this.stmt_get_group_members = this.db.prepare(
         'SELECT username FROM GroupMembers WHERE (groupId = ?)');
 
@@ -106,28 +110,33 @@ class Database {
     return this.stmt_get_groups.all();
   }
 
-  addUserToGroup(username, groupID) {
-    this.stmt_insert_user_into_group.run(groupID, username);
+  getGroupsWithUser(username) {
+    console.log(username, this.stmt_get_groups_with_user.all(username));
+    return this.stmt_get_groups_with_user.all(username);
   }
 
-  getGroupMembers(groupID) {
-    return this.stmt_get_group_members.all(groupID);
+  addUserToGroup(groupId, username) {
+    this.stmt_insert_user_into_group.run(groupId, username);
   }
 
-  getGroupInterests(groupID) {
-    return this.stmt_get_group_interests.all(groupID);
+  getGroupMembers(id) {
+    return this.stmt_get_group_members.all(id);
   }
 
-  addGroupInterest(groupID, interest) {
-    this.stmt_insert_group_interest.run(groupID, interest);
+  getGroupInterests(id) {
+    return this.stmt_get_group_interests.all(id);
   }
 
-  makeMatch(primaryID, secondaryID) {
-    this.stmt_match_groups.run(primaryID, secondaryID);
+  addGroupInterest(id, interest) {
+    this.stmt_insert_group_interest.run(id, interest);
   }
 
-  getGroupMatches(primaryID) {
-    return this.stmt_get_group_matches.all(primaryID);
+  makeMatch(primaryId, secondaryId) {
+    this.stmt_match_groups.run(primaryId, secondaryId);
+  }
+
+  getGroupMatches(id) {
+    return this.stmt_get_group_matches.all(id);
   }
 }
 

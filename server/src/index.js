@@ -50,6 +50,7 @@ server.put('/api/insert-group', (request, result) => {
   if (validGroupname(request.body.groupname)) {
     db.insertGroup(request.body.id, request.body.name,
         request.body.admin, request.body.description);
+    db.addUserToGroup(request.body.id, request.body.admin);
     result.send('OK');
   } else {
     result.status(400).send();
@@ -60,12 +61,16 @@ server.put('/api/get-group', (request, result) => {
   result.send(JSON.stringify(db.getGroup(request.body.id)));
 });
 
+server.put('/api/get-groups-with-user', (request, result) => {
+  result.send(JSON.stringify(db.getGroupsWithUser(request.body.username)));
+});
+
 server.get('/api/get-groups', (request, result) => {
   result.send(JSON.stringify(db.getGroups()));
 });
 
 server.put('/api/add-user-to-group', (request, result) => {
-  db.addUserToGroup(request.body.username, request.body.groupID);
+  db.addUserToGroup(request.body.groupID, request.body.username);
   result.send('OK');
 });
 
