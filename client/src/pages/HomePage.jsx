@@ -1,4 +1,4 @@
-import {Container, Stack, Paper, Avatar, ImageList, Grid} from '@mui/material';
+import {Container, Stack, Paper, Avatar, ImageList, Grid, Button} from '@mui/material';
 import {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import HomePageLayout from '../components/userInput/HomePageLayout';
@@ -29,14 +29,14 @@ function HomePage() {
   } else {
     return <Container fixed>
       <Stack spacing={2}>
-        <Card>
+          <br />
           <Stack
             direction="row"
             justifyContent="flex-end"
             alignItems="center"
             spacing={4}
           >
-            <h1>Hello {userState.username}!</h1>
+            <h2>Hello {userState.username}!</h2>
             <div onClick={() => navigate('/user')}>
               <Avatar
                 alt=""
@@ -45,7 +45,6 @@ function HomePage() {
               />
             </div>
           </Stack>
-        </Card>
 
         <h1>My groups</h1>
         <Card>
@@ -58,7 +57,14 @@ function HomePage() {
               </Grid>,
             )}
           </Grid>
-          <button onClick={() => navigate('/create-group')}>Create new group</button>
+
+          <Button 
+            variant="contained"
+            onClick={() => navigate('/create-group')}
+          >
+            Create new group
+          </Button>
+
         </Card>
       </Stack>
     </Container>;
