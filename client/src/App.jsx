@@ -8,8 +8,8 @@ import {UserProvider} from './contexts/User';
 import CreateGroupPage from './pages/CreateGroupPage';
 import MyProfilePage from './pages/MyProfilePage';
 import IndexPage from './pages/IndexPage';
-import { ColorModeProvider } from './contexts/ColorMode';
-import { CssBaseline } from '@mui/material';
+import {ColorModeProvider} from './contexts/ColorMode';
+import {CssBaseline} from '@mui/material';
 import LightSwitch from './components/LightSwitch';
 
 export default function App() {

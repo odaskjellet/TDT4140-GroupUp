@@ -1,10 +1,8 @@
 import {useForm} from 'react-hook-form';
-import classes from './LoginForm.module.css';
-import Card from '../../ui/Card';
-import {Link} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../../contexts/User';
 import {useContext} from 'react';
+import {Button, Card, Stack, TextField} from '@mui/material';
 
 /**
  * Returns a login form with client side validation.
@@ -33,25 +31,51 @@ function LoginForm() {
 
   return (
     <Card>
-      <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
-        <div className={classes.control}>
-          <label htmlFor={'username'}>Username</label>
-          <input {...register('username', {required: true, maxLength: 40, pattern: /^[a-z ,.'-]+$/i})} />
-          {errors.username?.type === 'required' && 'Username is required'}
+      <form style={{padding: '2rem'}} onSubmit={handleSubmit(onSubmit)}>
+        <h2>Login to your account</h2>
+
+        <div>
+          <TextField
+            required
+            fullWidth
+            margin="normal"
+            error={errors.username}
+            helperText={errors.username && 'A username is required.'}
+            label="Username"
+            type={'text'}
+            {...register('username', {required: true, maxLength: 40, pattern: /^[a-z ,.'-]+$/i})}
+          />
         </div>
 
-        <div className={classes.control}>
-          <label htmlFor={'password'}>Password</label>
-          <input type={'password'} {...register('password',
-              {required: true})} />
-          {errors.password && 'Password is required'}
+        <div>
+          <TextField
+            required
+            fullWidth
+            margin="normal"
+            error={errors.password}
+            helperText={errors.password && 'A password is required.'}
+            label="Password"
+            type={'password'}
+            {...register('password', {required: true})}
+          />
         </div>
 
-        <div className={classes.actions}>
-          <button className={classes.buttonPrimary}>Login</button>
+        <br />
+
+        <Stack
+          spacing={2}
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <p>Don't have an account? <a href='/register'>Sign up</a></p>
-        </div>
-
+          <Button
+            variant="contained"
+            type="submit"
+          >
+            Login
+          </Button>
+        </Stack>
       </form>
     </Card>
   );

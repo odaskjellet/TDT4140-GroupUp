@@ -1,7 +1,6 @@
-import classes from './CreateGroupForm.module.css';
 import {Link, useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
-import { Card, Button, Stack, TextField } from '@mui/material';
+import {Card, Button, Stack, TextField} from '@mui/material';
 
 export default function CreateGroupForm() {
   const {register, formState: {errors}, handleSubmit} = useForm();
@@ -24,7 +23,7 @@ export default function CreateGroupForm() {
 
   return (
     <Card>
-      <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+      <form style={{padding: '2rem'}} onSubmit={handleSubmit(onSubmit)}>
         <h2>Create a new group</h2>
         <div>
           <TextField
@@ -38,7 +37,7 @@ export default function CreateGroupForm() {
             {...register('name', {required: true})}
           />
         </div>
-        
+
         <div>
           <TextField
             required

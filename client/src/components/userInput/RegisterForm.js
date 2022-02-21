@@ -1,9 +1,8 @@
-import {useForm} from 'react-hook-form';
-import Card from '../../ui/Card';
-import classes from './LoginForm.module.css';
+import {Controller, useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../../contexts/User';
 import {useContext} from 'react';
+import {Card, InputLabel, MenuItem, Select, TextField, FormControl, Stack, Button} from '@mui/material';
 
 /**
  * Returns a register form wrapped in custom card div.
@@ -16,11 +15,13 @@ function RegisterForm() {
     formState: {errors},
     getValues,
     handleSubmit,
+    control,
   } = useForm();
 
   const navigate = useNavigate();
   const [userState, userDispatch] = useContext(UserContext);
   const onSubmit = async (data) => {
+    console.log(data);
     fetch('/api/insert-user', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
@@ -37,43 +38,89 @@ function RegisterForm() {
 
   return (
     <Card>
-      <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
-        <div className={classes.control}>
-          <label htmlFor={'username'}>Your username</label>
-          <input {...register('username', {required: true, maxLength: 40, pattern: /^[a-z ,.'-]+$/i})} />
-          {errors.username?.type === 'required' && 'Username is required'}
+      <form style={{padding: '2rem'}} onSubmit={handleSubmit(onSubmit)}>
+        <h2>Register a new account</h2>
+
+        <div>
+          <TextField
+            label="Username"
+            type={'text'}
+            required
+            fullWidth
+            margin="normal"
+            error={errors.username}
+            helperText={errors.username && 'A username is required.'}
+            {...register('username', {required: true, maxLength: 40, pattern: /^[a-z ,.'-]+$/i})}
+          />
         </div>
 
-        <div className={classes.control}>
-          <label>Your age</label>
-          <input type="number" {...register('age', {required: true, min: 18, max: 99})} />
-          {errors.age && 'You need to be between 18 and 99 years old.'}
+        <div>
+          <TextField
+            label="Email"
+            type={'email'}
+            required
+            fullWidth
+            margin="normal"
+            error={errors.email}
+            helperText={errors.email && 'Email is required'}
+            {...register('email', {required: true, maxLength: 40})}
+          />
         </div>
 
-        <div className={classes.control}>
-          <label>Your gender</label>
-          <select required={true} {...register('gender')}>
-            <option value="female">Female</option>
-            <option value="male">Male</option>
-            <option value="other">Other</option>
-          </select>
+        <div>
+          <TextField
+            label="Age"
+            type={'number'}
+            required
+            fullWidth
+            margin="normal"
+            error={errors.age}
+            helperText={errors.age && 'You need to be between 18 and 99 years old.'}
+            {...register('age', {required: true, min: 18, max: 99})}
+          />
         </div>
 
-        <div className={classes.control}>
-          <label htmlFor={'email'}>Your email</label>
-          <input type={'email'} {...register('email', {required: true, maxLength: 40})} />
-          {errors.email && 'Email is required'}
+        <div>
+          <FormControl fullWidth margin="normal" required>
+            <InputLabel id="gender-label">Gender</InputLabel>
+            <Controller
+              name='gender'
+              labelId="gender-label"
+              defaultValue=''
+              control={control}
+              render={({ field }) => (
+                <Select {...field}>
+                  <MenuItem value={'female'}>Female</MenuItem>
+                  <MenuItem value={'male'}>Male</MenuItem>
+                  <MenuItem value={'other'}>Other</MenuItem>
+                </Select>
+              )}
+            />
+          </FormControl>
+        </div>
+        
+        <div>
+          <TextField
+            label="Password"
+            type={'password'}
+            required
+            fullWidth
+            margin="normal"
+            error={errors.password}
+            helperText={errors.password && 'A password is required.'}
+            {...register('password', {required: true})}
+          />
         </div>
 
-        <div className={classes.control}>
-          <label htmlFor={'password'}>Your password</label>
-          <input type={'password'} {...register('password', {required: true})} />
-          {errors.password && 'Password is required'}
-        </div>
-
-        <div className={classes.control}>
-          <label>Confirm Password: </label>
-          <input type={'password'}
+        <div>
+          <TextField
+            label="Confirm password"
+            type={'password'}
+            required
+            fullWidth
+            margin="normal"
+            error={errors.password}
+            helperText={errors.password && 'A password is required.'}
             {...register('passwordConfirmation', {
               required: true,
               validate: {
@@ -84,13 +131,24 @@ function RegisterForm() {
               },
             })}
           />
-          {errors.passwordConfirmation && 'Password should match!'}
         </div>
 
-        <div className={classes.actions}>
-          <button className={classes.buttonPrimary}>Create account</button>
+        <br />
+
+        <Stack
+          spacing={2}
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <p>Already have an account? <a href='/login'>Login</a></p>
-        </div>
+          <Button
+            variant="contained"
+            type="submit"
+          >
+            Create account
+          </Button>
+        </Stack>
       </form>
     </Card>
   );

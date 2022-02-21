@@ -28,22 +28,22 @@ function HomePage() {
   } else {
     return <Container fixed>
       <Stack spacing={2}>
-          <br />
-          <Stack
-            direction="row"
-            justifyContent="flex-end"
-            alignItems="center"
-            spacing={4}
-          >
-            <h2>Hello {userState.username}!</h2>
-            <div onClick={() => navigate('/user')}>
-              <Avatar
-                alt=""
-                src=""
-                sx={{width: 80, height: 80}}
-              />
-            </div>
-          </Stack>
+        <br />
+        <Stack
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="center"
+          spacing={4}
+        >
+          <h2>Hello {userState.username}!</h2>
+          <div onClick={() => navigate('/user')}>
+            <Avatar
+              alt=""
+              src=""
+              sx={{width: 80, height: 80}}
+            />
+          </div>
+        </Stack>
 
         <h1>My groups</h1>
         <Card>
@@ -57,7 +57,7 @@ function HomePage() {
             )}
           </Grid>
 
-          <Button 
+          <Button
             variant="contained"
             onClick={() => navigate('/create-group')}
           >
