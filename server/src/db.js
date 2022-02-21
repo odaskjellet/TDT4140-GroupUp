@@ -8,27 +8,27 @@ class Database {
         {verbose: (msg) => console.log('[DB] ' + msg)});
 
     this.stmt_create = this.db.prepare(
-        'CREATE TABLE IF NOT EXISTS' +
+        'CREATE TABLE IF NOT EXISTS ' +
         'Users (username string, password string, age integer)');
     this.stmt_create.run();
 
     this.stmt_create_group = this.db.prepare(
-        'CREATE TABLE IF NOT EXISTS' +
+        'CREATE TABLE IF NOT EXISTS ' +
         'Groups (id integer, name string)');
     this.stmt_create_group.run();
 
     this.stmt_create_groupUser_relationTable = this.db.prepare(
-        'CREATE TABLE IF NOT EXISTS' +
+        'CREATE TABLE IF NOT EXISTS ' +
         'GroupMembers (groupID integer, username string)');
     this.stmt_create_groupUser_relationTable.run();
 
     this.stmt_create_group_interest_relation_table = this.db.prepare(
-        'CREATE TABLE IF NOT EXISTS' +
+        'CREATE TABLE IF NOT EXISTS ' +
         'GroupInterests (groupID integer, interest string)');
     this.stmt_create_group_interest_relation_table.run();
 
     this.stmt_create_match_table = this.db.prepare(
-        'CREATE TABLE IF NOT EXISTS' +
+        'CREATE TABLE IF NOT EXISTS ' +
         'GroupMatches (primaryID integer, secondaryID integer)');
     this.stmt_create_match_table.run();
 
