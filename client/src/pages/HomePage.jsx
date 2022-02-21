@@ -1,8 +1,7 @@
-import {Container, Stack, Paper, Avatar, ImageList, Grid, Button} from '@mui/material';
+import {Container, Stack, Card, Avatar, Grid, Button} from '@mui/material';
 import {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../contexts/User';
-import Card from '../ui/Card';
 
 /**
  * The home page: the page the user sees after logging in.
@@ -46,23 +45,31 @@ function HomePage() {
         </Stack>
 
         <h1>My groups</h1>
-        <Card>
+        <Card sx={{padding: '2rem'}} variant="outlined">
           <Grid container spacing={{xs: 2, md: 3}} columns={{xs: 4, sm: 8, md: 12}}>
             {Array.from(groups).map((group) =>
               <Grid item xs={2} sm={4} md={4} key={group.id}>
-                <Card>
+                <Card sx={{padding: '1rem'}} elevation={3}>
                   <h1>Group: {group.name}</h1>
                 </Card>
               </Grid>,
             )}
           </Grid>
-
-          <Button
-            variant="contained"
-            onClick={() => navigate('/create-group')}
+          
+          <Stack
+            sx={{padding: '1rem'}}
+            spacing={2}
+            direction="row"
+            justifyContent="flex-end"
+            alignItems="center"
           >
-            Create new group
-          </Button>
+            <Button
+              variant="contained"
+              onClick={() => navigate('/create-group')}
+            >
+              Create new group
+            </Button>
+          </Stack>
 
         </Card>
       </Stack>

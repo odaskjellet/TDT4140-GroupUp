@@ -1,5 +1,5 @@
+import { Container } from '@mui/material';
 import LoginForm from '../components/userInput/LoginForm';
-import classes from './LoginPage.module.css';
 
 /**
  * A page for user login.
@@ -7,10 +7,10 @@ import classes from './LoginPage.module.css';
  * @constructor
  */
 function LoginPage() {
-  return <div className={classes.wrapper}>
+  return <Container>
     <h1 style={{textAlign: 'center', margin: '4rem'}}>Welcome to GroupUp</h1>
     <LoginForm/>
-  </div>;
+  </Container>
 }
 
 export default LoginPage;

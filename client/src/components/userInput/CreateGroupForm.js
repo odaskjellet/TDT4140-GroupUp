@@ -22,7 +22,7 @@ export default function CreateGroupForm() {
   };
 
   return (
-    <Card>
+    <Card elevation={5}>
       <form style={{padding: '2rem'}} onSubmit={handleSubmit(onSubmit)}>
         <h2>Create a new group</h2>
         <div>

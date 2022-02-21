@@ -30,7 +30,7 @@ function LoginForm() {
   };
 
   return (
-    <Card>
+    <Card elevation={5}>
       <form style={{padding: '2rem'}} onSubmit={handleSubmit(onSubmit)}>
         <h2>Login to your account</h2>
 
