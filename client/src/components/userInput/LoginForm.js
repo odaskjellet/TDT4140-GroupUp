@@ -17,7 +17,7 @@ function LoginForm() {
   const navigate = useNavigate();
   const [userState, userDispatch] = useContext(UserContext);
   const onSubmit = async (data) => {
-    fetch('/api/try_login', {
+    fetch('/api/try-login', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(data),

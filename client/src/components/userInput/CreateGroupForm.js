@@ -8,7 +8,7 @@ export default function CreateGroupForm() {
   const navigate = useNavigate();
   const onSubmit = async (data) => {
     console.log(data);
-    fetch('/api/create_group', {
+    fetch('/api/insert-group', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(data),
