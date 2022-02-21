@@ -120,14 +120,14 @@ function RegisterForm() {
             required
             fullWidth
             margin="normal"
-            error={errors.password}
-            helperText={errors.password && 'A password is required.'}
+            error={errors.passwordConfirmation}
+            helperText={errors.passwordConfirmation && 'Passwords should match!'}
             {...register('passwordConfirmation', {
               required: true,
               validate: {
                 matchesPreviousPassword: (value) => {
                   const {password} = getValues();
-                  return password === value || 'Passwords should match!';
+                  return password === value;
                 },
               },
             })}
