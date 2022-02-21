@@ -8,7 +8,7 @@ function ProfileDescription() {
   ]);
   return (
     <div style={{
-      position: 'absolute',
+      position: 'absolute', // TODO: finne alternativ løsning til å bruke absolute position
       left: '50%',
       top: '50%',
       transform: 'translate(-50%, -50%)',

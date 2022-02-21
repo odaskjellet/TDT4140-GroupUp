@@ -1,19 +1,18 @@
 import Card from '../../ui/Card';
 import classes from './MyGroup.module.css';
 import CreateGroupForm from '../userInput/CreateGroupForm';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 
 export default function MyGroup() {
-  useEffect(() => {
-    const getData = async () => {
-      const dataFromServer = await fetchGroups();
-    };
-    getData();
+  const [groups, setGroups] = useState([]);
+
+  useEffect(async () => {
+    await fetchGroups();
   }, []);
 
   const fetchGroups = async () => {
-    const res = await fetch('api/get_group');
-    return await res.json();
+    const res = await fetch('/api/get-groups');
+    setGroups(await res.json());
   };
 
 
@@ -24,8 +23,11 @@ export default function MyGroup() {
       <div className={classes.group}>
         <Card>
           <h2>My groups</h2>
-
-
+          {Array.from(groups).map((group) =>
+            <Card>
+              <h1>{group.name}</h1>
+            </Card>,
+          )}
         </Card>
 
       </div>

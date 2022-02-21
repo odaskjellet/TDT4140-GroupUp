@@ -1,6 +1,6 @@
-import { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { UserContext } from "../contexts/User";
+import {useContext, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {UserContext} from '../contexts/User';
 
 /**
  * The index page, which redirects to either /login or /home
@@ -13,11 +13,11 @@ function IndexPage() {
 
   useEffect(() => {
     if (userState.verified) {
-      navigate('./home')
+      navigate('./home');
     } else {
-      navigate('./login')
+      navigate('./login');
     }
-  })
+  });
 
   return <section>
     Redirecting..

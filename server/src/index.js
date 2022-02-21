@@ -53,7 +53,7 @@ server.put('/api/insert-group', (request, result) => {
   }
 });
 
-server.get('/api/get-group', (request, result) => {
+server.get('/api/get-groups', (request, result) => {
   result.send(JSON.stringify(db.getGroups()));
 });
 
