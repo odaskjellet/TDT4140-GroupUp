@@ -2,7 +2,7 @@ import React from 'react';
 import {Container} from '@mui/material';
 import CreateGroupForm from '../components/userInput/CreateGroupForm';
 
-export default function GroupPage() {
+export default function CreateGroupPage() {
   return <Container>
     <br></br>
     <CreateGroupForm/>

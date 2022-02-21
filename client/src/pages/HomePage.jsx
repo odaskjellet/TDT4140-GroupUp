@@ -56,6 +56,11 @@ function HomePage() {
               <Grid item xs={2} sm={4} md={4} key={group.id}>
                 <Card sx={{padding: '1rem'}} elevation={3}>
                   <h1>Group: {group.name}</h1>
+                  <Button
+                    onClick={() => navigate('/group/' + group.id)}
+                  >
+                    Visit
+                  </Button>
                 </Card>
               </Grid>,
             )}
