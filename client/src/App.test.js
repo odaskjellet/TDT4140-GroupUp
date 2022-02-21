@@ -9,6 +9,6 @@ test('renders login', () => {
         <App/>
       </BrowserRouter>,
   );
-  const loginText = screen.getByText(/login/i);
+  const loginText = screen.getByText(/Login to your account/i);
   expect(loginText).toBeInTheDocument();
 });
