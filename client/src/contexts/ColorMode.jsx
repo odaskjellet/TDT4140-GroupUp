@@ -6,11 +6,16 @@ export const ColorModeContext = React.createContext(
 );
 
 export const ColorModeProvider = ({children}) => {
-  const [mode, setMode] = React.useState('');
+  const storedMode = localStorage.getItem('colormode');
+  const [mode, setMode] = React.useState(storedMode == 'null' ? '' : storedMode);
   const colorMode = React.useMemo(
       () => ({
         toggleColorMode: () => {
-          setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+          setMode((prevMode) => {
+            const newMode = prevMode === 'light' ? 'dark' : 'light'
+            localStorage.setItem('colormode', newMode);
+            return newMode;
+          });
         },
       }),
       [],

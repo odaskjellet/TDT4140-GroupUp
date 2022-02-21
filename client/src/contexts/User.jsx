@@ -5,7 +5,7 @@ const initialState = {
   username: localStorage.getItem('user.username'),
 };
 
-const updateLocalStorage = (state) => {
+const setLocalStorage = (state) => {
   localStorage.setItem('user.verified', state.verified);
   localStorage.setItem('user.username', state.username);
 };
@@ -36,7 +36,7 @@ export const UserProvider = ({children}) => {
       default:
         newState = state;
     }
-    updateLocalStorage(newState);
+    setLocalStorage(newState);
     return newState;
   };
 
