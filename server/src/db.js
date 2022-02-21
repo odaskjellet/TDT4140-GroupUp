@@ -8,8 +8,11 @@ class Database {
         {verbose: (msg) => console.log('[DB] ' + msg)});
 
     this.stmt_create_table_users = this.db.prepare(
-        'CREATE TABLE IF NOT EXISTS ' +
-        'Users (username string, password string, age integer, email string)');
+        'CREATE TABLE IF NOT EXISTS Users ' +
+        '(username string, password string, age integer, email string, ' +
+        'gender string)'
+    );
+
     this.stmt_create_table_users.run();
 
     this.stmt_create_table_groups = this.db.prepare(
@@ -35,8 +38,8 @@ class Database {
     this.stmt_get_users = this.db.prepare(
         'SELECT username FROM Users');
 
-    this.stmt_get_userinfo = this.db.prepare(
-        'SELECT username, age FROM Users');
+    this.stmt_get_user = this.db.prepare(
+        'SELECT username, age, email, gender FROM Users WHERE username = ?');
 
     this.stmt_get_groups = this.db.prepare(
         'SELECT id, name FROM Groups');
@@ -51,8 +54,8 @@ class Database {
         'SELECT secondaryID FROM GroupMatches WHERE (primaryID = ?)');
 
     this.stmt_insert_user = this.db.prepare(
-        'INSERT INTO Users (username, password, age, email) ' +
-        'VALUES (?, ?, ?, ?)');
+        'INSERT INTO Users (username, password, age, email, gender) ' +
+        'VALUES (?, ?, ?, ?, ?)');
 
     this.stmt_insert_group = this.db.prepare(
         'INSERT INTO Groups (id, name) VALUES (?, ?)');
@@ -75,12 +78,12 @@ class Database {
     return this.stmt_get_users.all();
   }
 
-  getUserInfo() {
-    return this.stmt_get_userinfo.all();
+  getUser(username) {
+    return this.stmt_get_user.get(username);
   }
 
-  insertUser(username, password, age, email) {
-    this.stmt_insert_user.run(username, password, age, email);
+  insertUser(username, password, age, email, gender) {
+    this.stmt_insert_user.run(username, password, age, email, gender);
   }
 
   tryLogin(username, password) {

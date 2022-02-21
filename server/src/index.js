@@ -21,15 +21,16 @@ server.delete('/api/debug/clear', (request, result) => {
   result.send('OK');
 });
 
-server.get('/api/get-userinfo', (request, result) => {
-  result.send(JSON.stringify(db.getUserInfo()));
+server.put('/api/get-user', (request, result) => {
+  result.send(JSON.stringify(db.getUser(request.body.username)));
 });
 
 server.put('/api/insert-user', (request, result) => {
   if (!db.tryLogin(request.body.username, request.body.password) &&
       validUsername(request.body.username) &&
       validPassword(request.body.password)) {
-    db.insertUser(request.body.username, request.body.password);
+    db.insertUser(request.body.username, request.body.password,
+        request.body.age, request.body.email, request.body.gender);
     result.send('OK');
   } else {
     result.status(400).send();

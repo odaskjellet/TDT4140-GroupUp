@@ -13,14 +13,30 @@ function HomePage() {
   const [userState, _] = useContext(UserContext);
   const navigate = useNavigate();
   const [groups, setGroups] = useState([]);
+  const [userInfo, setUserInfo] = useState({});
 
   useEffect(async () => {
     await fetchGroups();
+    await fetchUserInfo();
   }, []);
 
   const fetchGroups = async () => {
-    const res = await fetch('/api/get-groups');
-    setGroups(await res.json());
+    fetch('/api/get-groups')
+        .then((res) => res.json())
+        .then((result) => {
+      setGroups(result);
+    });
+  };
+
+  const fetchUserInfo = async () => {
+    fetch('/api/get-user', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username: userState.username}),
+    })  .then((res) => res.json())
+        .then((result) => {
+      setUserInfo(result);
+    });
   };
 
   if (!userState.verified) {
@@ -35,7 +51,12 @@ function HomePage() {
           alignItems="center"
           spacing={4}
         >
-          <h2>Hello {userState.username}!</h2>
+          <div>
+            <h2>Hello {userState.username}!</h2>
+            <p>{userInfo.email}</p>
+            <p>{userInfo.age}</p>
+            <p>{userInfo.gender}</p>
+          </div>
           <div onClick={() => navigate('/user')}>
             <Avatar
               alt=""
