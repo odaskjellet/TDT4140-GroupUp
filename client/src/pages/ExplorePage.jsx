@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {Container, Stack, Card, Grid, Button, Dialog, DialogTitle, Select, MenuItem, FormControl, InputLabel}
+import {Container, Stack, Card, Grid, Button, Dialog, DialogTitle, Select, MenuItem, FormControl, InputLabel, Snackbar, Alert}
     from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/User';
@@ -12,6 +12,8 @@ export default function ExplorePage() {
   const [selectedGroupA, setSelectedGroupA] = useState({});
   const [selectedGroupBId, setSelectedGroupBId] = useState('');
   const [userState, _] = useContext(UserContext);
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+
 
   useEffect(async () => {
     await fetchAllGroups();
@@ -47,12 +49,19 @@ export default function ExplorePage() {
       }),
     }).then((res) => {
       if (res.ok) {
-        // Created match
+        setSnackbarOpen(true);
       } else {
         // Did not create match
       }
     });
   }
+  
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
 
   return (
     <Container>
@@ -133,6 +142,17 @@ export default function ExplorePage() {
           </Stack>
         </Container>
       </Dialog>
+
+      <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={4000}
+          onClose={handleSnackbarClose}
+      >
+        <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+          Match initiated!
+        </Alert>
+      </Snackbar>
+
     </Container>
   );
 }

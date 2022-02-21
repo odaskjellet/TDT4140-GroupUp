@@ -112,7 +112,6 @@ class Database {
   }
 
   getGroupsWithUser(username) {
-    console.log(username, this.stmt_get_groups_with_user.all(username));
     return this.stmt_get_groups_with_user.all(username);
   }
 
