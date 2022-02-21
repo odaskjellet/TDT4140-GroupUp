@@ -80,7 +80,13 @@ test('get groupinterest', () => {
 test('matching groups', () => {
   db.insertGroup(1, 'Gruppe 1');
   db.insertGroup(2, 'Gruppe 2');
-  db.makeMatch(1, 2);
+
+  db.matchGroups(1, 2);
+
+  expect(db.getGroupMatches(1)).toEqual([]);
+  expect(db.getGroupMatches(2)).toEqual([]);
+
+  db.matchGroups(2, 1); // A complete match
 
   expect(db.getGroupMatches(1)).toEqual([
     {'id': 2},
