@@ -7,79 +7,80 @@ class Database {
     this.db = new SQLiteDB(filename,
         {verbose: (msg) => console.log('[DB] ' + msg)});
 
-    this.stmt_create = this.db.prepare(
+    this.stmt_create_table_users = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS ' +
-        'Users (username string, password string, age integer)');
-    this.stmt_create.run();
+        'Users (username string, password string, age integer, email string)');
+    this.stmt_create_table_users.run();
 
-    this.stmt_create_group = this.db.prepare(
+    this.stmt_create_table_groups = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS ' +
-        'Groups (id integer, name string)');
-    this.stmt_create_group.run();
+        'Groups (id integer, name string, admin string)');
+    this.stmt_create_table_groups.run();
 
-    this.stmt_create_groupUser_relationTable = this.db.prepare(
+    this.stmt_create_table_group_members = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS ' +
         'GroupMembers (groupID integer, username string)');
-    this.stmt_create_groupUser_relationTable.run();
+    this.stmt_create_table_group_members.run();
 
-    this.stmt_create_group_interest_relation_table = this.db.prepare(
+    this.stmt_create_table_group_interests = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS ' +
         'GroupInterests (groupID integer, interest string)');
-    this.stmt_create_group_interest_relation_table.run();
+    this.stmt_create_table_group_interests.run();
 
-    this.stmt_create_match_table = this.db.prepare(
+    this.stmt_create_table_group_matches = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS ' +
         'GroupMatches (primaryID integer, secondaryID integer)');
-    this.stmt_create_match_table.run();
+    this.stmt_create_table_group_matches.run();
 
-    this.stmt_get = this.db.prepare(
-        'SELECT (username) FROM Users');
+    this.stmt_get_users = this.db.prepare(
+        'SELECT username FROM Users');
 
     this.stmt_get_userinfo = this.db.prepare(
         'SELECT username, age FROM Users');
 
-    this.stmt_get_group = this.db.prepare(
+    this.stmt_get_groups = this.db.prepare(
         'SELECT id, name FROM Groups');
 
     this.stmt_get_group_members = this.db.prepare(
-        'SELECT username FROM GroupMembers WHERE (groupID == ?)');
+        'SELECT username FROM GroupMembers WHERE (groupID = ?)');
 
     this.stmt_get_group_interests = this.db.prepare(
-        'SELECT interest FROM GroupInterests WHERE (groupID == ?)');
+        'SELECT interest FROM GroupInterests WHERE (groupID = ?)');
 
-    this.stmt_get_matches = this.db.prepare(
-        'SELECT secondaryID FROM GroupMatches WHERE (primaryID == ?)');
+    this.stmt_get_group_matches = this.db.prepare(
+        'SELECT secondaryID FROM GroupMatches WHERE (primaryID = ?)');
 
-    this.stmt_insert = this.db.prepare(
-        'INSERT INTO Users (username, password, age) VALUES (?, ?, ?)');
+    this.stmt_insert_user = this.db.prepare(
+        'INSERT INTO Users (username, password, age, email) ' +
+        'VALUES (?, ?, ?, ?)');
 
     this.stmt_insert_group = this.db.prepare(
         'INSERT INTO Groups (id, name) VALUES (?, ?)');
 
-    this.stmt_insert_groupUser_relation = this.db.prepare(
+    this.stmt_insert_user_into_group = this.db.prepare(
         'INSERT INTO GroupMembers (groupID, username) VALUES (?, ?)');
 
-    this.stmt_make_match = this.db.prepare(
+    this.stmt_match_groups = this.db.prepare(
         'INSERT INTO GroupMatches (primaryID, secondaryID) VALUES (?,?)');
 
     this.stmt_try_login = this.db.prepare(
-        'SELECT * FROM Users WHERE (username == ? AND password == ?)');
+        'SELECT * FROM Users WHERE (username = ? AND password = ?)');
 
-    this.stmt_insert_group_interests = this.db.prepare(
+    this.stmt_insert_group_interest = this.db.prepare(
         'INSERT INTO GroupInterests (groupID, interest) VALUES (?, ?)');
   }
 
 
   getUsers() {
-    return this.stmt_get.all();
+    return this.stmt_get_users.all();
   }
 
   getUserInfo() {
     return this.stmt_get_userinfo.all();
   }
 
-  insertUser(username, password, age) {
-    this.stmt_insert.run(username, password, age);
+  insertUser(username, password, age, email) {
+    this.stmt_insert_user.run(username, password, age, email);
   }
 
   tryLogin(username, password) {
@@ -87,15 +88,15 @@ class Database {
   }
 
   insertGroup(id, name) {
-    return this.stmt_insert_group.run(id, name);
+    this.stmt_insert_group.run(id, name);
   }
 
   getGroups() {
-    return this.stmt_get_group.all();
+    return this.stmt_get_groups.all();
   }
 
   addUserToGroup(username, groupID) {
-    return this.stmt_insert_groupUser_relation.run(groupID, username);
+    this.stmt_insert_user_into_group.run(groupID, username);
   }
 
   getGroupMembers(groupID) {
@@ -107,16 +108,15 @@ class Database {
   }
 
   addGroupInterest(groupID, interest) {
-    return this.stmt_insert_group_interests.run(groupID, interest);
+    this.stmt_insert_group_interest.run(groupID, interest);
   }
 
   makeMatch(primaryID, secondaryID) {
-    this.stmt_make_match.run(secondaryID, primaryID);
-    return this.stmt_make_match.run(primaryID, secondaryID);
+    this.stmt_match_groups.run(primaryID, secondaryID);
   }
 
   getGroupMatches(primaryID) {
-    return this.stmt_get_matches.all(primaryID);
+    return this.stmt_get_group_matches.all(primaryID);
   }
 }
 
