@@ -3,8 +3,7 @@ import {useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../../contexts/User';
 import {useContext} from 'react';
-import {Button, Card, Chip, Stack, TextField} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import {Alert, Button, Card, Stack, TextField} from '@mui/material';
 
 /**
  * Returns a login form with client side validation.
@@ -74,12 +73,12 @@ function LoginForm() {
           alignItems="center"
         >
           <p>Don't have an account? <a href='/register'>Sign up</a></p>
-          {badLogin && <Chip
-            color="error"
-            label="Wrong username or password!"
-            onDelete={() => setBadLogin(false)}
-            deleteIcon={<CloseIcon />}
-          />}
+          {badLogin && <Alert
+            severity="error"
+            onClose={() => setBadLogin(false)}
+          >
+            Wrong username or password!  
+          </Alert>}
           <Button
             variant="contained"
             type="submit"

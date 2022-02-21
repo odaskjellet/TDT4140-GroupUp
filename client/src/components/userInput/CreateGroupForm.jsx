@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
-import {Card, Button, Stack, TextField, Chip} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import {Card, Button, Stack, TextField, Alert} from '@mui/material';
 import { nanoid } from 'nanoid'
 import {UserContext} from '../../contexts/User';
 
@@ -94,12 +93,12 @@ export default function CreateGroupForm() {
           >
             Cancel
           </Button>
-          {badRequest && <Chip
-            color="error"
-            label="Something went wrong!"
-            onDelete={() => setBadRequest(false)}
-            deleteIcon={<CloseIcon />}
-          />}
+          {badRequest && <Alert
+            severity="error"
+            onClose={() => setBadRequest(false)}
+          >
+            Something went wrong! 
+          </Alert>}
           <Button
             variant="contained"
             type="submit"
