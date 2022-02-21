@@ -12,6 +12,7 @@ import {ColorModeProvider} from './contexts/ColorMode';
 import {CssBaseline} from '@mui/material';
 import LightSwitch from './components/LightSwitch';
 import GroupPage from './pages/GroupPage';
+import ExplorePage from './pages/ExplorePage';
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/create-group" element={<CreateGroupPage/>}/>
           <Route path="/user" element={<MyProfilePage/>}/>
           <Route path="/group/:id" element={<GroupPage/>} />
+          <Route path="/explore" element={<ExplorePage/>} />
         </Routes>
       </UserProvider>
       <br />

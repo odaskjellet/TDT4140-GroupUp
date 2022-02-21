@@ -143,6 +143,7 @@ function HomePage() {
             </Button>
             <Button
               variant="contained"
+              onClick={() => navigate('/explore')}
             >
               Explore matches
             </Button>
