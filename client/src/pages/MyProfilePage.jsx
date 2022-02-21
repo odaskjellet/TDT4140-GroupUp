@@ -13,17 +13,11 @@ import {UserContext} from '../contexts/User';
  * A page for userprofile information.
  */
 function MyProfilePage() {
-  const [_, userDispatch] = useContext(UserContext);
-  const navigate = useNavigate();
-  const onSignOutButton = () => {
-    userDispatch({type: 'logout'});
-    navigate('/');
-  };
+  
   return <section>
     <Settings/>
     <MyProfilePicture />
     <MyProfileDescription />
-    <button onClick={onSignOutButton}>Sign out</button>
   </section>;
 }
 
