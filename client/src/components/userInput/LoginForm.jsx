@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../../contexts/User';
 import {useContext} from 'react';
-import {Button, Card, Stack, TextField} from '@mui/material';
+import {Button, Card, Chip, Stack, TextField} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 /**
  * Returns a login form with client side validation.
@@ -11,11 +12,12 @@ import {Button, Card, Stack, TextField} from '@mui/material';
  * @constructor
  */
 function LoginForm() {
+  let [badLogin, setBadLogin] = useState(false);
   const {register, formState: {errors}, handleSubmit} = useForm();
-
   const navigate = useNavigate();
   const [_, userDispatch] = useContext(UserContext);
   const onSubmit = async (data) => {
+    setBadLogin(false);
     fetch('/api/try-login', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
@@ -25,7 +27,7 @@ function LoginForm() {
         userDispatch({type: 'login', username: data.username});
         navigate('../home');
       } else {
-        console.log('Could not login!'); // TODO
+        setBadLogin(true);
       }
     });
   };
@@ -72,6 +74,12 @@ function LoginForm() {
           alignItems="center"
         >
           <p>Don't have an account? <a href='/register'>Sign up</a></p>
+          {badLogin && <Chip
+            color="error"
+            label="Wrong username or password!"
+            onDelete={() => setBadLogin(false)}
+            deleteIcon={<CloseIcon />}
+          />}
           <Button
             variant="contained"
             type="submit"
