@@ -73,7 +73,7 @@ class Database {
         'INSERT INTO GroupMembers (groupId, username) VALUES (?, ?)');
 
     this.stmt_match_groups = this.db.prepare(
-        'INSERT INTO GroupMatches (primaryId, secondaryId) VALUES (?,?)');
+        'INSERT INTO GroupMatches (primaryId, secondaryId) VALUES (?, ?)');
 
     this.stmt_try_login = this.db.prepare(
         'SELECT * FROM Users WHERE (username = ? AND password = ?)');

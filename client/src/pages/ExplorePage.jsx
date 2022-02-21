@@ -1,22 +1,58 @@
-import React, { useEffect, useState } from 'react';
-import {Container, Stack, Card, Grid, Button} from '@mui/material';
+import React, { useContext, useEffect, useState } from 'react';
+import {Container, Stack, Card, Grid, Button, Dialog, DialogTitle, Select, MenuItem, FormControl, InputLabel}
+    from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../contexts/User';
 
 export default function ExplorePage() {
   const navigate = useNavigate();
-  const [groups, setGroups] = useState([]);
+  const [allGroups, setAllGroups] = useState([]);
+  const [myGroups, setMyGroups] = useState([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedGroupA, setSelectedGroupA] = useState({});
+  const [selectedGroupBId, setSelectedGroupBId] = useState('');
+  const [userState, _] = useContext(UserContext);
 
   useEffect(async () => {
-    await fetchGroups();
+    await fetchAllGroups();
+    await fetchMyGroups();
   }, []);
 
-  const fetchGroups = async () => {
+  const fetchAllGroups = async () => {
     fetch('/api/get-groups')
       .then((res) => res.json())
       .then((result) => {
-      setGroups(result);
+      setAllGroups(result);
     });
   };
+
+  const fetchMyGroups = async () => {
+    fetch('/api/get-groups-with-user', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username: userState.username}),
+    }).then((res) => res.json())
+      .then((result) => {
+      setMyGroups(result);
+    });
+  };
+
+  const createMatch = async () => {
+    fetch('/api/match-groups', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        primaryId: selectedGroupA.id,
+        secondaryId: selectedGroupBId
+      }),
+    }).then((res) => {
+      if (res.ok) {
+        // Created match
+      } else {
+        // Did not create match
+      }
+    });
+  }
 
   return (
     <Container>
@@ -29,28 +65,74 @@ export default function ExplorePage() {
         Home
       </Button>
       <h1>Explore groups</h1>
-      <p>Find the perfect match</p>
+      <p>Find the perfect match.</p>
 
-      <Card sx={{padding: '2rem'}} variant="outlined">
-        <Grid
-          container
-          spacing={{xs: 2, md: 3}}
-          columns={{xs: 4, sm: 8, md: 12}}
-        >
-          {Array.from(groups).map((group) =>
-            <Grid item xs={2} sm={4} md={4} key={group.id}>
-              <Card sx={{padding: '1rem'}} elevation={3}>
-                <h1>{group.name}</h1>
-                <Button
+      <Stack spacing={2}>
+        {Array.from(allGroups).map((group) => (
+          <Card key={group.id} sx={{padding: '2rem'}}>
+            <h2>{group.name}</h2>
+            <p>Group {group.id}</p>
+            <Button
+              variant='contained'
+              onClick={() => {
+                setSelectedGroupA(group);
+                setDialogOpen(true);
+              }}
+            >
+              Match
+            </Button>
+          </Card>
+        ))}
+      </Stack>
+
+      <Dialog onClose={() => dialogOpen = false} open={dialogOpen}>
+        <Container sx={{padding: '1rem'}}>
+          <DialogTitle>Select match</DialogTitle>
+          <p>What group do you want to match <b>{selectedGroupA.name}</b> with?</p>
+          <br />
+          <FormControl fullWidth>
+            <InputLabel id="group-select-label">Group</InputLabel>
+            <Select
+              labelId='group-select-label'
+              label='Group'
+              value={selectedGroupBId}
+              onChange={(e) => setSelectedGroupBId(e.target.value)}
+            >
+              {Array.from(myGroups).map((group) => (
+                <MenuItem
+                  key={group.id}
+                  value={group.id}
                 >
-                  Match
-                </Button>
-              </Card>
-            </Grid>,
-          )}
-        </Grid>
-      </Card>
+                  {group.name}
+                </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
+          <br />
+          <br />
 
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+          >
+            <Button
+              variant='outlined'
+              onClick={() => setDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant='contained'
+              onClick={() => {
+                createMatch();
+                setDialogOpen(false);
+              }}
+            >
+              Confirm
+            </Button>
+          </Stack>
+        </Container>
+      </Dialog>
     </Container>
   );
 }

@@ -51,7 +51,7 @@ function HomePage() {
   if (!userState.verified) {
     return <div>You are not logged in!</div>;
   } else {
-    return <Container fixed>
+    return <Container>
       <Stack spacing={2}>
         <br />
         <Stack

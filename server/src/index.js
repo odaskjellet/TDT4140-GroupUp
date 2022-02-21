@@ -70,30 +70,30 @@ server.get('/api/get-groups', (request, result) => {
 });
 
 server.put('/api/add-user-to-group', (request, result) => {
-  db.addUserToGroup(request.body.groupID, request.body.username);
+  db.addUserToGroup(request.body.groupId, request.body.username);
   result.send('OK');
 });
 
 server.get('/api/get-group-members', (request, result) => {
-  result.send(JSON.stringify(db.getGroupMembers(request.body.groupID)));
+  result.send(JSON.stringify(db.getGroupMembers(request.body.groupId)));
 });
 
 server.get('/api/get-group-interests', (request, result) => {
-  result.send(JSON.stringify(db.getGroupInterests(request.body.groupID)));
+  result.send(JSON.stringify(db.getGroupInterests(request.body.groupId)));
 });
 
 server.put('/api/insert-group-interest', (request, result) => {
-  db.addGroupInterest(request.body.groupID, request.body.interest);
+  db.addGroupInterest(request.body.groupId, request.body.interest);
   result.send('OK');
 });
 
 server.put('/api/match-groups', (request, result) => {
-  db.makeMatch(request.body.primaryID, request.body.secondaryID);
+  db.matchGroups(request.body.primaryId, request.body.secondaryId);
   result.send('OK');
 });
 
-server.get('/api/get-group-matches', (request, result) => {
-  result.send(JSON.stringify(db.getGroupMatches(request.body.primaryID)));
+server.put('/api/get-group-matches', (request, result) => {
+  result.send(JSON.stringify(db.getGroupMatches(request.body.id)));
 });
 
 server.listen(PORT, () => {
