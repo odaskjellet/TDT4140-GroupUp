@@ -85,18 +85,6 @@ function HomePage() {
             spacing={{xs: 2, md: 3}}
             columns={{xs: 4, sm: 8, md: 12}}
           >
-            {Array.from(groups).map((group) =>
-              <Grid item xs={2} sm={4} md={4} key={group.id}>
-                <Card sx={{padding: '1rem'}} elevation={3}>
-                  <h1>Group: {group.name}</h1>
-                  <Button
-                    onClick={() => navigate('/group/' + group.id)}
-                  >
-                    Visit
-                  </Button>
-                </Card>
-              </Grid>,
-            )}
           </Grid>
 
           <Stack
@@ -124,7 +112,7 @@ function HomePage() {
             {Array.from(groups).map((group) =>
               <Grid item xs={2} sm={4} md={4} key={group.id}>
                 <Card sx={{padding: '1rem'}} elevation={3}>
-                  <h1>Group: {group.name}</h1>
+                  <h1>{group.name}</h1>
                   <Button
                     onClick={() => navigate('/group/' + group.id)}
                   >
@@ -158,18 +146,6 @@ function HomePage() {
             spacing={{xs: 2, md: 3}}
             columns={{xs: 4, sm: 8, md: 12}}
           >
-            {Array.from(groups).map((group) =>
-              <Grid item xs={2} sm={4} md={4} key={group.id}>
-                <Card sx={{padding: '1rem'}} elevation={3}>
-                  <h1>Group: {group.name}</h1>
-                  <Button
-                    onClick={() => navigate('/group/' + group.id)}
-                  >
-                    Visit
-                  </Button>
-                </Card>
-              </Grid>,
-            )}
           </Grid>
         </Card>
 

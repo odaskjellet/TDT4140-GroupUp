@@ -10,29 +10,28 @@ class Database {
     this.stmt_create_table_users = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS Users ' +
         '(username string, password string, age integer, email string, ' +
-        'gender string)'
-    );
+        'gender string)');
 
     this.stmt_create_table_users.run();
 
     this.stmt_create_table_groups = this.db.prepare(
-        'CREATE TABLE IF NOT EXISTS ' +
-        'Groups (id integer, name string, admin string)');
+        'CREATE TABLE IF NOT EXISTS Groups ' +
+        '(id string, name string, admin string, description string)');
     this.stmt_create_table_groups.run();
 
     this.stmt_create_table_group_members = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS ' +
-        'GroupMembers (groupID integer, username string)');
+        'GroupMembers (groupId string, username string)');
     this.stmt_create_table_group_members.run();
 
     this.stmt_create_table_group_interests = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS ' +
-        'GroupInterests (groupID integer, interest string)');
+        'GroupInterests (groupId string, interest string)');
     this.stmt_create_table_group_interests.run();
 
     this.stmt_create_table_group_matches = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS ' +
-        'GroupMatches (primaryID integer, secondaryID integer)');
+        'GroupMatches (primaryId string, secondaryId integer)');
     this.stmt_create_table_group_matches.run();
 
     this.stmt_get_users = this.db.prepare(
@@ -40,37 +39,42 @@ class Database {
 
     this.stmt_get_user = this.db.prepare(
         'SELECT username, age, email, gender FROM Users WHERE username = ?');
+    
+    this.stmt_get_group = this.db.prepare(
+        'SELECT * FROM Groups WHERE id = ?');
 
     this.stmt_get_groups = this.db.prepare(
         'SELECT id, name FROM Groups');
 
     this.stmt_get_group_members = this.db.prepare(
-        'SELECT username FROM GroupMembers WHERE (groupID = ?)');
+        'SELECT username FROM GroupMembers WHERE (groupId = ?)');
 
     this.stmt_get_group_interests = this.db.prepare(
-        'SELECT interest FROM GroupInterests WHERE (groupID = ?)');
+        'SELECT interest FROM GroupInterests WHERE (groupId = ?)');
 
     this.stmt_get_group_matches = this.db.prepare(
-        'SELECT secondaryID FROM GroupMatches WHERE (primaryID = ?)');
+        'SELECT secondaryId FROM GroupMatches WHERE primaryId = ? UNION ' +
+        'SELECT primaryId FROM GroupMatches WHERE secondaryId = ?');
 
     this.stmt_insert_user = this.db.prepare(
         'INSERT INTO Users (username, password, age, email, gender) ' +
         'VALUES (?, ?, ?, ?, ?)');
 
     this.stmt_insert_group = this.db.prepare(
-        'INSERT INTO Groups (id, name) VALUES (?, ?)');
+        'INSERT INTO Groups (id, name, admin, description) ' +
+        'VALUES (?, ?, ?, ?)');
 
     this.stmt_insert_user_into_group = this.db.prepare(
-        'INSERT INTO GroupMembers (groupID, username) VALUES (?, ?)');
+        'INSERT INTO GroupMembers (groupId, username) VALUES (?, ?)');
 
     this.stmt_match_groups = this.db.prepare(
-        'INSERT INTO GroupMatches (primaryID, secondaryID) VALUES (?,?)');
+        'INSERT INTO GroupMatches (primaryId, secondaryId) VALUES (?,?)');
 
     this.stmt_try_login = this.db.prepare(
         'SELECT * FROM Users WHERE (username = ? AND password = ?)');
 
     this.stmt_insert_group_interest = this.db.prepare(
-        'INSERT INTO GroupInterests (groupID, interest) VALUES (?, ?)');
+        'INSERT INTO GroupInterests (groupId, interest) VALUES (?, ?)');
   }
 
 
@@ -90,8 +94,12 @@ class Database {
     return this.stmt_try_login.all(username, password).length > 0;
   }
 
-  insertGroup(id, name) {
-    this.stmt_insert_group.run(id, name);
+  insertGroup(id, name, admin, description) {
+    this.stmt_insert_group.run(id, name, admin, description);
+  }
+
+  getGroup(id) {
+    return this.stmt_get_group.get(id);
   }
 
   getGroups() {

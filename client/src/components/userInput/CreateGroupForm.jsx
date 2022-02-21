@@ -1,23 +1,29 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
-import {Card, Button, Stack, TextField} from '@mui/material';
+import {Card, Button, Stack, TextField, Chip} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { nanoid } from 'nanoid'
+import {UserContext} from '../../contexts/User';
 
 export default function CreateGroupForm() {
+  const [badRequest, setBadRequest] = useState(false);
   const {register, formState: {errors}, handleSubmit} = useForm();
+  const [userState, _] = useContext(UserContext);
   const navigate = useNavigate();
   const onSubmit = async (data) => {
-    console.log(data);
+    setBadRequest(false);
+    data.id = nanoid();
+    data.admin = userState.username;
     fetch('/api/insert-group', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(data),
     }).then((res) => {
       if (res.ok) {
-        console.log('group created!');
-        navigate('/home');
+        navigate('/group/' + data.id);
       } else {
-        console.log(res.text()); // TODO
+        setBadRequest(true);
       }
     });
   };
@@ -33,35 +39,9 @@ export default function CreateGroupForm() {
             margin="normal"
             error={errors.name}
             helperText={errors.name && 'A group name is required.'}
-            label="Group name"
+            label="Name"
             type={'text'}
             {...register('name', {required: true})}
-          />
-        </div>
-
-        <div>
-          <TextField
-            required
-            fullWidth
-            margin="normal"
-            error={errors.id}
-            helperText={errors.id && 'A group id cannot be negative.'}
-            label="Group id"
-            type={'number'}
-            {...register('id', {required: true, min: 0, max: 999999})}
-          />
-        </div>
-
-        <div>
-          <TextField
-            required
-            fullWidth
-            margin="normal"
-            error={errors.interests}
-            helperText={errors.interests && 'Interests are required.'}
-            label="Group interests"
-            type={'text'}
-            {...register('interests', {required: true})}
           />
         </div>
 
@@ -80,10 +60,24 @@ export default function CreateGroupForm() {
 
         <div>
           <TextField
+            disabled
+            fullWidth
+            margin="normal"
+            error={errors.interests}
+            helperText={errors.interests && 'Interests are required.'}
+            label="Interests - TODO"
+            type={'text'}
+            {...register('interests', {required: false})}
+          />
+        </div>
+
+        <div>
+          <TextField
+            disabled
             fullWidth
             margin="normal"
             error={errors.members}
-            label="Add members"
+            label="Add members - TODO"
             type={'text'}
             {...register('members', {required: false})}
           />
@@ -100,6 +94,12 @@ export default function CreateGroupForm() {
           >
             Cancel
           </Button>
+          {badRequest && <Chip
+            color="error"
+            label="Something went wrong!"
+            onDelete={() => setBadRequest(false)}
+            deleteIcon={<CloseIcon />}
+          />}
           <Button
             variant="contained"
             type="submit"

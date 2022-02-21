@@ -4,7 +4,8 @@ import CreateGroupForm from '../components/userInput/CreateGroupForm';
 
 export default function CreateGroupPage() {
   return <Container>
-    <br></br>
+    <br/>
+    <br/>
     <CreateGroupForm/>
   </Container>;
 }

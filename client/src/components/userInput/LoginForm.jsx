@@ -12,7 +12,7 @@ import CloseIcon from '@mui/icons-material/Close';
  * @constructor
  */
 function LoginForm() {
-  let [badLogin, setBadLogin] = useState(false);
+  const [badLogin, setBadLogin] = useState(false);
   const {register, formState: {errors}, handleSubmit} = useForm();
   const navigate = useNavigate();
   const [_, userDispatch] = useContext(UserContext);

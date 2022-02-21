@@ -48,11 +48,16 @@ server.put('/api/try-login', (request, result) => {
 
 server.put('/api/insert-group', (request, result) => {
   if (validGroupname(request.body.groupname)) {
-    db.insertGroup(request.body.id, request.body.name);
+    db.insertGroup(request.body.id, request.body.name,
+        request.body.admin, request.body.description);
     result.send('OK');
   } else {
     result.status(400).send();
   }
+});
+
+server.put('/api/get-group', (request, result) => {
+  result.send(JSON.stringify(db.getGroup(request.body.id)));
 });
 
 server.get('/api/get-groups', (request, result) => {
