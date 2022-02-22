@@ -1,5 +1,5 @@
 const express = require('express');
-const {Database} = require('./db.js');
+const { Database } = require('./db.js');
 
 const PORT = 3001;
 const server = express();
@@ -25,12 +25,22 @@ server.put('/api/get-user', (request, result) => {
   result.send(JSON.stringify(db.getUser(request.body.username)));
 });
 
+<<<<<<< server/src/index.js
+server.put('/api/insert', (request, result) => {
+  if (!db.tryLogin(request.body.username, request.body.password)
+    && validUsername(request.body.username)
+    && validPassword(request.body.password)
+    && validAge(request.body.age)
+    && validEmail(request.body.email)) {
+    db.insertUser(request.body.username, request.body.password, request.body.age, request.body.email, request.body.gender);
+=======
 server.put('/api/insert-user', (request, result) => {
   if (!db.tryLogin(request.body.username, request.body.password) &&
       validUsername(request.body.username) &&
       validPassword(request.body.password)) {
     db.insertUser(request.body.username, request.body.password,
         request.body.age, request.body.email, request.body.gender);
+>>>>>>> server/src/index.js
     result.send('OK');
   } else {
     result.status(400).send();
@@ -46,11 +56,17 @@ server.put('/api/try-login', (request, result) => {
   }
 });
 
+<<<<<<< server/src/index.js
+server.put('/api/insert_group', (request, result) => {
+  if (validGroupname(request.body.groupname)) {
+    db.insertGroup(request.body.id, request.body.name);
+=======
 server.put('/api/insert-group', (request, result) => {
   if (validGroupname(request.body.groupname)) {
     db.insertGroup(request.body.id, request.body.name,
         request.body.admin, request.body.description);
     db.addUserToGroup(request.body.id, request.body.admin);
+>>>>>>> server/src/index.js
     result.send('OK');
   } else {
     result.status(400).send();
@@ -82,8 +98,13 @@ server.get('/api/get-group-interests', (request, result) => {
   result.send(JSON.stringify(db.getGroupInterests(request.body.groupId)));
 });
 
+<<<<<<< server/src/index.js
+server.put('/api/insert_group_interests', (request, result) => {
+  db.addGroupInterest(request.body.groupID, request.body.interest);
+=======
 server.put('/api/insert-group-interest', (request, result) => {
   db.addGroupInterest(request.body.groupId, request.body.interest);
+>>>>>>> server/src/index.js
   result.send('OK');
 });
 
@@ -101,6 +122,7 @@ server.listen(PORT, () => {
 });
 
 
+//Validation
 function validUsername(username) {
   const regexPattern = /[A-Za-z]+$/i; // Regex only letters
   return regexPattern.test(username);
@@ -111,6 +133,35 @@ function validPassword(password) {
 }
 
 function validGroupname(groupname) {
+<<<<<<< server/src/index.js
+  let regexPattern = /[A-Za-z]+$/i;
+=======
   const regexPattern = /[A-Za-z]+$/i;
+>>>>>>> server/src/index.js
   return regexPattern.test(groupname);
 }
+
+function validAge(age) {
+  return age >= 18;
+}
+
+function validEmail(email) {
+  //Splits on @, checks for two substrings
+  let substrings = email.split("@");
+  if (substrings.length == 2) {
+    if ((substrings[0].length > 1) && (substrings[1].length > 1)) {
+      //Splits on . Checks for two substrings
+      let domainsubstring = substrings[1].split(".");
+      if (domainsubstring.length == 2) {
+        if (domainsubstring[0].length > 1 && domainsubstring[1].length > 1) {
+          return true;
+        }
+      }
+    }
+  }
+  else{
+    return false;
+  }
+}
+
+
