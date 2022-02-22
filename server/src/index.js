@@ -25,7 +25,7 @@ server.put('/api/get-user', (request, result) => {
   result.send(JSON.stringify(db.getUser(request.body.username)));
 });
 
-server.put('/api/insert', (request, result) => {
+server.put('/api/insert-user', (request, result) => {
   if (!db.tryLogin(request.body.username, request.body.password)
     && validUsername(request.body.username)
     && validPassword(request.body.password)
@@ -109,7 +109,7 @@ function validUsername(username) {
 }
 
 function validPassword(password) {
-  return password.length > 6;
+  return password.length >= 6;
 }
 
 function validGroupname(groupname) {
@@ -118,7 +118,7 @@ function validGroupname(groupname) {
 }
 
 function validAge(age) {
-  return age >= 18;
+  return parseInt(age) >= 18;
 }
 
 function validEmail(email) {
