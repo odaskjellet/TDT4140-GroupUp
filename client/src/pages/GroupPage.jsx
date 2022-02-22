@@ -6,6 +6,8 @@ export default function GroupPage() {
   const { id } = useParams();
   const [groupInfo, setGroupInfo] = useState({});
   const [groupMatches, setGroupMatches] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
+  const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
   const navigate = useNavigate();
   
   useEffect(async () => {
@@ -33,6 +35,15 @@ export default function GroupPage() {
       .then((result) => {
         setGroupMatches(result);
     });
+  };
+
+  //Hente alle brukere fra databasen
+  const fetchAllUsers = async () => {
+    fetch('api/get-users') //må lage url i server
+    .then((res) => res.json())
+    .then((result) => {
+      setAllUsers(true); //et resultat vi gjør noe med 
+    }); 
   };
 
   return (<Container>
@@ -69,6 +80,36 @@ export default function GroupPage() {
         )}
       </Grid>
     </Card>
+
+    <Button
+    variant='outlined'
+    onClick={() => {
+      setInviteDialogOpen(true);
+    }}>
+      Add Members
+    </Button>
+
+    {/* <Dialog onClose={() => inviteDialogOpen = false open={inviteDialogOpen}}>
+      <Container>
+        <DialogTitle>Add new member</DialogTitle>
+        <p>Who do you want to add?</p>
+      </Container>
+
+    </Dialog> */}
+
+    <h2>Members</h2>
+  
   </Container>
   );
 }
+
+/**
+ * TODO
+ *  [] Legge til "add member" button
+ *  [] Knytte den opp mot en invitasjonslogikk
+ *  [] Legge til invitasjon i database, relasjonstabell mellom gruppe og bruker
+ * 
+ *  [] Legge til en liste over medlemmer, kjøre et API kall for å hente alle medlemmer. 
+ * 
+ *  [] Gi alle medlemmer tilgang til gruppa når de har akseptert invitasjonen
+ */

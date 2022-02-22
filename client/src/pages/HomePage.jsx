@@ -167,3 +167,9 @@ function HomePage() {
 }
 
 export default HomePage;
+
+/**
+ * TODO:
+ * Legge til "pending invites" oversikt
+ * 
+ */

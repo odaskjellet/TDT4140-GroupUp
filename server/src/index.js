@@ -69,6 +69,10 @@ server.get('/api/get-groups', (request, result) => {
   result.send(JSON.stringify(db.getGroups()));
 });
 
+server.get('/api/get-users', (request, result) => {
+  result.send(JSON.stringify(db.getUsers()));
+})
+
 server.put('/api/add-user-to-group', (request, result) => {
   db.addUserToGroup(request.body.groupId, request.body.username);
   result.send('OK');
@@ -95,6 +99,7 @@ server.put('/api/match-groups', (request, result) => {
 server.put('/api/get-group-matches', (request, result) => {
   result.send(JSON.stringify(db.getGroupMatches(request.body.id)));
 });
+
 
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
