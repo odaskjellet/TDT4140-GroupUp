@@ -4,7 +4,7 @@ it('should be cleared', async () => {
 });
 
 it('db should start empty', async () => {
-  const result = await fetch('/api/get', {method: 'GET'})
+  const result = await fetch('/api/get-users', {method: 'GET'})
       .then((res) => res.json());
   expect(result).to.be.empty;
 });
@@ -18,8 +18,8 @@ it('should be able to insert user', async () => {
       password: 'henrik123',
     }),
   };
-  await fetch('/api/insert', requestOptions);
-  const result = await fetch('/api/get', {method: 'GET'})
+  await fetch('/api/insert-user', requestOptions);
+  const result = await fetch('/api/get-users', {method: 'GET'})
       .then((res) => res.json());
   expect(result).to.deep.equal([{username: 'henrik'}]);
 });
@@ -33,6 +33,6 @@ it('should not be able to insert an invalid user', async () => {
       password: 'henrik123',
     }),
   };
-  const result = await fetch('/api/insert', requestOptions);
+  const result = await fetch('/api/insert-user', requestOptions);
   expect(result.status).to.equal(400);
 });

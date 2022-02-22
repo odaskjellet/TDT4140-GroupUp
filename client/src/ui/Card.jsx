@@ -1,8 +1,9 @@
+import React from 'react';
 import classes from './Card.module.css';
 
 /**
  * Creates a custom "card" div that you can use to wrap elements in.
- * @param props
+ * @param props: JSX.Element
  * @return {JSX.Element}
  * @constructor
  */

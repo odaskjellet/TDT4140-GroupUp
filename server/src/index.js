@@ -11,7 +11,7 @@ server.use(express.urlencoded({extended: true}));
 
 // API tests: client/cypress/integration/api.test.js
 
-server.get('/api/get', (request, result) => {
+server.get('/api/get-users', (request, result) => {
   result.send(JSON.stringify(db.getUsers()));
 });
 
@@ -21,22 +21,24 @@ server.delete('/api/debug/clear', (request, result) => {
   result.send('OK');
 });
 
-server.get('/api/get_userinfo', (request, result) => {
-  result.send(JSON.stringify(db.getUserInfo()));
+server.put('/api/get-user', (request, result) => {
+  result.send(JSON.stringify(db.getUser(request.body.username)));
 });
 
-server.put('/api/insert', (request, result) => {
+server.put('/api/insert-user', (request, result) => {
   if (!db.tryLogin(request.body.username, request.body.password) &&
       validUsername(request.body.username) &&
       validPassword(request.body.password)) {
-    db.insertUser(request.body.username, request.body.password);
+    db.insertUser(request.body.username, request.body.password,
+        request.body.age, request.body.email, request.body.gender);
     result.send('OK');
   } else {
-    result.status(400).send(); // TODO: Return info about why the registration failed?
+    result.status(400).send();
+    // TODO: Return info about why the registration failed?
   }
 });
 
-server.put('/api/try_login', (request, result) => {
+server.put('/api/try-login', (request, result) => {
   if (db.tryLogin(request.body.username, request.body.password)) {
     result.send('OK');
   } else {
@@ -44,44 +46,54 @@ server.put('/api/try_login', (request, result) => {
   }
 });
 
-server.put('/api/insert_group', (request, result) => {
+server.put('/api/insert-group', (request, result) => {
   if (validGroupname(request.body.groupname)) {
-    db.insertGroup(request.body.id, request.body.name);
+    db.insertGroup(request.body.id, request.body.name,
+        request.body.admin, request.body.description);
+    db.addUserToGroup(request.body.id, request.body.admin);
     result.send('OK');
   } else {
     result.status(400).send();
   }
 });
 
-server.get('/api/get_group', (request, result) => {
+server.put('/api/get-group', (request, result) => {
+  result.send(JSON.stringify(db.getGroup(request.body.id)));
+});
+
+server.put('/api/get-groups-with-user', (request, result) => {
+  result.send(JSON.stringify(db.getGroupsWithUser(request.body.username)));
+});
+
+server.get('/api/get-groups', (request, result) => {
   result.send(JSON.stringify(db.getGroups()));
 });
 
-server.put('/api/insert_groupUser_relation', (request, result) => {
-  db.addUserToGroup(request.body.username, request.body.groupID);
+server.put('/api/add-user-to-group', (request, result) => {
+  db.addUserToGroup(request.body.groupId, request.body.username);
   result.send('OK');
 });
 
-server.get('/api/get_group_members', (request, result) => {
-  result.send(JSON.stringify(db.getGroupMembers(request.body.groupID)));
+server.get('/api/get-group-members', (request, result) => {
+  result.send(JSON.stringify(db.getGroupMembers(request.body.groupId)));
 });
 
-server.get('/api/get_group_interests', (request, result) => {
-  result.send(JSON.stringify(db.getGroupInterests(request.body.groupID)));
+server.get('/api/get-group-interests', (request, result) => {
+  result.send(JSON.stringify(db.getGroupInterests(request.body.groupId)));
 });
 
-server.put('/api/insert_group_interests', (request, result) => {
-  db.addGroupInterest(request.body.groupID, request.body.interest);
+server.put('/api/insert-group-interest', (request, result) => {
+  db.addGroupInterest(request.body.groupId, request.body.interest);
   result.send('OK');
 });
 
-server.put('/api/make_match', (request, result) => {
-  db.makeMatch(request.body.primaryID, request.body.secondaryID);
+server.put('/api/match-groups', (request, result) => {
+  db.matchGroups(request.body.primaryId, request.body.secondaryId);
   result.send('OK');
 });
 
-server.get('/api/get_matches', (request, result) => {
-  result.send(JSON.stringify(db.getGroupMatches(request.body.primaryID)));
+server.put('/api/get-group-matches', (request, result) => {
+  result.send(JSON.stringify(db.getGroupMatches(request.body.id)));
 });
 
 server.listen(PORT, () => {

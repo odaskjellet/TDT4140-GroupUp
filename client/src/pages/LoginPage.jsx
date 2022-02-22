@@ -1,3 +1,5 @@
+import React from 'react';
+import {Container} from '@mui/material';
 import LoginForm from '../components/userInput/LoginForm';
 
 /**
@@ -6,10 +8,10 @@ import LoginForm from '../components/userInput/LoginForm';
  * @constructor
  */
 function LoginPage() {
-  return <section>
-    <h1>Welcome to GroupUp</h1>
+  return <Container>
+    <h1 style={{textAlign: 'center', margin: '4rem'}}>Welcome to GroupUp</h1>
     <LoginForm/>
-  </section>;
+  </Container>;
 }
 
 export default LoginPage;
