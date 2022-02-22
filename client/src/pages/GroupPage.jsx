@@ -1,4 +1,4 @@
-import { Button, Card, Container, Grid } from '@mui/material';
+import { Button, Card, Container, Grid, Dialog, DialogTitle, Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -13,6 +13,7 @@ export default function GroupPage() {
   useEffect(async () => {
     await fetchGroupInfo();
     await fetchMatches();
+    await fetchAllUsers();
   }, [id]);
 
   const fetchGroupInfo = async () => {
@@ -42,7 +43,7 @@ export default function GroupPage() {
     fetch('api/get-users') //må lage url i server
     .then((res) => res.json())
     .then((result) => {
-      setAllUsers(true); //et resultat vi gjør noe med 
+      setAllUsers(result); //et resultat vi gjør noe med 
     }); 
   };
 
@@ -81,6 +82,8 @@ export default function GroupPage() {
       </Grid>
     </Card>
 
+    <h2>Members</h2>
+
     <Button
     variant='outlined'
     onClick={() => {
@@ -89,15 +92,37 @@ export default function GroupPage() {
       Add Members
     </Button>
 
-    {/* <Dialog onClose={() => inviteDialogOpen = false open={inviteDialogOpen}}>
-      <Container>
+    <Dialog onClose={() => inviteDialogOpen = false} open={inviteDialogOpen}>
+      <Container sx={{padding: '1rem'}} >
         <DialogTitle>Add new member</DialogTitle>
         <p>Who do you want to add?</p>
+        <br />
+
+        {/* <Stack spacing={1}>
+        {Array.from(allUsers).map((user) => (
+          <Card sx={{padding: '2rem'}} variant="outlined">
+            <h3>{user.name}</h3>
+            <Button
+              variant='contained'
+            >
+              Add
+            </Button>
+          </Card>
+        ))}
+        </Stack> */}
+
+        <Box textAlign='center'>
+          <Button
+              variant='outlined'
+              onClick={() => setInviteDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+          </Box>
       </Container>
+    </Dialog>
 
-    </Dialog> */}
-
-    <h2>Members</h2>
+   
   
   </Container>
   );
@@ -105,11 +130,10 @@ export default function GroupPage() {
 
 /**
  * TODO
- *  [] Legge til "add member" button
+ *  [X] Legge til "add member" button
+ *  [] Legge til en liste over medlemmer, kjøre et API kall for å hente alle medlemmer. 
  *  [] Knytte den opp mot en invitasjonslogikk
  *  [] Legge til invitasjon i database, relasjonstabell mellom gruppe og bruker
- * 
- *  [] Legge til en liste over medlemmer, kjøre et API kall for å hente alle medlemmer. 
  * 
  *  [] Gi alle medlemmer tilgang til gruppa når de har akseptert invitasjonen
  */
