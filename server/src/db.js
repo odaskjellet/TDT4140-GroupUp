@@ -82,51 +82,114 @@ class Database {
         'INSERT INTO GroupInterests (groupId, interest) VALUES (?, ?)');
   }
 
-
+  /**
+   * Format: [{username: string}, ...]
+   * @returns all usernames in DB 
+   */
   getUsers() {
     return this.stmt_get_users.all();
   }
 
+  /**
+   * Format: {username: string, age: number, email: string, gender: string}
+   * @param {string} username 
+   * @returns attributes of the user with the given username 
+   */
   getUser(username) {
     return this.stmt_get_user.get(username);
   }
 
+  /**
+   * Inserts a new user with the given attributes
+   * @param {string} username 
+   * @param {string} password 
+   * @param {number} age 
+   * @param {string} email 
+   * @param {string} gender 
+   */
   insertUser(username, password, age, email, gender) {
     this.stmt_insert_user.run(username, password, age, email, gender);
   }
 
+  /**
+   * 
+   * @param {string} username 
+   * @param {string} password 
+   * @returns {boolean} if the username/password combination is valid
+   */
   tryLogin(username, password) {
     return this.stmt_try_login.all(username, password).length > 0;
   }
 
+  /**
+   * Inserts a new group with the given attributes
+   * @param {string} id 
+   * @param {string} name 
+   * @param {string} admin username
+   * @param {string} description 
+   */
   insertGroup(id, name, admin, description) {
     this.stmt_insert_group.run(id, name, admin, description);
   }
 
+  /**
+   * Format: {id: string, name: string, admin: string, description: string}
+   * @param {string} id 
+   * @returns attributes of the group with the given username 
+   */
   getGroup(id) {
     return this.stmt_get_group.get(id);
   }
-
+  
+  /**
+   * Format: [{id: string, name: string}, ...]
+   * @returns id and name of all groups
+   */
   getGroups() {
     return this.stmt_get_groups.all();
   }
 
+  /**
+   * Format: [{id: string, name: string}, ...]
+   * @param {string} username 
+   * @returns id and name of all groups which the given user is member of
+   */
   getGroupsWithUser(username) {
     return this.stmt_get_groups_with_user.all(username);
   }
 
+  /**
+   * Adds the user to the given group
+   * @param {string} groupId 
+   * @param {string} username 
+   */
   addUserToGroup(groupId, username) {
     this.stmt_insert_user_into_group.run(groupId, username);
   }
 
+  /**
+   * Format: [{username: string}]
+   * @param {string} id 
+   * @returns usernames of all members of the given group
+   */
   getGroupMembers(id) {
     return this.stmt_get_group_members.all(id);
   }
 
+  /**
+   * Format: [{interest: string}]
+   * @param {string} id 
+   * @returns the interests of the given group
+   */
   getGroupInterests(id) {
     return this.stmt_get_group_interests.all(id);
   }
 
+  /**
+   * Adds the given interest to the given group
+   * @param {string} id 
+   * @param {string} interest 
+   */
   addGroupInterest(id, interest) {
     this.stmt_insert_group_interest.run(id, interest);
   }
@@ -141,6 +204,11 @@ class Database {
     this.stmt_match_groups.run(primaryId, secondaryId);
   }
 
+  /**
+   * Format: [{id: string}, ...]
+   * @param {string} id 
+   * @returns the groups that the given groups has matched with
+   */
   getGroupMatches(id) {
     return this.stmt_get_group_matches.all(id, id);
   }
