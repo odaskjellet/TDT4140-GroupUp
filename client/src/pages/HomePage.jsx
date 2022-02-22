@@ -49,7 +49,8 @@ function HomePage() {
   };
 
   if (!userState.verified) {
-    return <div>You are not logged in!</div>;
+    navigate('/');
+    return <div></div>;
   } else {
     return <Container>
       <Stack spacing={2}>

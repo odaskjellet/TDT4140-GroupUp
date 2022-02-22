@@ -86,7 +86,7 @@ function RegisterForm() {
             <Controller
               name='gender'
               labelId="gender-label"
-              defaultValue=''
+              label='Gender'
               control={control}
               render={({field}) => (
                 <Select {...field}>

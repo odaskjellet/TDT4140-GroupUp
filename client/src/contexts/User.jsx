@@ -1,13 +1,13 @@
 import React from 'react';
 
 const initialState = {
-  verified: localStorage.getItem('user.verified'),
-  username: localStorage.getItem('user.username'),
+  verified: sessionStorage.getItem('user.verified'),
+  username: sessionStorage.getItem('user.username'),
 };
 
 const setLocalStorage = (state) => {
-  localStorage.setItem('user.verified', state.verified);
-  localStorage.setItem('user.username', state.username);
+  sessionStorage.setItem('user.verified', state.verified);
+  sessionStorage.setItem('user.username', state.username);
 };
 
 export const UserContext = React.createContext({
