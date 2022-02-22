@@ -1,3 +1,5 @@
+import React from 'react';
+import {Container} from '@mui/material';
 import RegisterForm from '../components/userInput/RegisterForm';
 
 /**
@@ -6,10 +8,10 @@ import RegisterForm from '../components/userInput/RegisterForm';
  * @constructor
  */
 function RegisterPage() {
-  return <section>
-    <h1>Register a new user</h1>
+  return <Container>
+    <h1 style={{textAlign: 'center', margin: '4rem'}}>Welcome to GroupUp</h1>
     <RegisterForm/>
-  </section>;
+  </Container>;
 }
 
 export default RegisterPage;

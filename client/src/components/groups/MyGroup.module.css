@@ -1,0 +1,10 @@
+.group {
+    width: auto;
+
+}
+
+.test {
+    display: flex;
+    justify-content: space-between;
+
+}

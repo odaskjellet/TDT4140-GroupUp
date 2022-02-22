@@ -1,0 +1,38 @@
+
+.boxes {
+    border-radius: 20px;
+    background: #C4C4C4;
+    text-align: center;
+}
+
+.profile {
+    position: absolute;
+    width: 47%;
+    height: 30%;
+    left: 51%;
+    top: 15%;
+    border-radius: inherit;
+    background: inherit;
+}
+
+.information{
+
+    position: absolute;
+    width: 47%;
+    height: 82%;
+    left: 2%;
+    top: 15%;
+    border-radius: inherit;
+    background: inherit;
+}
+
+.groups{
+
+    position: absolute;
+    width: 47%;
+    height: 48%;
+    left: 51%;
+    top: 49%;
+    border-radius: inherit;
+    background: inherit;
+}
