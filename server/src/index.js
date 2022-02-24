@@ -1,5 +1,5 @@
 const express = require('express');
-const {Database} = require('./db.js');
+const { Database } = require('./db.js');
 
 const PORT = 3001;
 const server = express();
@@ -26,11 +26,12 @@ server.put('/api/get-user', (request, result) => {
 });
 
 server.put('/api/insert-user', (request, result) => {
-  if (!db.tryLogin(request.body.username, request.body.password) &&
-      validUsername(request.body.username) &&
-      validPassword(request.body.password)) {
-    db.insertUser(request.body.username, request.body.password,
-        request.body.age, request.body.email, request.body.gender);
+  if (!db.tryLogin(request.body.username, request.body.password)
+    && validUsername(request.body.username)
+    && validPassword(request.body.password)
+    && validAge(request.body.age)
+    && validEmail(request.body.email)) {
+    db.insertUser(request.body.username, request.body.password, request.body.age, request.body.email, request.body.gender);
     result.send('OK');
   } else {
     let errorData = alertErrors(registration_errors);
@@ -104,6 +105,7 @@ server.listen(PORT, () => {
 
 const registration_errors = [];
 
+//Validation
 function validUsername(username) {
   const regexPattern = /[A-Za-z]+$/i; // Regex only letters
   if(regexPattern.test(username)){
@@ -147,3 +149,28 @@ function clearErrors(registration_errors) {
   output = "";
   return null;
 }
+
+function validAge(age) {
+  return parseInt(age) >= 18;
+}
+
+function validEmail(email) {
+  //Splits on @, checks for two substrings
+  let substrings = email.split("@");
+  if (substrings.length == 2) {
+    if ((substrings[0].length > 1) && (substrings[1].length > 1)) {
+      //Splits on . Checks for two substrings
+      let domainsubstring = substrings[1].split(".");
+      if (domainsubstring.length == 2) {
+        if (domainsubstring[0].length > 1 && domainsubstring[1].length > 1) {
+          return true;
+        }
+      }
+    }
+  }
+  else{
+    return false;
+  }
+}
+
+
