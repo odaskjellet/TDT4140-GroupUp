@@ -13,7 +13,7 @@ export default function GroupPage() {
   useEffect(async () => {
     await fetchGroupInfo();
     await fetchMatches();
-    await fetchAllUsers();
+    await fetchAllUsers(); //skal den kalles her?
   }, [id]);
 
   const fetchGroupInfo = async () => {
@@ -38,7 +38,7 @@ export default function GroupPage() {
     });
   };
 
-  //Hente alle brukere fra databasen
+  //Henter alle brukere fra databasen
   const fetchAllUsers = async () => {
     fetch('api/get-users') //må lage url i server
     .then((res) => res.json())
@@ -95,7 +95,7 @@ export default function GroupPage() {
     <Dialog onClose={() => inviteDialogOpen = false} open={inviteDialogOpen}>
       <Container sx={{padding: '1rem'}} >
         <DialogTitle>Add new member</DialogTitle>
-        <p>Who do you want to add?</p>
+        <p textAlign='center'>Who do you want to add?</p>
         <br />
 
         {/* <Stack spacing={1}>
