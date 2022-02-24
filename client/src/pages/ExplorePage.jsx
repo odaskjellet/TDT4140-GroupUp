@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Container, Stack, Card, Grid, Button, Dialog, DialogTitle, Select, MenuItem, FormControl, InputLabel, Snackbar, Alert}
-    from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../contexts/User';
+  from '@mui/material';
+import {useNavigate} from 'react-router-dom';
+import {UserContext} from '../contexts/User';
 
 export default function ExplorePage() {
   const navigate = useNavigate();
@@ -22,10 +22,10 @@ export default function ExplorePage() {
 
   const fetchAllGroups = async () => {
     fetch('/api/get-groups')
-      .then((res) => res.json())
-      .then((result) => {
-      setAllGroups(result);
-    });
+        .then((res) => res.json())
+        .then((result) => {
+          setAllGroups(result);
+        });
   };
 
   const fetchMyGroups = async () => {
@@ -34,9 +34,9 @@ export default function ExplorePage() {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({username: userState.username}),
     }).then((res) => res.json())
-      .then((result) => {
-      setMyGroups(result);
-    });
+        .then((result) => {
+          setMyGroups(result);
+        });
   };
 
   const createMatch = async () => {
@@ -45,7 +45,7 @@ export default function ExplorePage() {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         primaryId: selectedGroupA.id,
-        secondaryId: selectedGroupBId
+        secondaryId: selectedGroupBId,
       }),
     }).then((res) => {
       if (res.ok) {
@@ -54,8 +54,8 @@ export default function ExplorePage() {
         // Did not create match
       }
     });
-  }
-  
+  };
+
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -114,7 +114,7 @@ export default function ExplorePage() {
                 >
                   {group.name}
                 </MenuItem>
-                ))}
+              ))}
             </Select>
           </FormControl>
           <br />
@@ -144,11 +144,11 @@ export default function ExplorePage() {
       </Dialog>
 
       <Snackbar
-          open={snackbarOpen}
-          autoHideDuration={4000}
-          onClose={handleSnackbarClose}
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={handleSnackbarClose}
       >
-        <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+        <Alert onClose={handleSnackbarClose} severity="success" sx={{width: '100%'}}>
           Match initiated!
         </Alert>
       </Snackbar>

@@ -39,7 +39,7 @@ class Database {
 
     this.stmt_get_user = this.db.prepare(
         'SELECT username, age, email, gender FROM Users WHERE username = ?');
-    
+
     this.stmt_get_group = this.db.prepare(
         'SELECT * FROM Groups WHERE id = ?');
 
@@ -58,7 +58,7 @@ class Database {
 
     this.stmt_get_group_matches = this.db.prepare(
         'SELECT secondaryId AS id FROM GroupMatches WHERE primaryId = ?' +
-        'INTERSECT ' + 
+        'INTERSECT ' +
         'SELECT primaryId AS id FROM GroupMatches WHERE secondaryId = ?');
 
     this.stmt_insert_user = this.db.prepare(
@@ -134,8 +134,8 @@ class Database {
   /**
    * Matches groups, one-way.
    * Groups have to match both ways to have a complete match.
-   * @param {string} primaryId 
-   * @param {string} secondaryId 
+   * @param {string} primaryId
+   * @param {string} secondaryId
    */
   matchGroups(primaryId, secondaryId) {
     this.stmt_match_groups.run(primaryId, secondaryId);

@@ -33,11 +33,11 @@ test('try to login', () => {
 test('try to get user info', () => {
   db.insertUser('henrik', 'henrik123', 20, 'henrik@gmail.com', 'male');
   expect(db.getUser('henrik')).toEqual({
-      username: 'henrik',
-      age: 20,
-      email: 'henrik@gmail.com',
-      gender: 'male'
-    });
+    username: 'henrik',
+    age: 20,
+    email: 'henrik@gmail.com',
+    gender: 'male',
+  });
 });
 
 test('get group', () => {
