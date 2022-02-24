@@ -87,7 +87,7 @@ class Database {
         'INSERT INTO GroupInterests (groupId, interest) VALUES (?, ?)');
 
     this.stmt_invite_user_to_group = this.db.prepare(
-        'INSERT INTO InvitationsToGroup (username, invitationStatus, groupId) VALUES (?, Pending string, ?)'
+        "INSERT INTO InvitationsToGroup (username, invitationStatus, groupId) VALUES (?, 'Pending', ?)"
     );
     
     this.stmt_answer_invitation_to_group = this.db.prepare(
@@ -95,7 +95,7 @@ class Database {
     );
 
     this.stmt_delete_invitation_to_group = this.db.prepare(
-      'DELETE FROM InvitationsToGroup (username = ? AND groupId = ? AND invitationStatus = "Declined")' //er det slik man skriver string??
+      "DELETE FROM InvitationsToGroup (username = ? AND groupId = ? AND invitationStatus = 'Declined')" //er det slik man skriver string??
     );
 
     this.stmt_get_invitation_to_group = this.db.prepare(
