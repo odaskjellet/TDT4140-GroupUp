@@ -1,9 +1,9 @@
 import React from 'react';
-import {Controller, useForm} from 'react-hook-form';
-import {useNavigate} from 'react-router-dom';
-import {UserContext} from '../../contexts/User';
-import {useContext} from 'react';
-import {Card, InputLabel, MenuItem, Select, TextField, FormControl, Stack, Button} from '@mui/material';
+import { Controller, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../contexts/User';
+import { useContext } from 'react';
+import { Card, InputLabel, MenuItem, Select, TextField, FormControl, Stack, Button } from '@mui/material';
 
 /**
  * Returns a register form wrapped in custom card div.
@@ -13,7 +13,7 @@ import {Card, InputLabel, MenuItem, Select, TextField, FormControl, Stack, Butto
 function RegisterForm() {
   const {
     register,
-    formState: {errors},
+    formState: { errors },
     getValues,
     handleSubmit,
     control,
@@ -24,21 +24,24 @@ function RegisterForm() {
   const onSubmit = async (data) => {
     fetch('/api/insert-user', {
       method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
-    }).then((res) => {
+    }).then(async (res) => {
       if (res.ok) {
-        userDispatch({type: 'login', username: data.username});
+        userDispatch({ type: 'login', username: data.username });
         navigate('../home');
       } else {
         console.log('Could not register user!'); // TODO
+        const errorMessage = await (res.json());
+        console.log(errorMessage);
+        alert(errorMessage);
       }
     });
   };
 
   return (
     <Card elevation={5}>
-      <form style={{padding: '2rem'}} onSubmit={handleSubmit(onSubmit)}>
+      <form style={{ padding: '2rem' }} onSubmit={handleSubmit(onSubmit)}>
         <h2>Register a new account</h2>
 
         <div>
@@ -50,7 +53,7 @@ function RegisterForm() {
             margin="normal"
             error={errors.username}
             helperText={errors.username && 'A username is required.'}
-            {...register('username', {required: true, maxLength: 40, pattern: /^[a-z ,.'-]+$/i})}
+            {...register('username', { required: true, maxLength: 40, pattern: /^[a-z ,.'-]+$/i })}
           />
         </div>
 
@@ -63,7 +66,7 @@ function RegisterForm() {
             margin="normal"
             error={errors.email}
             helperText={errors.email && 'Email is required'}
-            {...register('email', {required: true, maxLength: 40})}
+            {...register('email', { required: true, maxLength: 40 })}
           />
         </div>
 
@@ -76,7 +79,7 @@ function RegisterForm() {
             margin="normal"
             error={errors.age}
             helperText={errors.age && 'You need to be between 18 and 99 years old.'}
-            {...register('age', {required: true, min: 18, max: 99})}
+            {...register('age', { required: true, min: 18, max: 99 })}
           />
         </div>
 
@@ -88,7 +91,7 @@ function RegisterForm() {
               labelId="gender-label"
               label='Gender'
               control={control}
-              render={({field}) => (
+              render={({ field }) => (
                 <Select {...field}>
                   <MenuItem value={'female'}>Female</MenuItem>
                   <MenuItem value={'male'}>Male</MenuItem>
@@ -108,7 +111,7 @@ function RegisterForm() {
             margin="normal"
             error={errors.password}
             helperText={errors.password && 'A password is required.'}
-            {...register('password', {required: true})}
+            {...register('password', { required: true })}
           />
         </div>
 
@@ -125,7 +128,7 @@ function RegisterForm() {
               required: true,
               validate: {
                 matchesPreviousPassword: (value) => {
-                  const {password} = getValues();
+                  const { password } = getValues();
                   return password === value;
                 },
               },

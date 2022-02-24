@@ -33,8 +33,10 @@ server.put('/api/insert-user', (request, result) => {
         request.body.age, request.body.email, request.body.gender);
     result.send('OK');
   } else {
-    result.status(400).send();
-    // TODO: Return info about why the registration failed?
+    let errorData = alertErrors(registration_errors);
+    result.status(400);
+    result.send(JSON.stringify(errorData.error));
+    clearErrors(registration_errors);
   }
 });
 
@@ -53,7 +55,7 @@ server.put('/api/insert-group', (request, result) => {
     db.addUserToGroup(request.body.id, request.body.admin);
     result.send('OK');
   } else {
-    result.status(400).send();
+    result.status(400);
   }
 });
 
@@ -100,17 +102,48 @@ server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
 
+const registration_errors = [];
 
 function validUsername(username) {
   const regexPattern = /[A-Za-z]+$/i; // Regex only letters
-  return regexPattern.test(username);
+  if(regexPattern.test(username)){
+    return true;
+  } else {
+    registration_errors.push("Username must only containt letters");
+  }
 }
 
 function validPassword(password) {
-  return password.length > 6;
+  if(password.length > 6){
+    return true;
+  } else {
+    registration_errors.push("Password must be atleast 6 characters long");
+    return false;
+  }
 }
 
 function validGroupname(groupname) {
   const regexPattern = /[A-Za-z]+$/i;
-  return regexPattern.test(groupname);
+  if(regexPattern.test(groupname)){
+    return true;
+  } else {
+    registration_errors.push("Groupname must only contain letters");
+    return false;
+  }
+}
+
+function alertErrors(registration_errors) {
+  if(registration_errors.length != 0) {
+    let output = registration_errors.join('\r\n');
+    let outputJSON = {
+      error: output,
+    };
+    return outputJSON;
+  }
+}
+
+function clearErrors(registration_errors) {
+  registration_errors.length = 0;
+  output = "";
+  return null;
 }
