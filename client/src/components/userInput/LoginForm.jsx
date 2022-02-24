@@ -44,6 +44,7 @@ function LoginForm() {
             error={errors.username}
             helperText={errors.username && 'A username is required.'}
             label="Username"
+            aria-label="Username"
             type={'text'}
             {...register('username',
                 {required: true, maxLength: 40, pattern: /[A-Za-z]+$/i})
@@ -59,6 +60,7 @@ function LoginForm() {
             error={errors.password}
             helperText={errors.password && 'A password is required.'}
             label="Password"
+            aria-label="Password"
             type={'password'}
             {...register('password', {required: true, minLength: 6})}
           />
