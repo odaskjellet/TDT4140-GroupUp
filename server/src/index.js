@@ -82,6 +82,10 @@ server.get('/api/get-group-interests', (request, result) => {
   result.send(JSON.stringify(db.getGroupInterests(request.body.groupId)));
 });
 
+server.get('/api/get-group-members', (request, result) => {
+  result.send(JSON.stringify(db.getGroupMembers(request.body.groupId)));
+});
+
 server.put('/api/insert-group-interest', (request, result) => {
   db.addGroupInterest(request.body.groupId, request.body.interest);
   result.send('OK');
@@ -96,13 +100,17 @@ server.put('/api/get-group-matches', (request, result) => {
   result.send(JSON.stringify(db.getGroupMatches(request.body.id)));
 });
 
-server.get('/api/get-group-members', (request, result) => {
-  result.send(JSON.stringify(db.getGroupMembers(request.body.groupId)));
-});
-
-server.put('api/get-invitations-with-user', (request, result) => {
+//skal putte invitasjonene til en bruker i en liste på home page
+server.put('/api/get-invitations-with-user', (request, result) => {
   result.send(JSON.stringify(db.getUserInvitations(request.body.username)));
 });
+
+//invite user to group
+server.put('/api/invite-user-to-group', (request, result) => {
+  db.inviteUserToGroup(request.body.username, request.body.id);
+  result.send('OK');
+});
+
 
 
 server.listen(PORT, () => {

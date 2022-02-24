@@ -1,4 +1,4 @@
-import { Button, Card, Container, Grid, Dialog, DialogTitle, Box } from '@mui/material';
+import { Button, Card, Container, Grid, Dialog, DialogTitle, Box, List, ListItem, ListItemText, Snackbar, Alert} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -9,7 +9,10 @@ export default function GroupPage() {
   const [allUsers, setAllUsers] = useState([]);
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
   const navigate = useNavigate();
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   
+
+
   useEffect(async () => {
     await fetchGroupInfo();
     await fetchMatches();
@@ -40,11 +43,36 @@ export default function GroupPage() {
 
   //Henter alle brukere fra databasen
   const fetchAllUsers = async () => {
-    fetch('api/get-users') //må lage url i server
+    fetch('/api/get-users') //må lage url i server
     .then((res) => res.json())
     .then((result) => {
       setAllUsers(result); //et resultat vi gjør noe med 
     }); 
+  };
+
+  //sende invite til bruker
+  const sendInvite = async (username) => {
+    fetch('/api/invite-user-to-group', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        id : id,
+        username : username
+      }),
+    }).then((res) => {
+      if(res.ok) {
+        setSnackbarOpen(true);
+      } else {
+        // could not invite
+      }
+    });
+  }
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
   };
 
   return (<Container>
@@ -92,24 +120,27 @@ export default function GroupPage() {
       Add Members
     </Button>
 
-    <Dialog onClose={() => inviteDialogOpen = false} open={inviteDialogOpen}>
+    <Dialog onClose={() => inviteDialogOpen(false)} open={inviteDialogOpen}>
       <Container sx={{padding: '1rem'}} >
         <DialogTitle>Add new member</DialogTitle>
         <p textAlign='center'>Who do you want to add?</p>
         <br />
+        <List style={{maxHeight: 150, overflow: 'auto'}}>
+          {Array.from(allUsers).map((user) => 
+          <ListItem 
+          key={user.username}
+          value={user.username}> 
+          <ListItemText primary={user.username}></ListItemText>
+          <Button 
+          variant='contained'
+          onClick={() => {
+            sendInvite(user.username); 
+            
+          }}
+          >Invite</Button>
+          </ListItem>)}
+        </List>
 
-        {/* <Stack spacing={1}>
-        {Array.from(allUsers).map((user) => (
-          <Card sx={{padding: '2rem'}} variant="outlined">
-            <h3>{user.name}</h3>
-            <Button
-              variant='contained'
-            >
-              Add
-            </Button>
-          </Card>
-        ))}
-        </Stack> */}
 
         <Box textAlign='center'>
           <Button
@@ -121,6 +152,16 @@ export default function GroupPage() {
           </Box>
       </Container>
     </Dialog>
+
+    <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={4000}
+          onClose={handleSnackbarClose}
+      >
+        <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+          Invite sent!
+        </Alert>
+      </Snackbar>
 
    
   
