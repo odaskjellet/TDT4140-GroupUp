@@ -27,9 +27,9 @@ function HomePage() {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({username: userState.username}),
     }).then((res) => res.json())
-      .then((result) => {
-      setGroups(result);
-    });
+        .then((result) => {
+          setGroups(result);
+        });
   };
 
   const fetchUserInfo = async () => {
@@ -38,9 +38,9 @@ function HomePage() {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({username: userState.username}),
     }).then((res) => res.json())
-      .then((result) => {
-      setUserInfo(result);
-    });
+        .then((result) => {
+          setUserInfo(result);
+        });
   };
 
   const onSignOutButton = () => {
@@ -150,7 +150,7 @@ function HomePage() {
             </Button>
           </Stack>
         </Card>
-        
+
         <h2>Feed</h2>
         <Card sx={{padding: '2rem'}} variant="outlined">
           <Grid

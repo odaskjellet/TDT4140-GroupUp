@@ -16,8 +16,8 @@ it('should be able to insert user', async () => {
     body: JSON.stringify({
       username: 'henrik',
       password: 'henrik123',
-      age:"19",
-      email:"henrik123@gmail.com"
+      age: '19',
+      email: 'henrik123@gmail.com',
     }),
   };
   await fetch('/api/insert-user', requestOptions);
@@ -33,8 +33,8 @@ it('should not be able to insert a user with invalid username', async () => {
     body: JSON.stringify({
       username: 'harald!',
       password: 'henrik123',
-      age:"19",
-      email:"henrik123@gmail.com"
+      age: '19',
+      email: 'henrik123@gmail.com',
     }),
   };
   const result = await fetch('/api/insert-user', requestOptions);
@@ -48,8 +48,8 @@ it('should not be able to insert a user with invalid password', async () => {
     body: JSON.stringify({
       username: 'henriken',
       password: '123',
-      age:"19",
-      email:"henrik123@gmail.com"
+      age: '19',
+      email: 'henrik123@gmail.com',
     }),
   };
   const result = await fetch('/api/insert-user', requestOptions);
@@ -63,8 +63,8 @@ it('should not be able to insert a user with invalid age', async () => {
     body: JSON.stringify({
       username: 'vladimir',
       password: 'cyka1337',
-      age:"17",
-      email:"vladimir123@gmail.com"
+      age: '17',
+      email: 'vladimir123@gmail.com',
     }),
   };
   const result = await fetch('/api/insert-user', requestOptions);
@@ -78,8 +78,8 @@ it('should not be able to insert a user with invalid email-address', async () =>
     body: JSON.stringify({
       username: 'elskersurdeit',
       password: 'glutenerfett',
-      age:"29",
-      email:"v@g.com"
+      age: '29',
+      email: 'v@g.com',
     }),
   };
   const result = await fetch('/api/insert-user', requestOptions);

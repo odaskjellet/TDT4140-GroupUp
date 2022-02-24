@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../../contexts/User';
@@ -46,7 +46,7 @@ function LoginForm() {
             label="Username"
             type={'text'}
             {...register('username',
-                {required: true, maxLength: 40, pattern: /^[a-z ,.'-]+$/i})
+                {required: true, maxLength: 40, pattern: /[A-Za-z]+$/i})
             }
           />
         </div>
@@ -60,7 +60,7 @@ function LoginForm() {
             helperText={errors.password && 'A password is required.'}
             label="Password"
             type={'password'}
-            {...register('password', {required: true})}
+            {...register('password', {required: true, minLength: 6})}
           />
         </div>
 
@@ -77,7 +77,7 @@ function LoginForm() {
             severity="error"
             onClose={() => setBadLogin(false)}
           >
-            Wrong username or password!  
+            Wrong username or password!
           </Alert>}
           <Button
             variant="contained"

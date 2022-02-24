@@ -1,13 +1,13 @@
-import { Button, Card, Container, Grid } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import {Button, Card, Container, Grid} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 
 export default function GroupPage() {
-  const { id } = useParams();
+  const {id} = useParams();
   const [groupInfo, setGroupInfo] = useState({});
   const [groupMatches, setGroupMatches] = useState([]);
   const navigate = useNavigate();
-  
+
   useEffect(async () => {
     await fetchGroupInfo();
     await fetchMatches();
@@ -19,9 +19,9 @@ export default function GroupPage() {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({id: id}),
     }).then((res) => res.json())
-      .then((result) => {
-        setGroupInfo(result);
-    });
+        .then((result) => {
+          setGroupInfo(result);
+        });
   };
 
   const fetchMatches = async () => {
@@ -30,14 +30,14 @@ export default function GroupPage() {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({id: id}),
     }).then((res) => res.json())
-      .then((result) => {
-        setGroupMatches(result);
-    });
+        .then((result) => {
+          setGroupMatches(result);
+        });
   };
 
   return (<Container>
     <br />
-    <Button 
+    <Button
       variant='outlined'
       onClick={() => navigate('/home')}
     >
