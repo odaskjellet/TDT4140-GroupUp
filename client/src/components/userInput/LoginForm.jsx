@@ -44,7 +44,7 @@ function LoginForm() {
             error={errors.username}
             helperText={errors.username && 'A username is required.'}
             label="Username"
-            aria-label="Username"
+            inputProps={{'data-testid': 'username-input'}}
             type={'text'}
             {...register('username',
                 {required: true, maxLength: 40, pattern: /[A-Za-z]+$/i})
@@ -61,6 +61,7 @@ function LoginForm() {
             helperText={errors.password && 'A password is required.'}
             label="Password"
             aria-label="Password"
+            inputProps={{'data-testid': 'password-input'}}
             type={'password'}
             {...register('password', {required: true, minLength: 6})}
           />
@@ -82,6 +83,7 @@ function LoginForm() {
             Wrong username or password!
           </Alert>}
           <Button
+            aria-label="Button"
             variant="contained"
             type="submit"
           >

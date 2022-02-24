@@ -3,9 +3,10 @@ import {fireEvent, render, screen} from '@testing-library/react';
 import App from '../App';
 import {BrowserRouter} from 'react-router-dom';
 import {act} from 'react-dom/test-utils';
+import userEvent from '@testing-library/user-event';
 
 
-test('renders login', () => {
+function renderLogin() {
   act(() => {
     render(
         <BrowserRouter>
@@ -13,11 +14,26 @@ test('renders login', () => {
         </BrowserRouter>,
     );
   });
-  // make assertions
-  const userInput = screen.getByLabelText('Username');
-  const passwordInput = screen.getByLabelText('Password');
+}
 
-  fireEventchange.(userInput, {target: {value: '123'}});
+test('renders login', () => {
+  renderLogin();
 
-  expect(userInput.value).toBe('23');
+  // Getting inputs
+  const userInput = screen.getByTestId('username-input');
+  const passwordInput = screen.getByTestId('password-input');
+  const buttonInput = screen.getByLabelText('Button');
+
+  // Checks that the text-inputs is in the LoginForm
+  expect(userInput).toBeInTheDocument();
+  expect(passwordInput).toBeInTheDocument();
+  expect(buttonInput).toBeInTheDocument();
+
+  // Simulates a user entering their username
+  fireEvent.change(userInput, {target: {value: '123'}});
+  expect(userInput.value).toMatch('123');
+
+  // Simulates a user entering their password
+  fireEvent.change(passwordInput, {target: {value: 'test'}});
+  expect(passwordInput.value).toMatch('test');
 });
