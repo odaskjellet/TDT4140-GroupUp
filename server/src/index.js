@@ -150,7 +150,7 @@ function validGroupname(groupname) {
 }
 
 function validAge(age) {
-  if (parseInt(age) >= 18 || parseInt(age) <= 99) {
+  if (parseInt(age) >= 18 && parseInt(age) <= 99) {
     return true;
   } else {
     registration_errors.push('You need to be between 18 and 99 years old.');
