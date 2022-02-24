@@ -100,6 +100,10 @@ server.put('/api/get-group-matches', (request, result) => {
   result.send(JSON.stringify(db.getGroupMatches(request.body.id)));
 });
 
+server.put('api/get-invitations-with-user', (request, result) => {
+  result.send(JSON.stringify(db.getUserInvitations(request.body.id)));
+});
+
 
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

@@ -15,10 +15,12 @@ function HomePage() {
   const navigate = useNavigate();
   const [groups, setGroups] = useState([]);
   const [userInfo, setUserInfo] = useState({});
+  const [invitations, setInvitations] = useState({});
 
   useEffect(async () => {
     await fetchGroups();
     await fetchUserInfo();
+    await fetchInvitaions();
   }, []);
 
   const fetchGroups = async () => {
@@ -42,6 +44,16 @@ function HomePage() {
       setUserInfo(result);
     });
   };
+
+  const fetchInvitaions = async () => {
+    fetch('/api/get-invitations-with-user', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username: userState.username}),
+    }).then((res) => res.json()).then((result) => {
+      setInvitations(result);
+    });
+  }
 
   const onSignOutButton = () => {
     userDispatch({type: 'logout'});
@@ -82,6 +94,16 @@ function HomePage() {
             <Button onClick={onSignOutButton}>Sign out</Button>
           </Stack>
         </Stack>
+
+        <h2>Invitations</h2>
+        <Card sx={{padding: '2rem'}} variant="outlined"> 
+          <Grid
+            container
+            spacing={{xs: 2, md: 3}}
+            columns={{xs: 4, sm: 8, md: 12}}
+          >
+          </Grid>
+          </Card>
 
         <h2>Interests</h2>
         <Card sx={{padding: '2rem'}} variant="outlined">

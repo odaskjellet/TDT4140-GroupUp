@@ -34,6 +34,11 @@ class Database {
         'GroupMatches (primaryId string, secondaryId integer)');
     this.stmt_create_table_group_matches.run();
 
+    this.stmt_create_table_group_matches = this.db.prepare(
+      'CREATE TABLE IF NOT EXISTS ' +
+      'InvitationsToGroup (username string, invitationStatus string, groupId integer)');
+    this.stmt_create_table_group_matches.run();
+
     this.stmt_get_users = this.db.prepare(
         'SELECT username FROM Users');
 
@@ -80,6 +85,22 @@ class Database {
 
     this.stmt_insert_group_interest = this.db.prepare(
         'INSERT INTO GroupInterests (groupId, interest) VALUES (?, ?)');
+
+    this.stmt_invite_user_to_group = this.db.prepare(
+        'INSERT INTO InvitationsToGroup (username, invitationStatus, groupId) VALUES (?, Pending string, ?)'
+    );
+    
+    this.stmt_answer_invitation_to_group = this.db.prepare(
+      'UPDATE InvitationsToGroup SET (invitationStatus = ?) WHERE (username = ? AND groupId = ?)'
+    );
+
+    this.stmt_delete_invitation_to_group = this.db.prepare(
+      'DELETE FROM InvitationsToGroup (username = ? AND groupId = ? AND invitationStatus = "Declined")' //er det slik man skriver string??
+    );
+
+    this.stmt_get_invitation_to_group = this.db.prepare(
+      'SELECT * FROM InvitationsToGroup WHERE (username = ?)'
+    );
   }
 
 
@@ -144,6 +165,52 @@ class Database {
   getGroupMatches(id) {
     return this.stmt_get_group_matches.all(id, id);
   }
+
+  /**
+   * Sends invitation to user
+   * @param {string} username
+   * @param {int} groupId
+   */
+  inviteUserToGroup(username, groupId) {
+    this.stmt_invite_user_to_group.run(username, 'Pending', groupId); 
+    //det er vel en annen måte å sette default status i en database på
+  }
+
+  /**
+   * Answers the invitation to a group.
+   * If accepted, adds the user to the group.
+   * If declined, removes the invitation.
+   * @param {string} username
+   * @param {string} answer
+   * @param {int} groupId
+   */
+  answerGroupInvitation(username, answer, groupId) {
+    this.stmt_answer_invitation_to_group(username, answer, groupId);
+
+    if(answer.equals('Accept')) {
+      this.addUserToGroup(groupId, username);
+    }
+    else if(answer.equals('Decline')) {
+      this.deleteInvitation(username, groupId);
+    }
+
+  }
+
+  /**
+   * Removes the invitation
+   */
+  deleteInvitation(username, groupId) {
+    this.stmt_delete_invitation_to_group(username, groupId);
+  }
+
+  /**
+   * Getter for a users invitations to groups
+   */
+  getUserInvitations(username) {
+    this.stmt_get_invitation_to_group(username);
+  }
+
+
 }
 
 module.exports = {Database};
