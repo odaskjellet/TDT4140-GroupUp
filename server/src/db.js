@@ -34,10 +34,10 @@ class Database {
         'GroupMatches (primaryId string, secondaryId integer)');
     this.stmt_create_table_group_matches.run();
 
-    this.stmt_create_table_group_matches = this.db.prepare(
+    this.stmt_create_table_invitations_to_group = this.db.prepare(
       'CREATE TABLE IF NOT EXISTS ' +
-      'InvitationsToGroup (username string, invitationStatus string, groupId integer)');
-    this.stmt_create_table_group_matches.run();
+      'InvitationsToGroup (username string, invitationStatus string, groupId string)');
+    this.stmt_create_table_invitations_to_group.run();
 
     this.stmt_get_users = this.db.prepare(
         'SELECT username FROM Users');
@@ -87,20 +87,23 @@ class Database {
         'INSERT INTO GroupInterests (groupId, interest) VALUES (?, ?)');
 
     this.stmt_invite_user_to_group = this.db.prepare(
-        "INSERT INTO InvitationsToGroup (username, invitationStatus, groupId) VALUES (?, 'Pending', ?)"
+        'INSERT INTO InvitationsToGroup (username, invitationStatus, groupId) VALUES (?, ?, ?)'
     );
     
     this.stmt_answer_invitation_to_group = this.db.prepare(
-      'UPDATE InvitationsToGroup SET (invitationStatus = ?) WHERE (username = ? AND groupId = ?)'
+      'UPDATE InvitationsToGroup SET invitationStatus = ? WHERE (username = ? AND groupId = ?)'
     );
 
-    this.stmt_delete_invitation_to_group = this.db.prepare(
-      "DELETE FROM InvitationsToGroup (username = ? AND groupId = ? AND invitationStatus = 'Declined')" //er det slik man skriver string??
-    );
+    // this.stmt_delete_invitation_to_group = this.db.prepare(
+    //   'DELETE FROM InvitationsToGroup (username = ? AND groupId = ? AND invitationStatus = "Declined")' //er det slik man skriver string??
+    // );
 
     this.stmt_get_invitation_to_group = this.db.prepare(
-      'SELECT * FROM InvitationsToGroup WHERE (username = ?)'
+      'SELECT invitationStatus, groupID FROM InvitationsToGroup WHERE (username = ?)'
     );
+    //må denne egt kobles opp mot gruppe id (int) fra tabellen groups som som gjort i en annen spørring?
+    //'SELECT id, name FROM GroupMembers JOIN Groups WHERE ' +
+    //'GroupMembers.groupId = Groups.id AND GroupMembers.username = ?'
   }
 
 
@@ -169,10 +172,10 @@ class Database {
   /**
    * Sends invitation to user
    * @param {string} username
-   * @param {int} groupId
+   * @param {string} groupId
    */
   inviteUserToGroup(username, groupId) {
-    this.stmt_invite_user_to_group.run(username, 'Pending', groupId); 
+    this.stmt_invite_user_to_group.run(username, "Pending", groupId); 
     //det er vel en annen måte å sette default status i en database på
   }
 
@@ -182,15 +185,15 @@ class Database {
    * If declined, removes the invitation.
    * @param {string} username
    * @param {string} answer
-   * @param {int} groupId
+   * @param {string} groupId
    */
   answerGroupInvitation(username, answer, groupId) {
     this.stmt_answer_invitation_to_group(username, answer, groupId);
 
-    if(answer.equals('Accept')) {
+    if(answer.equals("Accept")) {
       this.addUserToGroup(groupId, username);
     }
-    else if(answer.equals('Decline')) {
+    else if(answer.equals("Decline")) {
       this.deleteInvitation(username, groupId);
     }
 
@@ -199,9 +202,9 @@ class Database {
   /**
    * Removes the invitation
    */
-  deleteInvitation(username, groupId) {
-    this.stmt_delete_invitation_to_group(username, groupId);
-  }
+  // deleteInvitation(username, groupId) {
+  //   this.stmt_delete_invitation_to_group(username, groupId);
+  // }
 
   /**
    * Getter for a users invitations to groups

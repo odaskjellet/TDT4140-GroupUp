@@ -96,27 +96,27 @@ test('matching groups', () => {
   ]);
 });
 
-test('get invitations for user', () => {
-  db.insertGroup(1, 'Gruppe 1');
-  db.insertUser('henrik', 'henrik123', 20);
-  db.insertUser('per', 'per123', 20);
+// test('get invitations for user', () => {
+//   db.insertGroup(1, 'Gruppe 1');
+//   db.insertUser('henrik', 'henrik123', 20);
+//   db.insertUser('per', 'per123', 20);
 
-  db.inviteUserToGroup(1, 'per'); //inviter bruker til gruppe1
-  db.answerGroupInvitation('per', 1, 'Accept');
+//   db.inviteUserToGroup(1, 'per'); //inviter bruker til gruppe1
+//   db.answerGroupInvitation('per', 1, 'Accept');
 
-  expect(db.getGroupMembers(1)).toEqual([
-    {'username': 'per'},
-  ]);
+//   expect(db.getGroupMembers(1)).toEqual([
+//     {'username': 'per'},
+//   ]);
 
-  db.inviteUserToGroup(1, 'henrik');
-  db.answerGroupInvitation('henrik', 1, 'Decline');
-  expect(db.getGroupMembers(1)).toEqual([
-    {'username': 'per'},
-  ]);
+//   db.inviteUserToGroup(1, 'henrik');
+//   db.answerGroupInvitation('henrik', 1, 'Decline');
+//   expect(db.getGroupMembers(1)).toEqual([
+//     {'username': 'per'},
+//   ]);
+//  })
   
   
 
-})
 
 /*
 User (username, password, age)
