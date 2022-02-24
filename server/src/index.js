@@ -78,10 +78,6 @@ server.put('/api/add-user-to-group', (request, result) => {
   result.send('OK');
 });
 
-server.get('/api/get-group-members', (request, result) => {
-  result.send(JSON.stringify(db.getGroupMembers(request.body.groupId)));
-});
-
 server.get('/api/get-group-interests', (request, result) => {
   result.send(JSON.stringify(db.getGroupInterests(request.body.groupId)));
 });
@@ -98,6 +94,10 @@ server.put('/api/match-groups', (request, result) => {
 
 server.put('/api/get-group-matches', (request, result) => {
   result.send(JSON.stringify(db.getGroupMatches(request.body.id)));
+});
+
+server.get('/api/get-group-members', (request, result) => {
+  result.send(JSON.stringify(db.getGroupMembers(request.body.groupId)));
 });
 
 server.put('api/get-invitations-with-user', (request, result) => {
