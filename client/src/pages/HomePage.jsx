@@ -45,6 +45,7 @@ function HomePage() {
     });
   };
 
+  //fetch the invites from the database, used for making a list in GUI
   const fetchInvitaions = async () => {
     fetch('/api/get-invitations-with-user', {
       method: 'PUT',
@@ -54,11 +55,30 @@ function HomePage() {
       setInvitations(result);
     });
   }
+  //answers the invite 
+  const answerInvite = (answer) => {
+    fetch('/api/answer-invite', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        username: username,
+        groupId : groupId,
+        answer : answer,
+      }),
+    }).then((res) => {
+      if(res.ok) {
+        //answer sent
+      } else {
+        //did not send answer
+      }
+    })
+  }
 
   const onSignOutButton = () => {
     userDispatch({type: 'logout'});
     navigate('/');
   };
+  
 
   if (!userState.verified) {
     navigate('/');
@@ -95,13 +115,32 @@ function HomePage() {
           </Stack>
         </Stack>
 
-        <h2>Invitations</h2>
+        <h2>Invitations</h2>  {/* DETTE ER HVOR JEG JOBBER, har satt opp api kall, men kan hende det er krøll med database :) */}
         <Card sx={{padding: '2rem'}} variant="outlined"> 
           <Grid
             container
             spacing={{xs: 2, md: 3}}
             columns={{xs: 4, sm: 8, md: 12}}
           >
+            {Array.from(invitations).map((invite) =>
+              <Grid item xs={2} sm={4} md={4} key={group.id}>
+                <Card sx={{padding: '1rem'}} elevation={3}>
+                  <h1>{invite}</h1> {/* MÅ stå noe sånt som "You are invited to join group: name" */}
+                  <Button 
+                    variant='contained'
+                    onClick={() => 
+                      answerInvite("Accept")}
+                    >Accept </Button>
+                  <Button
+                    variant='outlined'
+                    onClick={() => answerInvite("Decline")}
+                  >
+                    Decline
+                  </Button>
+
+                </Card>
+              </Grid>,
+            )}
           </Grid>
           </Card>
 

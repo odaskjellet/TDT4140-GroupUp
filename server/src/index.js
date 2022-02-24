@@ -111,6 +111,12 @@ server.put('/api/invite-user-to-group', (request, result) => {
   result.send('OK');
 });
 
+//send answer 
+server.put('/api/answer-invite', (request, result) => {
+  db.answerGroupInvitation(request.body.username, request.body.answer, request.body.groupId);
+  result.send('OK');
+})
+
 
 
 server.listen(PORT, () => {
