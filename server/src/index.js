@@ -101,7 +101,7 @@ server.put('/api/get-group-matches', (request, result) => {
 });
 
 server.put('api/get-invitations-with-user', (request, result) => {
-  result.send(JSON.stringify(db.getUserInvitations(request.body.id)));
+  result.send(JSON.stringify(db.getUserInvitations(request.body.username)));
 });
 
 
