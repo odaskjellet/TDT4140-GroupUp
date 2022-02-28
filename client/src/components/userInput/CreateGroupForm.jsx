@@ -12,7 +12,7 @@ export default function CreateGroupForm() {
   const navigate = useNavigate();
   const onSubmit = async (data) => {
     setBadRequest(false);
-    data.id = nanoid();
+    data.groupId = nanoid();
     data.admin = userState.username;
     fetch('/api/insert-group', {
       method: 'PUT',
@@ -20,7 +20,7 @@ export default function CreateGroupForm() {
       body: JSON.stringify(data),
     }).then(async (res) => {
       if (res.ok) {
-        navigate('/group/' + data.id);
+        navigate('/group/' + data.groupId);
       } else {
         setBadRequest(true);
         console.log('Could not register group!'); // TODO
