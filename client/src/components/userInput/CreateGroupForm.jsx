@@ -43,6 +43,7 @@ export default function CreateGroupForm() {
             error={errors.name}
             helperText={errors.name && 'A group name is required.'}
             label="Name"
+            inputProps={{'data-testid': 'group-name-input'}}
             type={'text'}
             {...register('name', {required: true})}
           />
@@ -56,6 +57,7 @@ export default function CreateGroupForm() {
             error={errors.description}
             helperText={errors.description && 'A description is required.'}
             label="Description"
+            inputProps={{'data-testid': 'description-input'}}
             type={'text'}
             {...register('description', {required: true})}
           />
