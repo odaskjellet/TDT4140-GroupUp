@@ -11,8 +11,6 @@ describe('Matching Page', () => {
   });
 
   it('should be able to initiate a match', () => {
-    const [userState, userDispatch] = useContext(UserContext);
-
     const users = [
       {
         username: 'userA',
@@ -39,7 +37,7 @@ describe('Matching Page', () => {
       {
         groupId: '1',
         name: 'GruppeB',
-        admin: 'userA'
+        admin: 'userB'
       },
       {
         groupId: '2',
@@ -55,7 +53,11 @@ describe('Matching Page', () => {
         body: JSON.stringify(data),
       });
     }
-    userDispatch({type: 'login', username: 'userA'});
+
+    // Hacky way to sign in
+    sessionStorage.setItem('user.verified', true);
+    sessionStorage.setItem('user.username', 'userA');
+
     for (let data of groups) {
       fetch('/api/insert-group', {
         method: 'PUT',
@@ -68,5 +70,26 @@ describe('Matching Page', () => {
     cy.findByText('GruppeA');
     cy.findByText('GruppeB');
     cy.findByText('GruppeC');
+    cy.findByText('GruppeB').parent().findByText('Match').click();
+    cy.get('.MuiSelect-select').click();
+    cy.get('.MuiList-root').findByText('GruppeA').click();
+    cy.findByText('Confirm').click();
+
+    cy.contains('Match initiated!').then(() => {
+      sessionStorage.setItem('user.verified', true);
+      sessionStorage.setItem('user.username', 'userB');
+    });
+
+    cy.visit('/explore');
+    cy.findByText('GruppeA').parent().findByText('Match').click();
+    cy.get('.MuiSelect-select').click();
+    cy.get('.MuiList-root').findByText('GruppeB').click();
+    cy.findByText('Confirm').click();
+    cy.contains('Match initiated!');
+
+    cy.visit('/group/0');
+    cy.findByText('GruppeB');
+    cy.visit('/group/1');
+    cy.findByText('GruppeA');
   });
 });
