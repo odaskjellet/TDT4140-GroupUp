@@ -98,7 +98,7 @@ export default function GroupPage() {
       Home
     </Button>
     <h1>Welcome to {groupInfo.name}</h1>
-    <p>ID: {groupId} </p>
+    {/* <p>ID: {groupId} </p> */}
     <p>Admin: {groupInfo.admin} </p>
     <p>Description: {groupInfo.description} </p>
 

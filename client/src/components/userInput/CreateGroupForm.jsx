@@ -61,7 +61,7 @@ export default function CreateGroupForm() {
           />
         </div>
 
-        <div>
+        {/* <div>
           <TextField
             disabled
             fullWidth
@@ -72,9 +72,9 @@ export default function CreateGroupForm() {
             type={'text'}
             {...register('interests', {required: false})}
           />
-        </div>
+        </div> */}
 
-        <div>
+        {/* <div>
           <TextField
             disabled
             fullWidth
@@ -84,7 +84,7 @@ export default function CreateGroupForm() {
             type={'text'}
             {...register('members', {required: false})}
           />
-        </div>
+        </div> */}
         <br></br>
         <Stack
           spacing={2}
