@@ -13,11 +13,14 @@ beforeEach(() => {
   // setup a DOM element as a render target
   container = document.createElement('div');
   document.body.appendChild(container);
-  render(<BrowserRouter>
-    <UserProvider>
-      <RegisterForm/>
-    </UserProvider>
-  </BrowserRouter>, container);
+
+  act(() => {
+    render(<BrowserRouter>
+      <UserProvider>
+        <RegisterForm/>
+      </UserProvider>
+    </BrowserRouter>, container);
+  });
 });
 
 afterEach(() => {
@@ -29,11 +32,11 @@ afterEach(() => {
 
 
 test('Checks that user input fields are in the document', () => {
-  const userInput = screen.getByTestId('username-register');
-  const passwordInput = screen.getByTestId('password-register');
-  const emailInput = screen.getByTestId('email-register');
-  const button = screen.getByLabelText('button-register');
-  const ageInput = screen.getByTestId('age-register');
+  const userInput = screen.getByTestId('username-input');
+  const passwordInput = screen.getByTestId('password-input');
+  const emailInput = screen.getByTestId('email-input');
+  const button = screen.getByLabelText('button-input');
+  const ageInput = screen.getByTestId('age-input');
 
 
   expect(userInput).toBeInTheDocument();
@@ -44,10 +47,10 @@ test('Checks that user input fields are in the document', () => {
 });
 
 test('Checks that user input fields are mutable', () => {
-  const userInput = screen.getByTestId('username-register');
-  const passwordInput = screen.getByTestId('password-register');
-  const emailInput = screen.getByTestId('email-register');
-  const ageInput = screen.getByTestId('age-register');
+  const userInput = screen.getByTestId('username-input');
+  const passwordInput = screen.getByTestId('password-input');
+  const emailInput = screen.getByTestId('email-input');
+  const ageInput = screen.getByTestId('age-input');
 
   userEvent.type(userInput, '123');
   expect(userInput.value).toMatch('123');

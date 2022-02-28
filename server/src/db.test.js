@@ -152,7 +152,7 @@ test('get invitations for user', () => {
   db.insertUser('henrik', 'henrik123', 20);
   db.insertUser('per', 'per123', 20);
 
-  db.inviteUserToGroup(1, 'per'); 
+  db.inviteUserToGroup(1, 'per');
   db.answerGroupInvitation('per', true, 1);
 
   expect(db.getGroupMembers(1)).toEqual([

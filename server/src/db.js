@@ -150,7 +150,7 @@ class Database {
   insertGroup(groupId, name, admin, description) {
     this.stmt_insert_group.run(groupId, name, admin, description);
   }
-  
+
   /**
    * Format: {id: string, name: string, admin: string, description: string}
    * @param {string} groupId

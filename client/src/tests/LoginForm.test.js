@@ -19,8 +19,8 @@ beforeEach(() => {
         <BrowserRouter>
           <UserProvider>
             <LoginForm/>
-          </UserProvider> </BrowserRouter>
-        , container);
+          </UserProvider>
+        </BrowserRouter>, container);
   });
 });
 
