@@ -78,12 +78,15 @@ function LoginForm() {
           <p>Don't have an account? <a href='/register'>Sign up</a></p>
           {badLogin && <Alert
             severity="error"
+            aria-label="errorLogin"
+            label="errorLogin"
             onClose={() => setBadLogin(false)}
           >
             Wrong username or password!
           </Alert>}
           <Button
             aria-label="Button"
+            data-testid="login-button"
             variant="contained"
             type="submit"
           >

@@ -20,7 +20,7 @@ function RegisterForm() {
   } = useForm();
 
   const navigate = useNavigate();
-  const [_, userDispatch] = useContext(UserContext);
+  const [userDispatch] = useContext(UserContext);
   const onSubmit = async (data) => {
     fetch('/api/insert-user', {
       method: 'PUT',
@@ -47,6 +47,8 @@ function RegisterForm() {
         <div>
           <TextField
             label="Username"
+            aria-label="Username"
+            inputProps={{'data-testid': 'username-register'}}
             type={'text'}
             required
             fullWidth
@@ -60,6 +62,8 @@ function RegisterForm() {
         <div>
           <TextField
             label="Email"
+            aria-label="Email"
+            inputProps={{'data-testid': 'email-register'}}
             type={'email'}
             required
             fullWidth
@@ -105,6 +109,8 @@ function RegisterForm() {
         <div>
           <TextField
             label="Password"
+            aria-label="Password"
+            inputProps={{'data-testid': 'password-register'}}
             type={'password'}
             required
             fullWidth

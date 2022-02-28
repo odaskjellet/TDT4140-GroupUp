@@ -1,39 +1,63 @@
-import React, {useState} from 'react';
-import {fireEvent, render, screen} from '@testing-library/react';
+import React from 'react';
+import {render, screen} from '@testing-library/react';
 import App from '../App';
 import {BrowserRouter} from 'react-router-dom';
 import {act} from 'react-dom/test-utils';
 import userEvent from '@testing-library/user-event';
+import {unmountComponentAtNode} from 'react-dom';
+import LoginForm from '../components/userInput/LoginForm';
 
+let container = null;
+beforeEach(() => {
+  // setup a DOM element as a render target
+  container = document.createElement('div');
+  document.body.appendChild(container);
 
-function renderLogin() {
   act(() => {
     render(
         <BrowserRouter>
-          <App/>
-        </BrowserRouter>,
-    );
+          <App>
+            <LoginForm/>
+          </App> </BrowserRouter>
+        , container);
   });
-}
+});
 
-test('renders login', () => {
-  renderLogin();
+afterEach(() => {
+  // cleanup on exiting
+  unmountComponentAtNode(container);
+  container.remove();
+  container = null;
+});
 
+
+test('Inputs are present in the document', () => {
   // Getting inputs
   const userInput = screen.getByTestId('username-input');
   const passwordInput = screen.getByTestId('password-input');
-  const buttonInput = screen.getByLabelText('Button');
+  const buttonInput = screen.getByTestId('login-button');
 
   // Checks that the text-inputs is in the LoginForm
   expect(userInput).toBeInTheDocument();
   expect(passwordInput).toBeInTheDocument();
   expect(buttonInput).toBeInTheDocument();
+});
 
+test('inputs are mutable', () => {
+  // Getting inputs
+  const userInput = screen.getByTestId('username-input');
+  const passwordInput = screen.getByTestId('password-input');
   // Simulates a user entering their username
-  fireEvent.change(userInput, {target: {value: '123'}});
+  // Asserts that the value we set matches.
+
+  userEvent.type(userInput, '123');
   expect(userInput.value).toMatch('123');
 
   // Simulates a user entering their password
-  fireEvent.change(passwordInput, {target: {value: 'test'}});
-  expect(passwordInput.value).toMatch('test');
+  // Asserts that the value we set matches.
+
+  userEvent.type(passwordInput, '123');
+  expect(passwordInput.value).toMatch('123');
 });
+
+
