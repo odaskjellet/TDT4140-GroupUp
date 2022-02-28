@@ -47,7 +47,6 @@ function RegisterForm() {
         <div>
           <TextField
             label="Username"
-            aria-label="Username"
             inputProps={{'data-testid': 'username-register'}}
             type={'text'}
             required
@@ -62,7 +61,6 @@ function RegisterForm() {
         <div>
           <TextField
             label="Email"
-            aria-label="Email"
             inputProps={{'data-testid': 'email-register'}}
             type={'email'}
             required
@@ -78,6 +76,7 @@ function RegisterForm() {
           <TextField
             label="Age"
             type={'number'}
+            inputProps={{'data-testid': 'age-register'}}
             required
             fullWidth
             margin="normal"
@@ -109,7 +108,6 @@ function RegisterForm() {
         <div>
           <TextField
             label="Password"
-            aria-label="Password"
             inputProps={{'data-testid': 'password-register'}}
             type={'password'}
             required
@@ -154,6 +152,7 @@ function RegisterForm() {
           <Button
             variant="contained"
             type="submit"
+            aria-label="button-register"
           >
             Create account
           </Button>

@@ -1,11 +1,12 @@
 import React from 'react';
 import {render, screen} from '@testing-library/react';
-import App from '../App';
 import {BrowserRouter} from 'react-router-dom';
 import {act} from 'react-dom/test-utils';
 import userEvent from '@testing-library/user-event';
 import {unmountComponentAtNode} from 'react-dom';
 import LoginForm from '../components/userInput/LoginForm';
+import {UserProvider} from '../contexts/User';
+
 
 let container = null;
 beforeEach(() => {
@@ -16,9 +17,9 @@ beforeEach(() => {
   act(() => {
     render(
         <BrowserRouter>
-          <App>
+          <UserProvider>
             <LoginForm/>
-          </App> </BrowserRouter>
+          </UserProvider> </BrowserRouter>
         , container);
   });
 });
@@ -59,5 +60,4 @@ test('inputs are mutable', () => {
   userEvent.type(passwordInput, '123');
   expect(passwordInput.value).toMatch('123');
 });
-
 

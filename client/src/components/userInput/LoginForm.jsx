@@ -60,7 +60,6 @@ function LoginForm() {
             error={errors.password}
             helperText={errors.password && 'A password is required.'}
             label="Password"
-            aria-label="Password"
             inputProps={{'data-testid': 'password-input'}}
             type={'password'}
             {...register('password', {required: true, minLength: 6})}
