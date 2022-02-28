@@ -12,7 +12,7 @@ describe('Register Page', () => {
     cy.get('[data-testid="username-input"]').type('myUsername');
     cy.get('[data-testid="email-input"]').type('name@domain.com');
     cy.get('[data-testid="age-input"]').type(30);
-    cy.findByText('Other').click();
+    cy.get('.MuiSelect-select').click();
     cy.findByText('Female').click();
     cy.get('[data-testid="password-input"]').type('Password123');
     cy.get('[data-testid="password-confirmation-input"]').type('Password123');
@@ -20,7 +20,7 @@ describe('Register Page', () => {
     cy.url().should('include', '/home');
   });
 
-  it('should valide all inputs', () => {
+  it('should validate all inputs', () => {
     cy.visit('/register');
     cy.contains(/create account/i).click();
     cy.get('[data-testid="username-input"]').type('u'.repeat(42));
@@ -29,7 +29,7 @@ describe('Register Page', () => {
     cy.contains(/create account/i).click();
     cy.get('[data-testid="age-input"]').type(-1);
     cy.contains(/create account/i).click();
-    cy.findByText('Other').click();
+    cy.get('.MuiSelect-select').click();
     cy.findByText('Female').click();
     cy.contains(/create account/i).click();
     cy.get('[data-testid="password-input"]').type('Password1');
@@ -39,8 +39,10 @@ describe('Register Page', () => {
     cy.contains(/create account/i).click();
     cy.get('[data-testid="email-input"]').clear().type('myEmail@domain.com');
     cy.contains(/create account/i).click();
+    cy.contains(/You need to be between 18 and 99 years old./i);
     cy.get('[data-testid="age-input"]').clear().type(20);
     cy.contains(/create account/i).click();
+    cy.contains(/Passwords should match!./i);
     cy.get('[data-testid="password-confirmation-input"]')
         .clear().type('Password1');
     cy.contains(/create account/i).click();
