@@ -3,6 +3,7 @@ import {screen} from '@testing-library/react';
 import {BrowserRouter} from 'react-router-dom';
 import RegisterForm from '../components/userInput/RegisterForm';
 import React from 'react';
+import {UserProvider} from '../contexts/User';
 
 
 let container = null;
@@ -12,7 +13,9 @@ beforeEach(() => {
   container = document.createElement('div');
   document.body.appendChild(container);
   render(<BrowserRouter>
-    <RegisterForm/>
+    <UserProvider>
+      <RegisterForm/>
+    </UserProvider>
   </BrowserRouter>, container);
 });
 
@@ -26,7 +29,7 @@ afterEach(() => {
 
 test('renders with or without a name', () => {
   const userInput = screen.getByTestId('username-register');
-  const passwordInput = screen.getByLabelText('password-register');
+  const passwordInput = screen.getByTestId('password-register');
   const emailInput = screen.getByTestId('email-register');
 
   expect(userInput).toBeInTheDocument();
