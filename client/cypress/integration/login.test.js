@@ -7,7 +7,7 @@ describe('Login page', () => {
   });
 
   it('Should not be able to login with dummy data', () => {
-    cy.visit('/');
+    cy.visit('/login');
     cy.get('[data-testid="username-input"]').type('myUsername');
     cy.get('[data-testid="password-input"]').type('Password123');
     cy.get('[data-testid="login-button"]').click();
@@ -15,7 +15,7 @@ describe('Login page', () => {
   });
 
   it('Username validation', () => {
-    cy.visit('/');
+    cy.visit('/login');
     cy.get('[data-testid="username-input"]').type(' ');
     cy.get('[data-testid="password-input"]').type('Password123');
     cy.get('[data-testid="login-button"]').click();
@@ -23,7 +23,7 @@ describe('Login page', () => {
   });
 
   it('Password validation', () => {
-    cy.visit('/');
+    cy.visit('/login');
     cy.get('[data-testid="username-input"]').type('myUsername');
     cy.get('[data-testid="password-input"]').type('123');
     cy.get('[data-testid="login-button"]').click();
@@ -42,6 +42,7 @@ describe('Login page', () => {
       }),
     };
     await fetch('/api/insert-user', requestOptions);
+    cy.visit('/login');
     cy.get('[data-testid="username-input"]').clear();
     cy.get('[data-testid="username-input"]').type('testUser');
     cy.get('[data-testid="password-input"]').clear();
