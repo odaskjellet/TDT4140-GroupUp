@@ -3,9 +3,9 @@ const SQLiteDB = require('better-sqlite3');
 // DOCS: https://github.com/JoshuaWise/better-sqlite3/blob/master/docs/api.md
 
 class Database {
-  constructor(filename) {
+  constructor(filename, verbose=true) {
     this.db = new SQLiteDB(filename,
-        {verbose: (msg) => console.log('[DB] ' + msg)});
+        {verbose: verbose ? (msg) => console.log('[DB] ' + msg) : null});
 
     this.stmt_create_table_users = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS Users ' +
@@ -101,51 +101,114 @@ class Database {
     );
   }
 
-
+  /**
+   * Format: [{username: string}, ...]
+   * @return all usernames in DB
+   */
   getUsers() {
     return this.stmt_get_users.all();
   }
 
+  /**
+   * Format: {username: string, age: number, email: string, gender: string}
+   * @param {string} username
+   * @return attributes of the user with the given username
+   */
   getUser(username) {
     return this.stmt_get_user.get(username);
   }
 
+  /**
+   * Inserts a new user with the given attributes
+   * @param {string} username
+   * @param {string} password
+   * @param {number} age
+   * @param {string} email
+   * @param {string} gender
+   */
   insertUser(username, password, age, email, gender) {
     this.stmt_insert_user.run(username, password, age, email, gender);
   }
 
+  /**
+   *
+   * @param {string} username
+   * @param {string} password
+   * @return {boolean} if the username/password combination is valid
+   */
   tryLogin(username, password) {
     return this.stmt_try_login.all(username, password).length > 0;
   }
 
+  /**
+   * Inserts a new group with the given attributes
+   * @param {string} groupDd
+   * @param {string} name
+   * @param {string} admin username
+   * @param {string} description
+   */
   insertGroup(groupId, name, admin, description) {
     this.stmt_insert_group.run(groupId, name, admin, description);
   }
-
+  
+  /**
+   * Format: {id: string, name: string, admin: string, description: string}
+   * @param {string} groupId
+   * @return attributes of the group with the given username
+   */
   getGroup(groupId) {
     return this.stmt_get_group.get(groupId);
   }
 
+  /**
+   * Format: [{id: string, name: string}, ...]
+   * @return id and name of all groups
+   */
   getGroups() {
     return this.stmt_get_groups.all();
   }
 
+  /**
+   * Format: [{id: string, name: string}, ...]
+   * @param {string} username
+   * @return id and name of all groups which the given user is member of
+   */
   getGroupsWithUser(username) {
     return this.stmt_get_groups_with_user.all(username);
   }
 
+  /**
+   * Adds the user to the given group
+   * @param {string} groupId
+   * @param {string} username
+   */
   addUserToGroup(groupId, username) {
     this.stmt_insert_user_into_group.run(groupId, username);
   }
 
+  /**
+   * Format: [{username: string}]
+   * @param {string} groupId
+   * @return usernames of all members of the given group
+   */
   getGroupMembers(groupId) {
     return this.stmt_get_group_members.all(groupId);
   }
 
+  /**
+   * Format: [{interest: string}]
+   * @param {string} groupId
+   * @return the interests of the given group
+   */
   getGroupInterests(groupId) {
     return this.stmt_get_group_interests.all(groupId);
   }
 
+  /**
+   * Adds the given interest to the given group
+   * @param {string} groupId
+   * @param {string} interest
+   */
   addGroupInterest(groupId, interest) {
     this.stmt_insert_group_interest.run(groupId, interest);
   }
@@ -160,6 +223,11 @@ class Database {
     this.stmt_match_groups.run(primaryId, secondaryId);
   }
 
+  /**
+   * Format: [{groupId: string}, ...]
+   * @param {string} groupId
+   * @return the groups that the given groups has matched with
+   */
   getGroupMatches(groupId) {
     return this.stmt_get_group_matches.all(groupId, groupId);
   }
@@ -171,7 +239,6 @@ class Database {
    */
   inviteUserToGroup(username, groupId) {
     this.stmt_invite_user_to_group.run(username, groupId);
-    // det er vel en annen måte å sette default status i en database på
   }
 
   /**

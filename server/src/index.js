@@ -27,14 +27,15 @@ server.put('/api/get-user', (request, result) => {
 
 server.put('/api/insert-user', (request, result) => {
   if (!db.tryLogin(request.body.username, request.body.password) &&
-      validUsername(request.body.username) &&
-      validPassword(request.body.password)) {
-    db.insertUser(request.body.username, request.body.password,
-        request.body.age, request.body.email, request.body.gender);
+    validInformation(request.body.username, request.body.password, request.body.age, request.body.email)) {
+    db.insertUser(request.body.username, request.body.password, request.body.age, request.body.email, request.body.gender);
     result.send('OK');
   } else {
-    result.status(400).send();
-    // TODO: Return info about why the registration failed?
+    const errorData = alertErrors(registration_errors);
+    result.status(400);
+    console.log(errorData);
+    result.send(JSON.stringify(errorData.error));
+    clearErrors(registration_errors);
   }
 });
 
@@ -47,13 +48,17 @@ server.put('/api/try-login', (request, result) => {
 });
 
 server.put('/api/insert-group', (request, result) => {
-  if (validGroupname(request.body.groupname)) {
+  if (validGroupname(request.body.name)) {
     db.insertGroup(request.body.groupId, request.body.name,
         request.body.admin, request.body.description);
     db.addUserToGroup(request.body.groupId, request.body.admin);
     result.send('OK');
   } else {
-    result.status(400).send();
+    const errorData = alertErrors(registration_errors);
+    result.status(400);
+    console.log(errorData);
+    result.send(JSON.stringify(errorData.error));
+    clearErrors(registration_errors);
   }
 });
 
@@ -119,17 +124,101 @@ server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
 
+const registration_errors = [];
 
+function validInformation(username, password, age, email) {
+  // Iterates over functions to get potential errors
+  validUsername(username);
+  validPassword(password);
+  validAge(age);
+  validEmail(email);
+  if (registration_errors.length == 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// Validation
 function validUsername(username) {
   const regexPattern = /[A-Za-z]+$/i; // Regex only letters
-  return regexPattern.test(username);
+  if (regexPattern.test(username)) {
+    return true;
+  } else {
+    registration_errors.push('Username must only containt letters');
+  }
 }
 
 function validPassword(password) {
-  return password.length > 6;
+  if (password.length >= 6) {
+    return true;
+  } else {
+    registration_errors.push('Password must be atleast 6 characters long');
+    return false;
+  }
 }
 
 function validGroupname(groupname) {
   const regexPattern = /[A-Za-z]+$/i;
-  return regexPattern.test(groupname);
+  if (regexPattern.test(groupname)) {
+    return true;
+  } else {
+    registration_errors.push('Groupname must only contain letters');
+    return false;
+  }
 }
+
+function validAge(age) {
+  if (parseInt(age) >= 18 && parseInt(age) <= 99) {
+    return true;
+  } else {
+    registration_errors.push('You need to be between 18 and 99 years old.');
+    return false;
+  }
+}
+
+function validEmail(email) {
+  // Splits on @, checks for two substrings
+  const substrings = email.split('@');
+  if (substrings.length == 2) {
+    if ((substrings[0].length > 1) && (substrings[1].length > 1)) {
+      // Splits on . Checks for two substrings
+      const domainsubstring = substrings[1].split('.');
+      if (domainsubstring.length == 2) {
+        if (domainsubstring[0].length > 1 && domainsubstring[1].length > 1) {
+          return true;
+        } else {
+          registration_errors.push('Must be a valid email! xx@yy.zz');
+          return false;
+        }
+      } else {
+        registration_errors.push('Must be a valid email! xx@yy.zz');
+        return false;
+      }
+    } else {
+      registration_errors.push('Must be a valid email! xx@yy.zz');
+      return false;
+    }
+  } else {
+    registration_errors.push('Must be a valid email! xx@yy.zz');
+    return false;
+  }
+}
+
+function alertErrors(registration_errors) {
+  if (registration_errors.length != 0) {
+    const output = registration_errors.join('\r\n');
+    const outputJSON = {
+      error: output,
+    };
+    return outputJSON;
+  }
+}
+
+function clearErrors(registration_errors) {
+  registration_errors.length = 0;
+  output = '';
+  return null;
+}
+
+

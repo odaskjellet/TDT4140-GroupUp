@@ -18,11 +18,15 @@ export default function CreateGroupForm() {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(data),
-    }).then((res) => {
+    }).then(async (res) => {
       if (res.ok) {
         navigate('/group/' + data.id);
       } else {
         setBadRequest(true);
+        console.log('Could not register group!'); // TODO
+        const errorMessage = await (res.json());
+        console.log(errorMessage);
+        alert(errorMessage);
       }
     });
   };

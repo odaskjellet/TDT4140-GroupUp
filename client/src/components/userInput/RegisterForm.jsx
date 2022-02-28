@@ -26,12 +26,15 @@ function RegisterForm() {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(data),
-    }).then((res) => {
+    }).then(async (res) => {
       if (res.ok) {
         userDispatch({type: 'login', username: data.username});
         navigate('../home');
       } else {
         console.log('Could not register user!'); // TODO
+        const errorMessage = await (res.json());
+        console.log(errorMessage);
+        alert(errorMessage);
       }
     });
   };
@@ -50,7 +53,7 @@ function RegisterForm() {
             margin="normal"
             error={errors.username}
             helperText={errors.username && 'A username is required.'}
-            {...register('username', {required: true, maxLength: 40, pattern: /^[a-z ,.'-]+$/i})}
+            {...register('username', {required: true, maxLength: 40, pattern: /[A-Za-z]+$/i})}
           />
         </div>
 
@@ -108,7 +111,7 @@ function RegisterForm() {
             margin="normal"
             error={errors.password}
             helperText={errors.password && 'A password is required.'}
-            {...register('password', {required: true})}
+            {...register('password', {required: true, minLength: 6})}
           />
         </div>
 

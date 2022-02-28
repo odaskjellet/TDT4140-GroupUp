@@ -46,7 +46,7 @@ function LoginForm() {
             label="Username"
             type={'text'}
             {...register('username',
-                {required: true, maxLength: 40, pattern: /^[a-z ,.'-]+$/i})
+                {required: true, maxLength: 40, pattern: /[A-Za-z]+$/i})
             }
           />
         </div>
@@ -60,7 +60,7 @@ function LoginForm() {
             helperText={errors.password && 'A password is required.'}
             label="Password"
             type={'password'}
-            {...register('password', {required: true})}
+            {...register('password', {required: true, minLength: 6})}
           />
         </div>
 
