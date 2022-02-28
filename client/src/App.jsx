@@ -26,7 +26,7 @@ export default function App() {
           <Route path="/home" element={<HomePage/>}/>
           <Route path="/create-group" element={<CreateGroupPage/>}/>
           <Route path="/user" element={<MyProfilePage/>}/>
-          <Route path="/group/:id" element={<GroupPage/>} />
+          <Route path="/group/:groupId" element={<GroupPage/>} />
           <Route path="/explore" element={<ExplorePage/>} />
         </Routes>
       </UserProvider>

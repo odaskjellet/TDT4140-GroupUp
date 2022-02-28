@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../../contexts/User';
@@ -77,7 +77,7 @@ function LoginForm() {
             severity="error"
             onClose={() => setBadLogin(false)}
           >
-            Wrong username or password!  
+            Wrong username or password!
           </Alert>}
           <Button
             variant="contained"

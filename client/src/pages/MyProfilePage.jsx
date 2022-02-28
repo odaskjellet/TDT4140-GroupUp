@@ -13,7 +13,6 @@ import {UserContext} from '../contexts/User';
  * A page for userprofile information.
  */
 function MyProfilePage() {
-  
   return <section>
     <Settings/>
     <MyProfilePicture />

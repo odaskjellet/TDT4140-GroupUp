@@ -18,10 +18,14 @@ function HomePage() {
   const [invitations, setInvitations] = useState({});
 
   useEffect(async () => {
+    fetchAll();
+  }, []);
+
+  const fetchAll = async () => {
     await fetchGroups();
     await fetchUserInfo();
-    await fetchInvitaions();
-  }, []);
+    await fetchInvitations();
+  };
 
   const fetchGroups = async () => {
     fetch('/api/get-groups-with-user', {
@@ -29,9 +33,9 @@ function HomePage() {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({username: userState.username}),
     }).then((res) => res.json())
-      .then((result) => {
-      setGroups(result);
-    });
+        .then((result) => {
+          setGroups(result);
+        });
   };
 
   const fetchUserInfo = async () => {
@@ -40,13 +44,13 @@ function HomePage() {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({username: userState.username}),
     }).then((res) => res.json())
-      .then((result) => {
-      setUserInfo(result);
-    });
+        .then((result) => {
+          setUserInfo(result);
+        });
   };
 
-  //fetch the invites from the database, used for making a list in GUI
-  const fetchInvitaions = async () => {
+  // fetch the invites from the database, used for making a list in GUI
+  const fetchInvitations = async () => {
     fetch('/api/get-invitations-with-user', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
@@ -54,31 +58,31 @@ function HomePage() {
     }).then((res) => res.json()).then((result) => {
       setInvitations(result);
     });
-  }
-  //answers the invite 
-  const answerInvite = (answer) => {
+  };
+  // answers the invite
+  const answerInvite = (accept, groupId) => {
     fetch('/api/answer-invite', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        username: username,
-        groupId : groupId,
-        answer : answer,
+        username: userState.username,
+        accept: accept,
+        groupId: groupId,
       }),
     }).then((res) => {
-      if(res.ok) {
-        //answer sent
+      if (res.ok) {
+        // answer sent
       } else {
-        //did not send answer
+        // did not send answer
       }
-    })
-  }
+    });
+  };
 
   const onSignOutButton = () => {
     userDispatch({type: 'logout'});
     navigate('/');
   };
-  
+
 
   if (!userState.verified) {
     navigate('/');
@@ -115,25 +119,30 @@ function HomePage() {
           </Stack>
         </Stack>
 
-        <h2>Invitations</h2>  {/* DETTE ER HVOR JEG JOBBER, har satt opp api kall, men kan hende det er krøll med database :) */}
-        <Card sx={{padding: '2rem'}} variant="outlined"> 
+        <h2>Invitations</h2>
+        <Card sx={{padding: '2rem'}} variant="outlined">
           <Grid
             container
             spacing={{xs: 2, md: 3}}
             columns={{xs: 4, sm: 8, md: 12}}
           >
             {Array.from(invitations).map((invite) =>
-              <Grid item xs={2} sm={4} md={4} key={group.id}>
+              <Grid item xs={2} sm={4} md={4} key={invite.groupId}>
                 <Card sx={{padding: '1rem'}} elevation={3}>
-                  <h1>{invite}</h1> {/* MÅ stå noe sånt som "You are invited to join group: name" */}
-                  <Button 
+                  <h1>You are invited to join {invite.name}!</h1>
+                  <Button
                     variant='contained'
-                    onClick={() => 
-                      answerInvite("Accept")}
-                    >Accept </Button>
+                    onClick={() => {
+                      answerInvite(true, invite.groupId);
+                      fetchAll();
+                    }}
+                  >Accept </Button>
                   <Button
                     variant='outlined'
-                    onClick={() => answerInvite("Decline")}
+                    onClick={() => {
+                      answerInvite(false, invite.groupId);
+                      fetchAll();
+                    }}
                   >
                     Decline
                   </Button>
@@ -142,8 +151,9 @@ function HomePage() {
               </Grid>,
             )}
           </Grid>
-          </Card>
+        </Card>
 
+        {/*
         <h2>Interests</h2>
         <Card sx={{padding: '2rem'}} variant="outlined">
           <Grid
@@ -166,7 +176,7 @@ function HomePage() {
               Add interest
             </Button>
           </Stack>
-        </Card>
+        </Card> */}
 
         <h2>Groups</h2>
         <Card sx={{padding: '2rem'}} variant="outlined">
@@ -176,11 +186,11 @@ function HomePage() {
             columns={{xs: 4, sm: 8, md: 12}}
           >
             {Array.from(groups).map((group) =>
-              <Grid item xs={2} sm={4} md={4} key={group.id}>
+              <Grid item xs={2} sm={4} md={4} key={group.groupId}>
                 <Card sx={{padding: '1rem'}} elevation={3}>
                   <h1>{group.name}</h1>
                   <Button
-                    onClick={() => navigate('/group/' + group.id)}
+                    onClick={() => navigate('/group/' + group.groupId)}
                   >
                     Visit
                   </Button>
@@ -211,7 +221,8 @@ function HomePage() {
             </Button>
           </Stack>
         </Card>
-        
+
+        {/*
         <h2>Feed</h2>
         <Card sx={{padding: '2rem'}} variant="outlined">
           <Grid
@@ -220,7 +231,7 @@ function HomePage() {
             columns={{xs: 4, sm: 8, md: 12}}
           >
           </Grid>
-        </Card>
+        </Card> */}
 
       </Stack>
     </Container>;
@@ -232,5 +243,5 @@ export default HomePage;
 /**
  * TODO:
  * Legge til "pending invites" oversikt
- * 
+ *
  */

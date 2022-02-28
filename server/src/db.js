@@ -16,12 +16,12 @@ class Database {
 
     this.stmt_create_table_groups = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS Groups ' +
-        '(id string, name string, admin string, description string)');
+        '(groupId string, name string, admin string, description string, PRIMARY KEY (groupId))');
     this.stmt_create_table_groups.run();
 
     this.stmt_create_table_group_members = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS ' +
-        'GroupMembers (groupId string, username string)');
+        'GroupMembers (groupId string, username string, CONSTRAINT UC_GroupMember UNIQUE (groupId, username))');
     this.stmt_create_table_group_members.run();
 
     this.stmt_create_table_group_interests = this.db.prepare(
@@ -31,12 +31,12 @@ class Database {
 
     this.stmt_create_table_group_matches = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS ' +
-        'GroupMatches (primaryId string, secondaryId integer)');
+        'GroupMatches (primaryId string, secondaryId integer, CONSTRAINT UC_GroupMatches UNIQUE (primaryId, secondaryId))');
     this.stmt_create_table_group_matches.run();
 
     this.stmt_create_table_invitations_to_group = this.db.prepare(
-      'CREATE TABLE IF NOT EXISTS ' +
-      'InvitationsToGroup (username string, invitationStatus string, groupId string)');
+        'CREATE TABLE IF NOT EXISTS ' +
+      'InvitationsToGroup (username string, groupId string, CONSTRAINT UC_Invitation UNIQUE (username, groupId))');
     this.stmt_create_table_invitations_to_group.run();
 
     this.stmt_get_users = this.db.prepare(
@@ -44,16 +44,16 @@ class Database {
 
     this.stmt_get_user = this.db.prepare(
         'SELECT username, age, email, gender FROM Users WHERE username = ?');
-    
+
     this.stmt_get_group = this.db.prepare(
-        'SELECT * FROM Groups WHERE id = ?');
+        'SELECT * FROM Groups WHERE groupId = ?');
 
     this.stmt_get_groups = this.db.prepare(
-        'SELECT id, name FROM Groups');
+        'SELECT groupId, name FROM Groups');
 
     this.stmt_get_groups_with_user = this.db.prepare(
-        'SELECT id, name FROM GroupMembers JOIN Groups WHERE ' +
-        'GroupMembers.groupId = Groups.id AND GroupMembers.username = ?');
+        'SELECT groupId, name FROM GroupMembers JOIN Groups USING ' +
+        '(groupId) WHERE GroupMembers.username = ?');
 
     this.stmt_get_group_members = this.db.prepare(
         'SELECT username FROM GroupMembers WHERE (groupId = ?)');
@@ -62,16 +62,18 @@ class Database {
         'SELECT interest FROM GroupInterests WHERE (groupId = ?)');
 
     this.stmt_get_group_matches = this.db.prepare(
-        'SELECT secondaryId AS id FROM GroupMatches WHERE primaryId = ?' +
-        'INTERSECT ' + 
-        'SELECT primaryId AS id FROM GroupMatches WHERE secondaryId = ?');
+        'SELECT groupId, name FROM Groups JOIN ' +
+        '(SELECT secondaryId AS groupId FROM GroupMatches WHERE primaryId = ?' +
+        'INTERSECT ' +
+        'SELECT primaryId AS groupId FROM GroupMatches WHERE secondaryId = ?)' +
+        'USING (groupId)');
 
     this.stmt_insert_user = this.db.prepare(
         'INSERT INTO Users (username, password, age, email, gender) ' +
         'VALUES (?, ?, ?, ?, ?)');
 
     this.stmt_insert_group = this.db.prepare(
-        'INSERT INTO Groups (id, name, admin, description) ' +
+        'INSERT INTO Groups (groupId, name, admin, description) ' +
         'VALUES (?, ?, ?, ?)');
 
     this.stmt_insert_user_into_group = this.db.prepare(
@@ -87,23 +89,16 @@ class Database {
         'INSERT INTO GroupInterests (groupId, interest) VALUES (?, ?)');
 
     this.stmt_invite_user_to_group = this.db.prepare(
-        'INSERT INTO InvitationsToGroup (username, invitationStatus, groupId) VALUES (?, ?, ?)'
-    );
-    
-    this.stmt_answer_invitation_to_group = this.db.prepare(
-      'UPDATE InvitationsToGroup SET invitationStatus = ? WHERE (username = ? AND groupId = ?)'
+        'INSERT INTO InvitationsToGroup (username, groupId) VALUES (?, ?)',
     );
 
-    // this.stmt_delete_invitation_to_group = this.db.prepare(
-    //   'DELETE FROM InvitationsToGroup (username = ? AND groupId = ? AND invitationStatus = "Declined")' //er det slik man skriver string??
-    // );
+    this.stmt_delete_invitation = this.db.prepare(
+        'DELETE FROM InvitationsToGroup WHERE (username = ? AND groupId = ?)',
+    );
 
     this.stmt_get_invitation_to_group = this.db.prepare(
-      'SELECT invitationStatus, groupID FROM InvitationsToGroup WHERE (username = ?)'
+        'SELECT groupId, name FROM InvitationsToGroup JOIN Groups USING (groupId) WHERE (username = ?)',
     );
-    //må denne egt kobles opp mot gruppe id (int) fra tabellen groups som som gjort i en annen spørring?
-    //'SELECT id, name FROM GroupMembers JOIN Groups WHERE ' +
-    //'GroupMembers.groupId = Groups.id AND GroupMembers.username = ?'
   }
 
 
@@ -123,12 +118,12 @@ class Database {
     return this.stmt_try_login.all(username, password).length > 0;
   }
 
-  insertGroup(id, name, admin, description) {
-    this.stmt_insert_group.run(id, name, admin, description);
+  insertGroup(groupId, name, admin, description) {
+    this.stmt_insert_group.run(groupId, name, admin, description);
   }
 
-  getGroup(id) {
-    return this.stmt_get_group.get(id);
+  getGroup(groupId) {
+    return this.stmt_get_group.get(groupId);
   }
 
   getGroups() {
@@ -143,30 +138,30 @@ class Database {
     this.stmt_insert_user_into_group.run(groupId, username);
   }
 
-  getGroupMembers(id) {
-    return this.stmt_get_group_members.all(id);
+  getGroupMembers(groupId) {
+    return this.stmt_get_group_members.all(groupId);
   }
 
-  getGroupInterests(id) {
-    return this.stmt_get_group_interests.all(id);
+  getGroupInterests(groupId) {
+    return this.stmt_get_group_interests.all(groupId);
   }
 
-  addGroupInterest(id, interest) {
-    this.stmt_insert_group_interest.run(id, interest);
+  addGroupInterest(groupId, interest) {
+    this.stmt_insert_group_interest.run(groupId, interest);
   }
 
   /**
    * Matches groups, one-way.
    * Groups have to match both ways to have a complete match.
-   * @param {string} primaryId 
-   * @param {string} secondaryId 
+   * @param {string} primaryId
+   * @param {string} secondaryId
    */
   matchGroups(primaryId, secondaryId) {
     this.stmt_match_groups.run(primaryId, secondaryId);
   }
 
-  getGroupMatches(id) {
-    return this.stmt_get_group_matches.all(id, id);
+  getGroupMatches(groupId) {
+    return this.stmt_get_group_matches.all(groupId, groupId);
   }
 
   /**
@@ -175,8 +170,8 @@ class Database {
    * @param {string} groupId
    */
   inviteUserToGroup(username, groupId) {
-    this.stmt_invite_user_to_group.run(username, "Pending", groupId); 
-    //det er vel en annen måte å sette default status i en database på
+    this.stmt_invite_user_to_group.run(username, groupId);
+    // det er vel en annen måte å sette default status i en database på
   }
 
   /**
@@ -187,33 +182,20 @@ class Database {
    * @param {string} answer
    * @param {string} groupId
    */
-  answerGroupInvitation(username, answer, groupId) {
-    this.stmt_answer_invitation_to_group(username, answer, groupId);
+  answerGroupInvitation(username, accept, groupId) {
+    this.stmt_delete_invitation.run(username, groupId);
 
-    if(answer.equals("Accept")) {
+    if (accept) {
       this.addUserToGroup(groupId, username);
     }
-    else if(answer.equals("Decline")) {
-      this.deleteInvitation(username, groupId);
-    }
-
   }
-
-  /**
-   * Removes the invitation
-   */
-  // deleteInvitation(username, groupId) {
-  //   this.stmt_delete_invitation_to_group(username, groupId);
-  // }
 
   /**
    * Getter for a users invitations to groups
    */
   getUserInvitations(username) {
-    this.stmt_get_invitation_to_group(username);
+    return this.stmt_get_invitation_to_group.all(username);
   }
-
-
 }
 
 module.exports = {Database};

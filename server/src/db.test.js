@@ -33,18 +33,18 @@ test('try to login', () => {
 test('try to get user info', () => {
   db.insertUser('henrik', 'henrik123', 20, 'henrik@gmail.com', 'male');
   expect(db.getUser('henrik')).toEqual({
-      username: 'henrik',
-      age: 20,
-      email: 'henrik@gmail.com',
-      gender: 'male'
-    });
+    username: 'henrik',
+    age: 20,
+    email: 'henrik@gmail.com',
+    gender: 'male',
+  });
 });
 
 test('get group', () => {
   db.insertGroup(1, 'Gruppe');
   expect(db.getGroups()).toEqual([
     {
-      id: 1,
+      groupId: 1,
       name: 'Gruppe',
     },
   ]);
@@ -52,14 +52,14 @@ test('get group', () => {
 
 test('get group members', () => {
   db.insertGroup(1, 'Gruppe');
-  db.insertUser('henrik', 'henrik123', 20);
   db.insertUser('per', 'henrik123', 20);
-  db.addUserToGroup(1, 'per');
+  db.insertUser('henrik', 'henrik123', 20);
   db.addUserToGroup(1, 'henrik');
-  expect(db.getGroupMembers(1)).toEqual([
-    {'username': 'per'},
+  db.addUserToGroup(1, 'per');
+  expect(db.getGroupMembers(1)).toEqual(expect.arrayContaining([
     {'username': 'henrik'},
-  ]);
+    {'username': 'per'},
+  ]));
 });
 
 test('get groupinterest', () => {
@@ -89,38 +89,41 @@ test('matching groups', () => {
   db.matchGroups(2, 1); // A complete match
 
   expect(db.getGroupMatches(1)).toEqual([
-    {'id': 2},
+    {groupId: 2, name: 'Gruppe 2'},
   ]);
   expect(db.getGroupMatches(2)).toEqual([
-    {'id': 1},
+    {groupId: 1, name: 'Gruppe 1'},
   ]);
 });
 
-// test('get invitations for user', () => {
-//   db.insertGroup(1, 'Gruppe 1');
-//   db.insertUser('henrik', 'henrik123', 20);
-//   db.insertUser('per', 'per123', 20);
 
-//   db.inviteUserToGroup(1, 'per'); //inviter bruker til gruppe1
-//   db.answerGroupInvitation('per', 1, 'Accept');
+test('get invitations for user', () => {
+  db.insertGroup(1, 'Gruppe 1');
+  db.insertUser('henrik', 'henrik123', 20);
+  db.insertUser('per', 'per123', 20);
 
-//   expect(db.getGroupMembers(1)).toEqual([
-//     {'username': 'per'},
-//   ]);
+  db.inviteUserToGroup(1, 'per'); // inviter bruker til gruppe1
+  db.answerGroupInvitation('per', true, 1);
 
-//   db.inviteUserToGroup(1, 'henrik');
-//   db.answerGroupInvitation('henrik', 1, 'Decline');
-//   expect(db.getGroupMembers(1)).toEqual([
-//     {'username': 'per'},
-//   ]);
-//  })
-  
-  
+  expect(db.getGroupMembers(1)).toEqual([
+    {'username': 'per'},
+  ]);
+
+  db.inviteUserToGroup(1, 'henrik');
+  db.answerGroupInvitation('henrik', false, 1);
+  expect(db.getGroupMembers(1)).toEqual([
+    {'username': 'per'},
+  ]);
+});
+
+test('no duplicate invites', () => {
+  // TODO
+});
 
 
 /*
 User (username, password, age)
-Group (id, name)
+Group (groupId, name)
 MemberOfGroup(username, groupID)
 Interests (interest)
 GroupInterest (groupID, interest)
