@@ -48,9 +48,9 @@ server.put('/api/try-login', (request, result) => {
 
 server.put('/api/insert-group', (request, result) => {
   if (validGroupname(request.body.groupname)) {
-    db.insertGroup(request.body.id, request.body.name,
+    db.insertGroup(request.body.groupId, request.body.name,
         request.body.admin, request.body.description);
-    db.addUserToGroup(request.body.id, request.body.admin);
+    db.addUserToGroup(request.body.groupId, request.body.admin);
     result.send('OK');
   } else {
     result.status(400).send();
@@ -58,7 +58,7 @@ server.put('/api/insert-group', (request, result) => {
 });
 
 server.put('/api/get-group', (request, result) => {
-  result.send(JSON.stringify(db.getGroup(request.body.id)));
+  result.send(JSON.stringify(db.getGroup(request.body.groupId)));
 });
 
 server.put('/api/get-groups-with-user', (request, result) => {
@@ -69,17 +69,21 @@ server.get('/api/get-groups', (request, result) => {
   result.send(JSON.stringify(db.getGroups()));
 });
 
+server.get('/api/get-users', (request, result) => {
+  result.send(JSON.stringify(db.getUsers()));
+});
+
 server.put('/api/add-user-to-group', (request, result) => {
   db.addUserToGroup(request.body.groupId, request.body.username);
   result.send('OK');
 });
 
-server.get('/api/get-group-members', (request, result) => {
-  result.send(JSON.stringify(db.getGroupMembers(request.body.groupId)));
-});
-
 server.get('/api/get-group-interests', (request, result) => {
   result.send(JSON.stringify(db.getGroupInterests(request.body.groupId)));
+});
+
+server.put('/api/get-group-members', (request, result) => {
+  result.send(JSON.stringify(db.getGroupMembers(request.body.groupId)));
 });
 
 server.put('/api/insert-group-interest', (request, result) => {
@@ -93,8 +97,23 @@ server.put('/api/match-groups', (request, result) => {
 });
 
 server.put('/api/get-group-matches', (request, result) => {
-  result.send(JSON.stringify(db.getGroupMatches(request.body.id)));
+  result.send(JSON.stringify(db.getGroupMatches(request.body.groupId)));
 });
+
+server.put('/api/get-invitations-with-user', (request, result) => {
+  result.send(JSON.stringify(db.getUserInvitations(request.body.username)));
+});
+
+server.put('/api/invite-user-to-group', (request, result) => {
+  db.inviteUserToGroup(request.body.username, request.body.groupId);
+  result.send('OK');
+});
+
+server.put('/api/answer-invite', (request, result) => {
+  db.answerGroupInvitation(request.body.username, request.body.accept, request.body.groupId);
+  result.send('OK');
+});
+
 
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

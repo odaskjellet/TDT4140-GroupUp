@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, {useContext, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {Card, Button, Stack, TextField, Alert} from '@mui/material';
-import { nanoid } from 'nanoid'
+import {nanoid} from 'nanoid';
 import {UserContext} from '../../contexts/User';
 
 export default function CreateGroupForm() {
@@ -97,7 +97,7 @@ export default function CreateGroupForm() {
             severity="error"
             onClose={() => setBadRequest(false)}
           >
-            Something went wrong! 
+            Something went wrong!
           </Alert>}
           <Button
             variant="contained"
