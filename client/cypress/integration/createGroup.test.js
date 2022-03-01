@@ -32,6 +32,16 @@ describe('Create group', () => {
     cy.visit('/home');
   });
 
+  it('Cannot add members when there are none', () => {
+    cy.visit('/home');
+    cy.contains(/Visit/i).click();
+    cy.url().should('include', '/group/');
+    cy.contains(/Add members/i).click();
+    cy.contains(/There are noone to invite!/i);
+    cy.get('.MuiButton-root').contains(/Invite/i).should('have.length', 0);
+    cy.contains(/Cancel/i).click();
+  });
+
   it('Add member', () => {
     const requestOptions = {
       method: 'PUT',
@@ -49,7 +59,9 @@ describe('Create group', () => {
     cy.contains('myUsername');
     cy.url().should('include', '/group/');
     cy.contains(/Add members/i).click();
-    cy.contains(/Invite/i).click();
+    cy.get('.MuiButton-root').contains(/Invite/i).should('have.length', 1);
+    cy.get('.MuiButton-root').contains(/Invite/i).click();
+    cy.get('.MuiButton-root').contains(/Invite/i).should('be.disabled');
     cy.contains(/Cancel/i).click();
     cy.contains(/invite sent!/i).then(() => {
       sessionStorage.setItem('user.verified', true);

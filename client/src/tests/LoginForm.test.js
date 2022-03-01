@@ -7,21 +7,18 @@ import {unmountComponentAtNode} from 'react-dom';
 import LoginForm from '../components/userInput/LoginForm';
 import {UserProvider} from '../contexts/User';
 
-
 let container = null;
 beforeEach(() => {
   // setup a DOM element as a render target
   container = document.createElement('div');
   document.body.appendChild(container);
 
-  act(() => {
-    render(
-        <BrowserRouter>
-          <UserProvider>
-            <LoginForm/>
-          </UserProvider>
-        </BrowserRouter>, container);
-  });
+  render(
+    <BrowserRouter>
+      <UserProvider>
+        <LoginForm/>
+      </UserProvider>
+    </BrowserRouter>, container);
 });
 
 afterEach(() => {

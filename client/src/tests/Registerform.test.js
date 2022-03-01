@@ -14,13 +14,12 @@ beforeEach(() => {
   container = document.createElement('div');
   document.body.appendChild(container);
 
-  act(() => {
-    render(<BrowserRouter>
+  render(
+    <BrowserRouter>
       <UserProvider>
         <RegisterForm/>
       </UserProvider>
     </BrowserRouter>, container);
-  });
 });
 
 afterEach(() => {
@@ -35,14 +34,11 @@ test('Checks that user input fields are in the document', () => {
   const userInput = screen.getByTestId('username-input');
   const passwordInput = screen.getByTestId('password-input');
   const emailInput = screen.getByTestId('email-input');
-  const button = screen.getByLabelText('button-input');
   const ageInput = screen.getByTestId('age-input');
-
 
   expect(userInput).toBeInTheDocument();
   expect(passwordInput).toBeInTheDocument();
   expect(emailInput).toBeInTheDocument();
-  expect(button).toBeInTheDocument();
   expect(ageInput).toBeInTheDocument();
 });
 

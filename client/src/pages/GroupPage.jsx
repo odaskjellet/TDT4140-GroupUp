@@ -1,7 +1,6 @@
 import {Button, Card, Container, Grid, Dialog, DialogTitle, Box, List, ListItem, ListItemText, Snackbar, Alert} from '@mui/material';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {UserContext} from '../contexts/User';
 
 export default function GroupPage() {
   const {groupId} = useParams();
@@ -9,17 +8,17 @@ export default function GroupPage() {
   const [groupMatches, setGroupMatches] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
-  const navigate = useNavigate();
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   const [groupMembers, setGroupMembers] = useState([]);
-  const [userState, userDispatch] = useContext(UserContext);
-
+  const [groupInvitations, setGroupInvitations] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(async () => {
     await fetchGroupInfo();
     await fetchMatches();
     await fetchAllUsers();
     await fetchGroupMembers();
+    await fetchGroupInvites();
   }, [groupId]);
 
   const fetchGroupInfo = async () => {
@@ -79,6 +78,19 @@ export default function GroupPage() {
     }).then((res) => res.json()).
         then((result) => {
           setGroupMembers(result);
+        });
+  };
+
+  const fetchGroupInvites = async () => {
+    await fetch('/api/get-group-invitations', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        groupId: groupId,
+      }),
+    }).then((res) => res.json()).
+        then((result) => {
+          setGroupInvitations(result);
         });
   };
 
@@ -146,25 +158,30 @@ export default function GroupPage() {
     <Dialog onClose={() => inviteDialogOpen(false)} open={inviteDialogOpen}>
       <Container sx={{padding: '1rem'}} >
         <DialogTitle>Add new member</DialogTitle>
-        <p textalign='center'>Who do you want to add?</p>
+        <p textalign='center'>Who do you want to invite?</p>
         <br />
+
+        {Boolean(!allUsers.some((user) => (
+          !groupMembers.some((e) => e.username === user.username)
+        ))) && <div>
+          <p>There are noone to invite!</p>  
+        </div>}
+        
         <List style={{maxHeight: 150, overflow: 'auto'}}>
-          {Array.from(allUsers).filter((user) => {
-            for (const member of groupMembers) {
-              if (member.username == user.username) {
-                return false;
-              }
-            }
-            return true;
-          }).map((user) =>
+          {allUsers.filter((user) => (
+            !groupMembers.some((e) => e.username === user.username)
+          )).map((user) =>
             <ListItem
               key={user.username}
               value={user.username}>
               <ListItemText primary={user.username}></ListItemText>
               <Button
                 variant='contained'
-                onClick={() => {
-                  sendInvite(user.username);
+                disabled=
+                  {groupInvitations.some((e) => e.username === user.username)}
+                onClick={async () => {
+                  await sendInvite(user.username);
+                  await fetchGroupInvites();
                 }}
               >Invite</Button>
             </ListItem>)

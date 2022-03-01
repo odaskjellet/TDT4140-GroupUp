@@ -155,7 +155,6 @@ function RegisterForm() {
           <Button
             variant="contained"
             type="submit"
-            aria-label="button-register"
           >
             Create account
           </Button>

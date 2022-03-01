@@ -12,8 +12,8 @@ export default function ExplorePage() {
   const [selectedGroupA, setSelectedGroupA] = useState({});
   const [selectedGroupBId, setSelectedGroupBId] = useState('');
   const [userState, _] = useContext(UserContext);
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
-
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [incompleteMatches, setIncompleteMatches] = useState([]);
 
   useEffect(async () => {
     await fetchAllGroups();
@@ -36,6 +36,17 @@ export default function ExplorePage() {
     }).then((res) => res.json())
         .then((result) => {
           setMyGroups(result);
+        });
+  };
+
+  const fetchIncompleteMatches = async (groupId) => {
+    fetch('/api/get-incomplete-group-matches', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({groupId: groupId}),
+    }).then((res) => res.json())
+        .then((result) => {
+          setIncompleteMatches(result);
         });
   };
 
@@ -85,6 +96,7 @@ export default function ExplorePage() {
               variant='contained'
               onClick={() => {
                 setSelectedGroupA(group);
+                fetchIncompleteMatches(group.groupId);
                 setDialogOpen(true);
               }}
             >
@@ -94,54 +106,84 @@ export default function ExplorePage() {
         ))}
       </Stack>
 
-      <Dialog onClose={() => dialogOpen = false} open={dialogOpen}>
+      <Dialog onClose={() => setDialogOpen(false)} open={dialogOpen}>
         <Container sx={{padding: '1rem'}}>
           <DialogTitle>Select match</DialogTitle>
-          <p>What group do you want to match <b>{selectedGroupA.name}</b> with?</p>
-          <br />
-          <FormControl fullWidth>
-            <InputLabel id="group-select-label">Group</InputLabel>
-            <Select
-              labelId='group-select-label'
-              label='Group'
-              value={selectedGroupBId}
-              onChange={(e) => setSelectedGroupBId(e.target.value)}
-            >
-              {Array.from(myGroups).filter((group) =>
-                (group.groupId !== selectedGroupA.groupId),
-              ).map((group) => (
-                <MenuItem
-                  key={group.groupId}
-                  value={group.groupId}
-                >
-                  {group.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <br />
-          <br />
+          {!Boolean(myGroups.length) && <div>
+            <Stack>
+              <p>
+                You have to be member of a group to match with other groups!
+              </p>
+              <br />
+              <Button
+                variant='outlined'
+                onClick={() => setDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+            </Stack>
+          </div>}
+          {Boolean(myGroups.length) && <div>
+            <p>What group do you want to match <b>{selectedGroupA.name}</b> with?</p>
+            <br />
+            <FormControl fullWidth>
+              <InputLabel id="group-select-label">Group</InputLabel>
+              <Select
+                labelId='group-select-label'
+                label='Group'
+                value={selectedGroupBId}
+                onChange={(e) => setSelectedGroupBId(e.target.value)}
+              >
+                {Array.from(myGroups).filter((group) =>
+                  (group.groupId !== selectedGroupA.groupId),
+                ).map((group) => (
+                  <MenuItem
+                    key={group.groupId}
+                    value={group.groupId}
+                  >
+                    {group.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <br />
+            <br />
 
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-          >
-            <Button
-              variant='outlined'
-              onClick={() => setDialogOpen(false)}
+            <Stack
+              direction="row"
+              justifyContent="space-between"
             >
-              Cancel
-            </Button>
-            <Button
-              variant='contained'
-              onClick={() => {
-                createMatch();
-                setDialogOpen(false);
-              }}
-            >
-              Confirm
-            </Button>
-          </Stack>
+              <Button
+                variant='outlined'
+                onClick={() => setDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant='contained'
+                disabled={
+                  Boolean(incompleteMatches.some((e) => 
+                    e.groupId === selectedGroupBId
+                  ))
+                }
+                onClick={() => {
+                  createMatch();
+                  setDialogOpen(false);
+                }}
+              >
+                {
+                  !Boolean(incompleteMatches.some((e) => 
+                    e.groupId === selectedGroupBId
+                  )) && <span>Confirm</span>
+                }
+                {
+                  Boolean(incompleteMatches.some((e) => 
+                    e.groupId === selectedGroupBId
+                  )) && <span>Match already initiated</span>
+                }
+              </Button>
+            </Stack>
+          </div>}
         </Container>
       </Dialog>
 
