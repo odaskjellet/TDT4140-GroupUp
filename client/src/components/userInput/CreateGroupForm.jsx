@@ -43,6 +43,7 @@ export default function CreateGroupForm() {
             error={errors.name}
             helperText={errors.name && 'A group name is required.'}
             label="Name"
+            inputProps={{'data-testid': 'group-name-input'}}
             type={'text'}
             {...register('name', {required: true})}
           />
@@ -56,12 +57,13 @@ export default function CreateGroupForm() {
             error={errors.description}
             helperText={errors.description && 'A description is required.'}
             label="Description"
+            inputProps={{'data-testid': 'description-input'}}
             type={'text'}
             {...register('description', {required: true})}
           />
         </div>
 
-        <div>
+        {/* <div>
           <TextField
             disabled
             fullWidth
@@ -72,9 +74,9 @@ export default function CreateGroupForm() {
             type={'text'}
             {...register('interests', {required: false})}
           />
-        </div>
+        </div> */}
 
-        <div>
+        {/* <div>
           <TextField
             disabled
             fullWidth
@@ -84,7 +86,7 @@ export default function CreateGroupForm() {
             type={'text'}
             {...register('members', {required: false})}
           />
-        </div>
+        </div> */}
         <br></br>
         <Stack
           spacing={2}

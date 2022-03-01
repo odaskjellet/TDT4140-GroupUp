@@ -133,6 +133,11 @@ test('match groups and get matches', () => {
 
   db.matchGroups(1, 2); // An incomplete match
 
+  expect(db.getIncompleteGroupMatches(1)).toEqual([
+    {groupId: 2}
+  ]);
+  expect(db.getIncompleteGroupMatches(2)).toEqual([]);
+
   expect(db.getGroupMatches(1)).toEqual([]);
   expect(db.getGroupMatches(2)).toEqual([]);
 
@@ -144,6 +149,13 @@ test('match groups and get matches', () => {
   expect(db.getGroupMatches(2)).toEqual([
     {groupId: 1, name: 'Gruppe 1'},
   ]);
+  expect(db.getIncompleteGroupMatches(1)).toEqual([
+    {groupId: 2}
+  ]);
+  expect(db.getIncompleteGroupMatches(2)).toEqual([
+    {groupId: 1}
+  ]);
+  
 });
 
 
@@ -152,17 +164,22 @@ test('get invitations for user', () => {
   db.insertUser('henrik', 'henrik123', 20);
   db.insertUser('per', 'per123', 20);
 
-  db.inviteUserToGroup(1, 'per'); 
+  db.inviteUserToGroup('per', 1);
+  expect(db.getGroupInvitations(1)).toEqual([
+    {username: 'per'},
+  ]);
   db.answerGroupInvitation('per', true, 1);
+  expect(db.getGroupInvitations(1)).toEqual([]);
 
   expect(db.getGroupMembers(1)).toEqual([
-    {'username': 'per'},
+    {username: 'per'},
   ]);
 
-  db.inviteUserToGroup(1, 'henrik');
+  db.inviteUserToGroup('henrik', 1);
+  
   db.answerGroupInvitation('henrik', false, 1);
   expect(db.getGroupMembers(1)).toEqual([
-    {'username': 'per'},
+    {username: 'per'},
   ]);
 });
 

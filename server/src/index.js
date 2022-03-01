@@ -105,6 +105,11 @@ server.put('/api/get-group-matches', (request, result) => {
   result.send(JSON.stringify(db.getGroupMatches(request.body.groupId)));
 });
 
+server.put('/api/get-incomplete-group-matches', (request, result) => {
+  result.send(
+      JSON.stringify(db.getIncompleteGroupMatches(request.body.groupId)));
+});
+
 server.put('/api/get-invitations-with-user', (request, result) => {
   result.send(JSON.stringify(db.getUserInvitations(request.body.username)));
 });
@@ -119,6 +124,9 @@ server.put('/api/answer-invite', (request, result) => {
   result.send('OK');
 });
 
+server.put('/api/get-group-invitations', (request, result) => {
+  result.send(JSON.stringify(db.getGroupInvitations(request.body.groupId)));
+});
 
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

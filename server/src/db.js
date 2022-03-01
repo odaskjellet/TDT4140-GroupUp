@@ -11,7 +11,6 @@ class Database {
         'CREATE TABLE IF NOT EXISTS Users ' +
         '(username string, password string, age integer, email string, ' +
         'gender string)');
-
     this.stmt_create_table_users.run();
 
     this.stmt_create_table_groups = this.db.prepare(
@@ -68,6 +67,9 @@ class Database {
         'SELECT primaryId AS groupId FROM GroupMatches WHERE secondaryId = ?)' +
         'USING (groupId)');
 
+    this.stmt_get_incomplete_group_matches = this.db.prepare(
+      'SELECT secondaryId AS groupId FROM GroupMatches WHERE primaryId = ?');
+
     this.stmt_insert_user = this.db.prepare(
         'INSERT INTO Users (username, password, age, email, gender) ' +
         'VALUES (?, ?, ?, ?, ?)');
@@ -89,16 +91,16 @@ class Database {
         'INSERT INTO GroupInterests (groupId, interest) VALUES (?, ?)');
 
     this.stmt_invite_user_to_group = this.db.prepare(
-        'INSERT INTO InvitationsToGroup (username, groupId) VALUES (?, ?)',
-    );
+        'INSERT INTO InvitationsToGroup (username, groupId) VALUES (?, ?)');
 
     this.stmt_delete_invitation = this.db.prepare(
-        'DELETE FROM InvitationsToGroup WHERE (username = ? AND groupId = ?)',
-    );
+        'DELETE FROM InvitationsToGroup WHERE (username = ? AND groupId = ?)');
 
     this.stmt_get_invitation_to_group = this.db.prepare(
-        'SELECT groupId, name FROM InvitationsToGroup JOIN Groups USING (groupId) WHERE (username = ?)',
-    );
+        'SELECT groupId, name FROM InvitationsToGroup JOIN Groups USING (groupId) WHERE (username = ?)');
+
+    this.stmt_get_group_invitations = this.db.prepare(
+        'SELECT username FROM InvitationsToGroup WHERE groupId = ?');
   }
 
   /**
@@ -150,7 +152,7 @@ class Database {
   insertGroup(groupId, name, admin, description) {
     this.stmt_insert_group.run(groupId, name, admin, description);
   }
-  
+
   /**
    * Format: {id: string, name: string, admin: string, description: string}
    * @param {string} groupId
@@ -231,6 +233,15 @@ class Database {
   getGroupMatches(groupId) {
     return this.stmt_get_group_matches.all(groupId, groupId);
   }
+  
+  /**
+   * Format: [{groupId: string}, ...]
+   * @param {string} groupId
+   * @returns all (incomplete and complete) group matches with the given group
+   */
+  getIncompleteGroupMatches(groupId) {
+    return this.stmt_get_incomplete_group_matches.all(groupId);
+  }
 
   /**
    * Sends invitation to user
@@ -250,11 +261,13 @@ class Database {
    * @param {string} groupId
    */
   answerGroupInvitation(username, accept, groupId) {
-    this.stmt_delete_invitation.run(username, groupId);
-
+    if (!this.getUserInvitations(username).some((e) => e.groupId == groupId)) {
+      throw Error('Cannot answer an invitation that does not exist!');
+    }
     if (accept) {
       this.addUserToGroup(groupId, username);
     }
+    this.stmt_delete_invitation.run(username, groupId);
   }
 
   /**
@@ -262,6 +275,15 @@ class Database {
    */
   getUserInvitations(username) {
     return this.stmt_get_invitation_to_group.all(username);
+  }
+
+  /**
+   * Format: [{username: string}, ...]
+   * @param {string} groupId 
+   * @returns the users who are currently invited to the given group
+   */
+  getGroupInvitations(groupId) {
+    return this.stmt_get_group_invitations.all(groupId);
   }
 }
 
