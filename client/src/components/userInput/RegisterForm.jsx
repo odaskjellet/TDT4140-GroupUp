@@ -47,13 +47,13 @@ function RegisterForm() {
         <div>
           <TextField
             label="Username"
-            inputProps={{'data-testid': 'username-register'}}
+            inputProps={{'data-testid': 'username-input'}}
             type={'text'}
             required
             fullWidth
             margin="normal"
             error={errors.username}
-            helperText={errors.username && 'A username is required.'}
+            helperText={errors.username && 'A username can only include letters and cannot be longer than 40 characters.'}
             {...register('username', {required: true, maxLength: 40, pattern: /[A-Za-z]+$/i})}
           />
         </div>
@@ -61,7 +61,7 @@ function RegisterForm() {
         <div>
           <TextField
             label="Email"
-            inputProps={{'data-testid': 'email-register'}}
+            inputProps={{'data-testid': 'email-input'}}
             type={'email'}
             required
             fullWidth
@@ -76,7 +76,7 @@ function RegisterForm() {
           <TextField
             label="Age"
             type={'number'}
-            inputProps={{'data-testid': 'age-register'}}
+            inputProps={{'data-testid': 'age-input'}}
             required
             fullWidth
             margin="normal"
@@ -91,8 +91,10 @@ function RegisterForm() {
             <InputLabel id="gender-label">Gender</InputLabel>
             <Controller
               name='gender'
+              inputProps={{'data-testid': 'gender-option'}}
               labelId="gender-label"
               label='Gender'
+              defaultValue={'other'}
               control={control}
               render={({field}) => (
                 <Select {...field}>
@@ -108,7 +110,7 @@ function RegisterForm() {
         <div>
           <TextField
             label="Password"
-            inputProps={{'data-testid': 'password-register'}}
+            inputProps={{'data-testid': 'password-input'}}
             type={'password'}
             required
             fullWidth
@@ -122,6 +124,7 @@ function RegisterForm() {
         <div>
           <TextField
             label="Confirm password"
+            inputProps={{'data-testid': 'password-confirmation-input'}}
             type={'password'}
             required
             fullWidth

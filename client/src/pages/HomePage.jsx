@@ -209,7 +209,10 @@ function HomePage() {
             <Button
               startIcon={<AddIcon/>}
               variant="outlined"
+              inputProps={{'data-testid': 'create-group-btn'}}
+              Label={'create-group-btn'}
               onClick={() => navigate('/create-group')}
+
             >
               Create new group
             </Button>
