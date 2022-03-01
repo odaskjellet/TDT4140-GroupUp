@@ -1,8 +1,5 @@
-import { useContext } from "react";
-import { UserContext } from "../../src/contexts/User";
 
 describe('Matching Page', () => {
-
   it('should start empty', async () => {
     await fetch('/api/debug/clear', {method: 'DELETE'});
     const result = await fetch('/api/get-users', {method: 'GET'})
@@ -26,27 +23,27 @@ describe('Matching Page', () => {
         age: '20',
         gender: 'other',
       },
-    ]
-    
+    ];
+
     const groups = [
       {
         groupId: '0',
         name: 'GruppeA',
-        admin: 'userA'
+        admin: 'userA',
       },
       {
         groupId: '1',
         name: 'GruppeB',
-        admin: 'userB'
+        admin: 'userB',
       },
       {
         groupId: '2',
         name: 'GruppeC',
-        admin: 'userB'
+        admin: 'userB',
       },
     ];
-    
-    for (let data of users) {
+
+    for (const data of users) {
       fetch('/api/insert-user', {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
@@ -58,7 +55,7 @@ describe('Matching Page', () => {
     sessionStorage.setItem('user.verified', true);
     sessionStorage.setItem('user.username', 'userA');
 
-    for (let data of groups) {
+    for (const data of groups) {
       fetch('/api/insert-group', {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},

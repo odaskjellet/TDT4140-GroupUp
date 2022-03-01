@@ -7,12 +7,12 @@ describe('Create group', () => {
         .then((res) => res.json());
     expect(result).to.be.empty;
   });
+
   sessionStorage.setItem('user.verified', true);
-  sessionStorage.setItem('user.username', 'username');
+  sessionStorage.setItem('user.username', 'myUsername');
 
   it('Create valid group', () => {
     cy.visit('/home');
-    // await fetch(cy.contains(/Create new group/i).click(), {method: 'GET'});
     cy.contains(/Create new group/i).click();
     cy.url().should('include', '/create-group');
     cy.get('[data-testid="group-name-input"]').type('MyCoolGroup');
@@ -23,7 +23,6 @@ describe('Create group', () => {
 
   it('Create invalid group', () => {
     cy.visit('/home');
-    // await fetch(cy.contains(/Create new group/i).click(), {method: 'GET'});
     cy.contains(/Create new group/i).click();
     cy.url().should('include', '/create-group');
     cy.get('[data-testid="group-name-input"]').type('123');
@@ -33,8 +32,7 @@ describe('Create group', () => {
     cy.visit('/home');
   });
 
-  // eslint-disable-next-line cypress/no-async-tests
-  it('Add member', async () => {
+  it('Add member', () => {
     const requestOptions = {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
@@ -45,12 +43,22 @@ describe('Create group', () => {
         email: 'tester123@gmail.com',
       }),
     };
-    await fetch('/api/insert-user', requestOptions);
+    fetch('/api/insert-user', requestOptions);
     cy.visit('/home');
-    cy.contains(/VISIT/i).click();
+    cy.contains(/Visit/i).click();
+    cy.contains('myUsername');
+    cy.url().should('include', '/group/');
     cy.contains(/Add members/i).click();
     cy.contains(/Invite/i).click();
     cy.contains(/Cancel/i).click();
+    cy.contains(/invite sent!/i).then(() => {
+      sessionStorage.setItem('user.verified', true);
+      sessionStorage.setItem('user.username', 'testUser');
+    })
     cy.visit('/home');
+    cy.contains(/Accept/i).click();
+    cy.contains(/Visit/i).click();
+    cy.contains('myUsername');
+    cy.contains('testUser');
   });
 });

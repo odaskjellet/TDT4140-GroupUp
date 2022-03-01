@@ -132,11 +132,11 @@ describe('api', () => {
         admin: 'henrik',
         groupId: 1,
       }),
-      };
-      await fetch('/api/insert-group', requestOptions);
-      const result = await fetch('/api/get-groups', {method: 'GET'})
-      .then((res) => res.json());
-      expect(result).to.deep.equal([{groupId: 1, name: 'groupA'}])
+    };
+    await fetch('/api/insert-group', requestOptions);
+    const result = await fetch('/api/get-groups', {method: 'GET'})
+        .then((res) => res.json());
+    expect(result).to.deep.equal([{groupId: 1, name: 'groupA'}]);
   });
 
   it('should not be able to insert group with invalid groupname', async () => {
@@ -152,10 +152,6 @@ describe('api', () => {
     const result = await fetch('/api/insert-group', requestedOptions);
     expect(result.status).to.equal(400);
   });
-
-
-
-
 });
 
 
