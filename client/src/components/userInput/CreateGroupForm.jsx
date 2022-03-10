@@ -1,20 +1,28 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {useForm} from 'react-hook-form';
-import {Card, Button, Stack, TextField, Alert, Chip} from '@mui/material';
+import {useForm, Controller} from 'react-hook-form';
+import {Card, Button, Stack, TextField, Alert, Chip, Autocomplete, createFilterOptions} from '@mui/material';
 import {nanoid} from 'nanoid';
 import {UserContext} from '../../contexts/User';
 
 export default function CreateGroupForm() {
   const [badRequest, setBadRequest] = useState(false);
-  const {register, formState: {errors}, handleSubmit} = useForm();
+  const {register, formState: {errors}, handleSubmit, control} = useForm();
   const [userState, _] = useContext(UserContext);
+  // const [interests, setInterests] = useState([]);
   const navigate = useNavigate();
+  const filter = createFilterOptions();
+
+  // useEffect(() => {
+  //   register({ name: 'interests' });
+  // })
 
   const onSubmit = async (data) => {
     setBadRequest(false);
     data.groupId = nanoid();
     data.admin = userState.username;
+    console.log(data);
+    return;
     fetch('/api/insert-group', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
@@ -63,8 +71,25 @@ export default function CreateGroupForm() {
             {...register('description', {required: true})}
           />
         </div>
+{/* 
+        <div><Autocomplete
+        multiple
+        id="tags-outlined"
+        options={interests}
+        getOptionLabel={(option) => option.title}
+        defaultValue={[top100Films[13]]}
+        filterSelectedOptions
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            variant="outlined"
+            label="filterSelectedOptions"
+            placeholder="Favorites"
+          />
+        )}
+      /></div> */}
 
-        <div>
+        {/* <div>
           <TextField
             disabled
             fullWidth
@@ -75,7 +100,7 @@ export default function CreateGroupForm() {
             type={'text'}
             {...register('interests', {required: false})}
           />
-        </div>
+        </div> */}
 
         <div>
           <TextField
@@ -101,6 +126,57 @@ export default function CreateGroupForm() {
             {...register('location', {required: true})}
           />
         </div>
+
+        <Controller
+          name="interests"
+          control={control}
+          onChange = {(event, newValue, reason) => (newValue)}
+          onInputChange = {(event, data) => (data)}
+          defaultValue={[]}
+          render={({field}) => (
+            <Autocomplete
+              {...field}
+              multiple
+              freeSolo
+              autoSelect
+              // value={interests}
+              options={interestOptions}
+              getOptionLabel={(option) => option.title}
+              // onChange={(event, value) => {
+              //   if (value && value.freeSolo) {
+              //     setInterests({
+              //       title: value.inputValue
+              //     });
+              //   } else {
+              //     setInterests(value);
+              //   }
+              // }}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+
+                if (params.inputValue !== "") {
+                  filtered.push({
+                    freeSolo: true,
+                    value: params.inputValue,
+                    title: params.inputValue
+                  });
+                }
+
+                return filtered;
+              }}
+              style={{ width: 300 }}
+              renderInput={params => (
+                <TextField {...params}
+                  margin="normal"
+                  label="Interests"
+                  variant="outlined"
+                  fullWidth
+                />
+              )}
+            />
+          )}
+        />
+
 
         <br></br>
         
@@ -133,3 +209,16 @@ export default function CreateGroupForm() {
     </Card>
   );
 }
+
+const interestOptions = [
+  {title: "Astrology"},
+  {title: "Chess"},
+  {title: "Gaming"},
+  {title: "Skiing"},
+  {title: "Traveling"},
+  {title: "Sports"},
+  {title: "Food"},
+  {title: "Wine"},
+  {title: "Movies"},
+  {title: "Paragliding"},
+]
