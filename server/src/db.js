@@ -114,8 +114,8 @@ class Database {
     this.stmt_get_groups_of_age = this.db.prepare(
       'SELECT groupId FROM (SELECT groupId, AVG(age) AS average FROM GroupMembers INNER JOIN Users ON GroupMembers.username = Users.username GROUP BY groupId) WHERE (average >= ? AND average <= ?)');
 
-    this.stmt_get_groups_at_location = this.db.prepare(
-      'SELECT groupId FROM Groups WHERE location = ?');
+    //this.stmt_get_groups_at_location = this.db.prepare(
+    //  'SELECT groupId FROM Groups WHERE location = ?');
   }
 
   /**

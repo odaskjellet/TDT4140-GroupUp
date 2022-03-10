@@ -3,6 +3,7 @@ import {Container, Stack, Card, Grid, Button, Dialog, DialogTitle, Select, MenuI
   from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../contexts/User';
+import FilterMenu from '../components/userInput/FilterMenu';
 
 export default function ExplorePage() {
   const navigate = useNavigate();
@@ -86,7 +87,12 @@ export default function ExplorePage() {
       </Button>
       <h1>Explore groups</h1>
       <p>Find the perfect match.</p>
-
+      <div
+      style={{width:"20%",height:"46%",display:"table",float:"left",position:"fixed",}}>
+        <FilterMenu />
+      </div>
+      <div
+      style={{width:"75%",display:"table", float:"right"}}>
       <Stack spacing={2}>
         {Array.from(allGroups).map((group) => (
           <Card key={group.groupId} sx={{padding: '2rem'}}>
@@ -105,6 +111,7 @@ export default function ExplorePage() {
           </Card>
         ))}
       </Stack>
+      </div>
 
       <Dialog onClose={() => setDialogOpen(false)} open={dialogOpen}>
         <Container sx={{padding: '1rem'}}>
