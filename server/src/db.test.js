@@ -113,7 +113,7 @@ test('get groups with user', () => {
   ]);
 });
 
-test('add and get group interests', () => {
+test('get, add and delete group interests', () => {
   db.insertGroup('g1', 'Gruppe');
   db.addGroupInterest('g1', 'skiing');
   expect(db.getGroupInterests('g1')).toEqual([
@@ -125,6 +125,11 @@ test('add and get group interests', () => {
     {'interest': 'skiing'},
     {'interest': 'chess'},
     {'interest': 'running'},
+  ]);
+  db.deleteGroupInterest('g1', 'running');
+  expect(db.getGroupInterests('g1')).toEqual([
+    {'interest': 'skiing'},
+    {'interest': 'chess'},
   ]);
 });
 

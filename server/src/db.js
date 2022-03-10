@@ -89,6 +89,9 @@ class Database {
 
     this.stmt_insert_group_interest = this.db.prepare(
         'INSERT INTO GroupInterests (groupId, interest) VALUES (?, ?)');
+    
+    this.stmt_remove_group_interest = this.db.prepare(
+        'DELETE FROM GroupInterests WHERE groupId = ? AND interest = ?')
 
     this.stmt_invite_user_to_group = this.db.prepare(
         'INSERT INTO InvitationsToGroup (username, groupId) VALUES (?, ?)');
@@ -219,6 +222,15 @@ class Database {
    */
   addGroupInterest(groupId, interest) {
     this.stmt_insert_group_interest.run(groupId, interest);
+  }
+
+  /**
+   * Deletes the given interest from the given group.
+   * @param {string} groupId 
+   * @param {string} interest 
+   */
+  deleteGroupInterest(groupId, interest) {
+    this.stmt_remove_group_interest.run(groupId, interest);
   }
 
   /**

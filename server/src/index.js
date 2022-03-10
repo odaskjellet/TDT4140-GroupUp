@@ -84,7 +84,7 @@ server.put('/api/add-user-to-group', (request, result) => {
   result.send('OK');
 });
 
-server.get('/api/get-group-interests', (request, result) => {
+server.put('/api/get-group-interests', (request, result) => {
   result.send(JSON.stringify(db.getGroupInterests(request.body.groupId)));
 });
 
@@ -94,6 +94,11 @@ server.put('/api/get-group-members', (request, result) => {
 
 server.put('/api/insert-group-interest', (request, result) => {
   db.addGroupInterest(request.body.groupId, request.body.interest);
+  result.send('OK');
+});
+
+server.put('/api/delete-group-interest', (request, result) => {
+  db.deleteGroupInterest(request.body.groupId, request.body.interest);
   result.send('OK');
 });
 

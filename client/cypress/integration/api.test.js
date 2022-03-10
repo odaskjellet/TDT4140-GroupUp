@@ -207,6 +207,57 @@ describe('api', () => {
       image: '',
     });
   });
+
+  it('can add and remove group interests', async () => {
+    await fetch('/api/insert-group', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        groupId: 'g2',
+        name: 'Gruppe',
+        admin: 'henrik',
+      }),
+    });
+
+    await fetch('/api/insert-group-interest', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        groupId: 'g1',
+        interest: 'chess',
+      }),
+    });
+
+    const result = await fetch('/api/get-group-interests', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        groupId: 'g1',
+      }),
+    }).then(res => res.json());
+
+    expect(result).to.deep.equal([{interest: 'chess'}]);
+
+    await fetch('/api/delete-group-interest', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        groupId: 'g1',
+        interest: 'chess',
+      }),
+    });
+
+    const result2 = await fetch('/api/get-group-interests', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        groupId: 'g1',
+      }),
+    }).then(res => res.json());
+
+    expect(result2).to.deep.equal([]);
+
+  });
 });
 
 
