@@ -6,6 +6,7 @@ const server = express();
 let db = new Database(
   process.argv[2] === 'test' ? ':memory:' : './data/database.db');
 
+
 server.use(express.json());
 server.use(express.urlencoded({extended: true}));
 
@@ -128,6 +129,14 @@ server.put('/api/get-group-invitations', (request, result) => {
   result.send(JSON.stringify(db.getGroupInvitations(request.body.groupId)));
 });
 
+server.put('/api/get-all-groups', (request, result) => {
+  result.send(JSON.stringify(db.getAllGroups()));
+});
+
+server.put('/api/get-groups-with-interest', (request, result) => {
+  result.send(JSON.stringify(db.getGroupWithInterest(request)));
+});
+
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
@@ -227,6 +236,29 @@ function clearErrors(registration_errors) {
   registration_errors.length = 0;
   output = '';
   return null;
+}
+
+let filteredGroups = [];
+
+function filterGroups(filterOption, option) {
+  let newGroups = [];
+  switch(filterOption) {
+    case interest:
+        newGroups = db.getGroupWithInterest(option); //TODO test db.getGroupsWithInterests
+        break;
+    case location:
+        newGroups = db.getGroupsAtLocation(option);
+      break;
+    case age:
+      newGroups = db.getGroupsOfAge(option[0], option[1]);
+      break;
+    case groupSize:
+      newGroups = db.getGroupsOfSize(option);
+      break;
+  }
+
+  let intersection = newGroups.filter(x => filterGroups.includes(x));
+  filterGroups = intersection;
 }
 
 

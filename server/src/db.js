@@ -46,6 +46,9 @@ class Database {
 
     this.stmt_get_group = this.db.prepare(
         'SELECT * FROM Groups WHERE groupId = ?');
+    
+    this.stmt_get_all_groups = this.db.prepare(
+      'SELECT * FROM Groups');
 
     this.stmt_get_groups = this.db.prepare(
         'SELECT groupId, name FROM Groups');
@@ -59,6 +62,9 @@ class Database {
 
     this.stmt_get_group_interests = this.db.prepare(
         'SELECT interest FROM GroupInterests WHERE (groupId = ?)');
+    
+    this.stmt_get_groups_with_interest = this.db.prepare(
+      'SELECT groupID FROM GroupInterests WHERE (interest = ?)');
 
     this.stmt_get_group_matches = this.db.prepare(
         'SELECT groupId, name FROM Groups JOIN ' +
@@ -101,6 +107,15 @@ class Database {
 
     this.stmt_get_group_invitations = this.db.prepare(
         'SELECT username FROM InvitationsToGroup WHERE groupId = ?');
+    
+    this.stmt_get_groups_of_size = this.db.prepare(
+      'SELECT groupId FROM (SELECT groupId, COUNT(*) AS size FROM groupMembers GROUP BY groupId) WHERE size = ?');
+    
+    this.stmt_get_groups_of_age = this.db.prepare(
+      'SELECT groupId FROM (SELECT groupId, AVG(age) AS average FROM GroupMembers INNER JOIN Users ON GroupMembers.username = Users.username GROUP BY groupId) WHERE (average >= ? AND average <= ?)');
+
+    this.stmt_get_groups_at_location = this.db.prepare(
+      'SELECT groupId FROM Groups WHERE location = ?');
   }
 
   /**
@@ -207,6 +222,14 @@ class Database {
     return this.stmt_get_group_interests.all(groupId);
   }
 
+  getGroupWithInterest(interest) {
+    return this.stmt_get_groups_with_interest.all(interest);
+  }
+
+  getGroupsOfSize(size) {
+    return this.stmt_get_groups_of_size.all(size);
+  }
+
   /**
    * Adds the given interest to the given group
    * @param {string} groupId
@@ -286,6 +309,19 @@ class Database {
   getGroupInvitations(groupId) {
     return this.stmt_get_group_invitations.all(groupId);
   }
+
+  getAllGroups() {
+    return this.stmt_get_all_groups.all();
+  }
+
+  getGroupsOfAge(lowAge, highAge) {
+    return this.stmt_get_groups_of_age.all(lowAge, highAge);
+  }
+
+  getGroupsAtLocation(location) {
+    return this.stmt_get_groups_at_location(location);
+  }
+
 }
 
 module.exports = {Database};
