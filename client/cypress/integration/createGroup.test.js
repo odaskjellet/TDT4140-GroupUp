@@ -1,11 +1,21 @@
 
 
 describe('Create group', () => {
-  it('should start empty', async () => {
+  it('should start empty, but with a user', async () => {
     await fetch('/api/debug/clear', {method: 'DELETE'});
     const result = await fetch('/api/get-users', {method: 'GET'})
         .then((res) => res.json());
     expect(result).to.be.empty;
+    await fetch('/api/insert-user', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        username: 'myUsername',
+        password: 'password123',
+        age: '20',
+        email: 'user@mail.com',
+      }),
+    });
   });
 
   sessionStorage.setItem('user.verified', true);
@@ -13,7 +23,7 @@ describe('Create group', () => {
 
   it('Create valid group', () => {
     cy.visit('/home');
-    cy.contains(/Create new group/i).click();
+    cy.get('.MuiButton-root').contains(/Create new group/i).click();
     cy.url().should('include', '/create-group');
     cy.get('[data-testid="group-name-input"]').type('MyCoolGroup');
     cy.get('[data-testid="description-input"]').type('VIDYA GAEMZ');
@@ -24,12 +34,12 @@ describe('Create group', () => {
 
   it('Create invalid group', () => {
     cy.visit('/home');
-    cy.contains(/Create new group/i).click();
+    cy.get('.MuiButton-root').contains(/Create new group/i).click();
     cy.url().should('include', '/create-group');
     cy.get('[data-testid="group-name-input"]').type('123');
     cy.get('[data-testid="description-input"]').type('VIDYA GAEMZ');
     cy.get('[data-testid="location-input"]').type('Trondheim');
-    cy.contains(/Create group/i).click();
+    cy.get('.MuiButton-root').contains(/Create group/i).click();
     cy.contains(/Something went wrong!/i);
     cy.visit('/home');
   });
