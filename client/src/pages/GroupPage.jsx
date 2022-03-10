@@ -120,15 +120,13 @@ export default function GroupPage() {
 
   const inputStyle = {
     padding: '2rem',
-    backgroundColor: membership,
 
 
   };
 
 
   const textBoxStyle = {
-    background: membership,
-    color: '#fff',
+    color: membership,
     fontFamily: 'serif',
     position: 'relative',
     textTransform: 'uppercase',
@@ -142,7 +140,7 @@ export default function GroupPage() {
 
   return (<Container style={styles}>
     <br />
-    <p style={textBoxStyle}>Membership  {groupInfo.membership} </p>
+    <p style={textBoxStyle}>  {groupInfo.membership} Membership </p>
     <Button
       variant='outlined'
       onClick={() => navigate('/home')}
