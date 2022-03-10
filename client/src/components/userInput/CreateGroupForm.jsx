@@ -1,13 +1,13 @@
 import React, {useContext, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {useForm} from 'react-hook-form';
-import {Card, Button, Stack, TextField, Alert} from '@mui/material';
+import {Controller, useForm} from 'react-hook-form';
+import {Card, Button, Stack, TextField, Alert, FormControl, InputLabel, Select, MenuItem} from '@mui/material';
 import {nanoid} from 'nanoid';
 import {UserContext} from '../../contexts/User';
 
 export default function CreateGroupForm() {
   const [badRequest, setBadRequest] = useState(false);
-  const {register, formState: {errors}, handleSubmit} = useForm();
+  const {register, formState: {errors}, handleSubmit, control} = useForm();
   const [userState, _] = useContext(UserContext);
   const navigate = useNavigate();
   const onSubmit = async (data) => {
@@ -62,6 +62,28 @@ export default function CreateGroupForm() {
             {...register('description', {required: true})}
           />
         </div>
+
+        <div>
+          <FormControl fullWidth margin="normal" required>
+            <InputLabel id="gender-label">Membership</InputLabel>
+            <Controller
+                name='membership'
+                inputProps={{'data-testid': 'membership'}}
+                labelId="membership"
+                label='membership'
+                defaultValue={'standard'}
+                control={control}
+                render={({field}) => (
+                    <Select {...field}>
+                      <MenuItem value={'standard'}>Standard</MenuItem>
+                      <MenuItem value={'gold'}>Gold</MenuItem>
+                    </Select>
+                )}
+            />
+          </FormControl>
+        </div>
+
+
 
         {/* <div>
           <TextField
