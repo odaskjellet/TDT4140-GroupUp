@@ -54,7 +54,7 @@ class Database {
         'SELECT groupId, name FROM Groups');
 
     this.stmt_get_groups_with_user = this.db.prepare(
-        'SELECT groupId, name FROM GroupMembers JOIN Groups USING ' +
+        'SELECT groupId, name, membership FROM GroupMembers JOIN Groups USING ' +
         '(groupId) WHERE GroupMembers.username = ?');
 
     this.stmt_get_group_members = this.db.prepare(
@@ -74,7 +74,7 @@ class Database {
         'USING (groupId)');
 
     this.stmt_get_incomplete_group_matches = this.db.prepare(
-      'SELECT secondaryId AS groupId FROM GroupMatches WHERE primaryId = ?');
+        'SELECT secondaryId AS groupId FROM GroupMatches WHERE primaryId = ?');
 
     this.stmt_insert_user = this.db.prepare(
         'INSERT INTO Users (username, password, age, email, gender) ' +
@@ -257,11 +257,11 @@ class Database {
   getGroupMatches(groupId) {
     return this.stmt_get_group_matches.all(groupId, groupId);
   }
-  
+
   /**
    * Format: [{groupId: string}, ...]
    * @param {string} groupId
-   * @returns all (incomplete and complete) group matches with the given group
+   * @return all (incomplete and complete) group matches with the given group
    */
   getIncompleteGroupMatches(groupId) {
     return this.stmt_get_incomplete_group_matches.all(groupId);
@@ -303,8 +303,8 @@ class Database {
 
   /**
    * Format: [{username: string}, ...]
-   * @param {string} groupId 
-   * @returns the users who are currently invited to the given group
+   * @param {string} groupId
+   * @return the users who are currently invited to the given group
    */
   getGroupInvitations(groupId) {
     return this.stmt_get_group_invitations.all(groupId);

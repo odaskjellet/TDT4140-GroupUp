@@ -6,7 +6,6 @@ import {nanoid} from 'nanoid';
 import {UserContext} from '../../contexts/User';
 
 
-
 export default function CreateGroupForm() {
   const [badRequest, setBadRequest] = useState(false);
   const {register, formState: {errors}, handleSubmit, control} = useForm();
@@ -69,22 +68,21 @@ export default function CreateGroupForm() {
           <FormControl fullWidth margin="normal" required>
             <InputLabel id="member-label">Membership</InputLabel>
             <Controller
-                name='membership'
-                inputProps={{'data-testid': 'membership-option'}}
-                labelId="membership-label"
-                label='membership'
-                defaultValue={'standard'}
-                control={control}
-                render={({field}) => (
-                    <Select {...field}>
-                      <MenuItem value={'Standard'}>Standard</MenuItem>
-                      <MenuItem value={'Gold'}>Gold</MenuItem>
-                    </Select>
-                )}
+              name='membership'
+              inputProps={{'data-testid': 'membership-option'}}
+              labelId="membership-label"
+              label='membership'
+              defaultValue={'standard'}
+              control={control}
+              render={({field}) => (
+                <Select {...field}>
+                  <MenuItem value={'standard'}>Standard</MenuItem>
+                  <MenuItem value={'Gold'}>Gold</MenuItem>
+                </Select>
+              )}
             />
           </FormControl>
         </div>
-
 
 
         {/* <div>

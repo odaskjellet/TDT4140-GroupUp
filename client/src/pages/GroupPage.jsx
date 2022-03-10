@@ -93,6 +93,13 @@ export default function GroupPage() {
           setGroupInvitations(result);
         });
   };
+  let membership = groupInfo.membership;
+
+  if (membership === 'standard') {
+    membership = '';
+  } else {
+    membership = 'gold';
+  }
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -101,8 +108,39 @@ export default function GroupPage() {
     setSnackbarOpen(false);
   };
 
-  return (<Container>
+
+  const styles = {
+    marginTop: '10px',
+    padding: '60px',
+    borderStyle: 'solid',
+    borderColor: membership,
+    borderRadius: '15px',
+  };
+
+
+  const inputStyle = {
+    padding: '2rem',
+
+
+  };
+
+
+  const textBoxStyle = {
+    color: membership,
+    fontFamily: 'serif',
+    position: 'relative',
+    textTransform: 'uppercase',
+    fontSize: '3vw',
+    margin: '0',
+    fontWeight: 400,
+    textAlign: 'center',
+
+  };
+
+
+  return (<Container style={styles}>
     <br />
+    <p style={textBoxStyle}>  {groupInfo.membership} Membership </p>
     <Button
       variant='outlined'
       onClick={() => navigate('/home')}
@@ -113,10 +151,10 @@ export default function GroupPage() {
     {/* <p>ID: {groupId} </p> */}
     <p>Admin: {groupInfo.admin} </p>
     <p>Description: {groupInfo.description} </p>
-    <p>Membership: {groupInfo.membership} </p>
+
 
     <h2>Matches</h2>
-    <Card sx={{padding: '2rem'}} variant="outlined">
+    <Card sx={inputStyle} variant="outlined">
       <Grid
         container
         spacing={{xs: 2, md: 3}}
@@ -165,9 +203,9 @@ export default function GroupPage() {
         {Boolean(!allUsers.some((user) => (
           !groupMembers.some((e) => e.username === user.username)
         ))) && <div>
-          <p>There are noone to invite!</p>  
+          <p>There are noone to invite!</p>
         </div>}
-        
+
         <List style={{maxHeight: 150, overflow: 'auto'}}>
           {allUsers.filter((user) => (
             !groupMembers.some((e) => e.username === user.username)
