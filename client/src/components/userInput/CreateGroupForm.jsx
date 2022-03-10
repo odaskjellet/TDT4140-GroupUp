@@ -5,6 +5,8 @@ import {Card, Button, Stack, TextField, Alert, FormControl, InputLabel, Select, 
 import {nanoid} from 'nanoid';
 import {UserContext} from '../../contexts/User';
 
+
+
 export default function CreateGroupForm() {
   const [badRequest, setBadRequest] = useState(false);
   const {register, formState: {errors}, handleSubmit, control} = useForm();
@@ -65,18 +67,18 @@ export default function CreateGroupForm() {
 
         <div>
           <FormControl fullWidth margin="normal" required>
-            <InputLabel id="gender-label">Membership</InputLabel>
+            <InputLabel id="member-label">Membership</InputLabel>
             <Controller
                 name='membership'
-                inputProps={{'data-testid': 'membership'}}
-                labelId="membership"
+                inputProps={{'data-testid': 'membership-option'}}
+                labelId="membership-label"
                 label='membership'
                 defaultValue={'standard'}
                 control={control}
                 render={({field}) => (
                     <Select {...field}>
-                      <MenuItem value={'standard'}>Standard</MenuItem>
-                      <MenuItem value={'gold'}>Gold</MenuItem>
+                      <MenuItem value={'Standard'}>Standard</MenuItem>
+                      <MenuItem value={'Gold'}>Gold</MenuItem>
                     </Select>
                 )}
             />

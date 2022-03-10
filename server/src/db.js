@@ -15,7 +15,7 @@ class Database {
 
     this.stmt_create_table_groups = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS Groups ' +
-        '(groupId string, name string, admin string, description string, PRIMARY KEY (groupId))');
+        '(groupId string, name string, admin string, description string, membership string, PRIMARY KEY (groupId))');
     this.stmt_create_table_groups.run();
 
     this.stmt_create_table_group_members = this.db.prepare(
@@ -155,7 +155,7 @@ class Database {
   }
 
   /**
-   * Format: {id: string, name: string, admin: string, description: string}
+   * Format: {id: string, name: string, admin: string, description: string, membership: string}
    * @param {string} groupId
    * @return attributes of the group with the given username
    */
@@ -258,11 +258,11 @@ class Database {
    * If accepted, adds the user to the group.
    * If declined, removes the invitation.
    * @param {string} username
-   * @param {string} answer
+   * @param accept rw
    * @param {string} groupId
    */
   answerGroupInvitation(username, accept, groupId) {
-    if (!this.getUserInvitations(username).some((e) => e.groupId == groupId)) {
+    if (!this.getUserInvitations(username).some((e) => e.groupId === groupId)) {
       throw Error('Cannot answer an invitation that does not exist!');
     }
     if (accept) {

@@ -50,7 +50,7 @@ server.put('/api/try-login', (request, result) => {
 server.put('/api/insert-group', (request, result) => {
   if (validGroupname(request.body.name)) {
     db.insertGroup(request.body.groupId, request.body.name,
-        request.body.admin, request.body.description);
+        request.body.admin, request.body.description, request.body.membership);
     db.addUserToGroup(request.body.groupId, request.body.admin);
     result.send('OK');
   } else {
