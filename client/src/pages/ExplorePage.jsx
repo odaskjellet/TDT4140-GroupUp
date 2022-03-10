@@ -88,7 +88,7 @@ export default function ExplorePage() {
       <h1>Explore groups</h1>
       <p>Find the perfect match.</p>
       <div
-      style={{width:"20%",height:"46%",display:"table",float:"left",position:"fixed",}}>
+      style={{width:"20%",height:"46%",display:"table",float:"left",position:"sticky",}}>
         <FilterMenu />
       </div>
       <div
