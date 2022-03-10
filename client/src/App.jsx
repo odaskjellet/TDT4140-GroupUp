@@ -6,7 +6,6 @@ import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import {UserProvider} from './contexts/User';
 import CreateGroupPage from './pages/CreateGroupPage';
-import MyProfilePage from './pages/MyProfilePage';
 import IndexPage from './pages/IndexPage';
 import {ColorModeProvider} from './contexts/ColorMode';
 import {CssBaseline} from '@mui/material';
@@ -25,7 +24,6 @@ export default function App() {
           <Route path="/register" element={<RegisterPage/>}/>
           <Route path="/home" element={<HomePage/>}/>
           <Route path="/create-group" element={<CreateGroupPage/>}/>
-          <Route path="/user" element={<MyProfilePage/>}/>
           <Route path="/group/:groupId" element={<GroupPage/>} />
           <Route path="/explore" element={<ExplorePage/>} />
         </Routes>
