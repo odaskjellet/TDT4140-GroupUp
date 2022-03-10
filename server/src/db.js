@@ -75,8 +75,8 @@ class Database {
         'VALUES (?, ?, ?, ?, ?)');
 
     this.stmt_insert_group = this.db.prepare(
-        'INSERT INTO Groups (groupId, name, admin, description) ' +
-        'VALUES (?, ?, ?, ?)');
+        'INSERT INTO Groups (groupId, name, admin, description, membership) ' +
+        'VALUES (?, ?, ?, ?, ?)');
 
     this.stmt_insert_user_into_group = this.db.prepare(
         'INSERT INTO GroupMembers (groupId, username) VALUES (?, ?)');
@@ -148,9 +148,10 @@ class Database {
    * @param {string} name
    * @param {string} admin username
    * @param {string} description
+   * @param {string} membership
    */
-  insertGroup(groupId, name, admin, description) {
-    this.stmt_insert_group.run(groupId, name, admin, description);
+  insertGroup(groupId, name, admin, description, membership) {
+    this.stmt_insert_group.run(groupId, name, admin, description, membership);
   }
 
   /**
