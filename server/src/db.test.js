@@ -68,7 +68,7 @@ test('insert and get groups', () => {
     admin: 'AdminNavn',
     description: 'Kul gruppe',
     location: null,
-    image: null
+    image: null,
   });
 });
 
@@ -136,7 +136,7 @@ test('match groups and get matches', () => {
   db.matchGroups('g1', 'g2'); // An incomplete match
 
   expect(db.getIncompleteGroupMatches('g1')).toEqual([
-    {groupId: 'g2'}
+    {groupId: 'g2'},
   ]);
   expect(db.getIncompleteGroupMatches('g2')).toEqual([]);
 
@@ -152,12 +152,11 @@ test('match groups and get matches', () => {
     {groupId: 'g1', name: 'Gruppe 1'},
   ]);
   expect(db.getIncompleteGroupMatches('g1')).toEqual([
-    {groupId: 'g2'}
+    {groupId: 'g2'},
   ]);
   expect(db.getIncompleteGroupMatches('g2')).toEqual([
-    {groupId: 'g1'}
+    {groupId: 'g1'},
   ]);
-  
 });
 
 
@@ -178,7 +177,7 @@ test('get invitations for user', () => {
   ]);
 
   db.inviteUserToGroup('henrik', 'g1');
-  
+
   db.answerGroupInvitation('henrik', false, 'g1');
   expect(db.getGroupMembers('g1')).toEqual([
     {username: 'per'},
@@ -186,19 +185,46 @@ test('get invitations for user', () => {
 });
 
 test('get group attributes', () => {
-  db.insertUser('henrik', 'password123', 20)
-  db.insertGroup('g1', 'Gruppe 1', 'henrik', 'En fin gruppe.', 'Oslo', 
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg')
-  const group = db.getGroup('g1')
+  db.insertUser('henrik', 'password123', 20);
+  db.insertGroup('g1', 'Gruppe 1', 'henrik', 'En fin gruppe.', 'Oslo',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg');
+  const group = db.getGroup('g1');
   expect(group).toEqual({
     groupId: 'g1',
     name: 'Gruppe 1',
     admin: 'henrik',
     description: 'En fin gruppe.',
     location: 'Oslo',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg'
-  })
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg',
+  });
 });
+
+test('update group attributes', () => {
+  db.insertUser('henrik', 'password123', 20);
+  db.insertGroup('g1', 'Gruppe 1', 'henrik', 'En fin gruppe.', 'Oslo',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg');
+
+  expect(db.getGroup('g1')).toEqual({
+    groupId: 'g1',
+    name: 'Gruppe 1',
+    admin: 'henrik',
+    description: 'En fin gruppe.',
+    location: 'Oslo',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg',
+  });
+
+  db.updateGroupAttributes('g1', 'Kult nytt navn', 'En ny kulere beskrivelse', 'Trondheim', 'https://wallpaperaccess.com/full/154009.jpg');
+
+  expect(db.getGroup('g1')).toEqual({
+    groupId: 'g1',
+    name: 'Kult nytt navn',
+    admin: 'henrik',
+    description: 'En ny kulere beskrivelse',
+    location: 'Trondheim',
+    image: 'https://wallpaperaccess.com/full/154009.jpg',
+  });
+});
+
 
 /*
 User (username, password, age)

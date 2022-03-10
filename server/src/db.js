@@ -68,7 +68,7 @@ class Database {
         'USING (groupId)');
 
     this.stmt_get_incomplete_group_matches = this.db.prepare(
-      'SELECT secondaryId AS groupId FROM GroupMatches WHERE primaryId = ?');
+        'SELECT secondaryId AS groupId FROM GroupMatches WHERE primaryId = ?');
 
     this.stmt_insert_user = this.db.prepare(
         'INSERT INTO Users (username, password, age, email, gender) ' +
@@ -101,6 +101,9 @@ class Database {
 
     this.stmt_get_group_invitations = this.db.prepare(
         'SELECT username FROM InvitationsToGroup WHERE groupId = ?');
+
+    this.stmt_update_group_attributes = this.db.prepare(
+        'UPDATE Groups SET name = ?, description = ?, location = ?, image = ? WHERE groupId = ?');
   }
 
   /**
@@ -236,11 +239,11 @@ class Database {
   getGroupMatches(groupId) {
     return this.stmt_get_group_matches.all(groupId, groupId);
   }
-  
+
   /**
    * Format: [{groupId: string}, ...]
    * @param {string} groupId
-   * @returns all (incomplete and complete) group matches with the given group
+   * @return all (incomplete and complete) group matches with the given group
    */
   getIncompleteGroupMatches(groupId) {
     return this.stmt_get_incomplete_group_matches.all(groupId);
@@ -282,11 +285,24 @@ class Database {
 
   /**
    * Format: [{username: string}, ...]
-   * @param {string} groupId 
-   * @returns the users who are currently invited to the given group
+   * @param {string} groupId
+   * @return the users who are currently invited to the given group
    */
   getGroupInvitations(groupId) {
     return this.stmt_get_group_invitations.all(groupId);
+  }
+
+  /**
+   * @param {string} groupId
+   * @param {string} name
+   * @param {string} description
+   * @param {string} location
+   * @param {string} image
+   *
+   */
+  updateGroupAttributes(groupId, name, description, location, image ) {
+    this.stmt_update_group_attributes.run(
+        name, description, location, image, groupId);
   }
 }
 

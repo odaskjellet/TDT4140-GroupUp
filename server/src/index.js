@@ -129,6 +129,11 @@ server.put('/api/get-group-invitations', (request, result) => {
   result.send(JSON.stringify(db.getGroupInvitations(request.body.groupId)));
 });
 
+server.put('/api/update-group-attributes', (request, result) => {
+  db.updateGroupAttributes(request.body.groupId, request.body.name, request.body.description, request.body.location, request.body.image);
+  result.send('OK');
+});
+
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });

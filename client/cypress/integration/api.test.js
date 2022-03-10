@@ -124,19 +124,31 @@ describe('api', () => {
   });
 
   it('should be able to insert group', async () => {
+    const exampleGroup = {
+      name: 'groupA',
+      admin: 'henrik',
+      groupId: 'g1',
+      description: 'En fin gruppe.',
+      location: 'Oslo',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg',
+    };
     const requestOptions = {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        name: 'groupA',
-        admin: 'henrik',
-        groupId: 1,
-      }),
+      body: JSON.stringify(exampleGroup),
     };
     await fetch('/api/insert-group', requestOptions);
     const result = await fetch('/api/get-groups', {method: 'GET'})
         .then((res) => res.json());
-    expect(result).to.deep.equal([{groupId: 1, name: 'groupA'}]);
+    expect(result).to.deep.equal([{groupId: 'g1', name: 'groupA'}]);
+    const requestOptions2 = {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({groupId: 'g1'}),
+    };
+    const result2 = await fetch('/api/get-group', requestOptions2)
+        .then((res) => res.json());
+    expect(result2).to.deep.equal(exampleGroup);
   });
 
   it('should not be able to insert group with invalid groupname', async () => {
@@ -151,6 +163,49 @@ describe('api', () => {
     };
     const result = await fetch('/api/insert-group', requestedOptions);
     expect(result.status).to.equal(400);
+  });
+
+  it('should be able to update group attributes', async () => {
+    await fetch('/api/insert-group', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        groupId: 'g1',
+        name: 'groupA',
+        admin: 'henrik',
+        description: 'En fin gruppe.',
+        location: 'Oslo',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg',
+      }),
+    });
+
+    // Update
+    await fetch('/api/update-group-attributes', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        groupId: 'g1',
+        name: 'Nytt navn',
+        description: 'Kul gruppe',
+        location: 'Trondheim',
+        image: '',
+      }),
+    });
+
+    const result2 = await fetch('/api/get-group', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({groupId: 'g1'}),
+    }).then((res) => res.json());
+
+    expect(result2).to.deep.equal({
+      groupId: 'g1',
+      name: 'Nytt navn',
+      admin: 'henrik',
+      description: 'Kul gruppe',
+      location: 'Trondheim',
+      image: '',
+    });
   });
 });
 
