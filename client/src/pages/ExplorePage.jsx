@@ -162,8 +162,8 @@ export default function ExplorePage() {
               <Button
                 variant='contained'
                 disabled={
-                  Boolean(incompleteMatches.some((e) => 
-                    e.groupId === selectedGroupBId
+                  Boolean(incompleteMatches.some((e) =>
+                    e.groupId === selectedGroupBId,
                   ))
                 }
                 onClick={() => {
@@ -172,13 +172,13 @@ export default function ExplorePage() {
                 }}
               >
                 {
-                  !Boolean(incompleteMatches.some((e) => 
-                    e.groupId === selectedGroupBId
+                  !Boolean(incompleteMatches.some((e) =>
+                    e.groupId === selectedGroupBId,
                   )) && <span>Confirm</span>
                 }
                 {
-                  Boolean(incompleteMatches.some((e) => 
-                    e.groupId === selectedGroupBId
+                  Boolean(incompleteMatches.some((e) =>
+                    e.groupId === selectedGroupBId,
                   )) && <span>Match already initiated</span>
                 }
               </Button>

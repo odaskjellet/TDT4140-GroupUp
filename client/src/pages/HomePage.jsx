@@ -108,11 +108,11 @@ function HomePage() {
             spacing={2}
           >
             {/* <div onClick={() => navigate('/user')}> */}
-              <Avatar
-                alt=""
-                src=""
-                sx={{width: 80, height: 80}}
-              />
+            <Avatar
+              alt=""
+              src=""
+              sx={{width: 80, height: 80}}
+            />
             {/* </div> */}
             {/* <Button>Edit</Button> */}
             <Button onClick={onSignOutButton}>Sign out</Button>

@@ -164,9 +164,9 @@ export default function GroupPage() {
         {Boolean(!allUsers.some((user) => (
           !groupMembers.some((e) => e.username === user.username)
         ))) && <div>
-          <p>There are noone to invite!</p>  
+          <p>There are noone to invite!</p>
         </div>}
-        
+
         <List style={{maxHeight: 150, overflow: 'auto'}}>
           {allUsers.filter((user) => (
             !groupMembers.some((e) => e.username === user.username)

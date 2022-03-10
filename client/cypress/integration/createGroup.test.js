@@ -66,7 +66,7 @@ describe('Create group', () => {
     cy.contains(/invite sent!/i).then(() => {
       sessionStorage.setItem('user.verified', true);
       sessionStorage.setItem('user.username', 'testUser');
-    })
+    });
     cy.visit('/home');
     cy.contains(/Accept/i).click();
     cy.contains(/Visit/i).click();
