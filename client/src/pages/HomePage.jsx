@@ -108,11 +108,11 @@ function HomePage() {
             spacing={2}
           >
             {/* <div onClick={() => navigate('/user')}> */}
-              <Avatar
-                alt=""
-                src=""
-                sx={{width: 80, height: 80}}
-              />
+            <Avatar
+              alt=""
+              src=""
+              sx={{width: 80, height: 80}}
+            />
             {/* </div> */}
             {/* <Button>Edit</Button> */}
             <Button onClick={onSignOutButton}>Sign out</Button>
@@ -178,6 +178,7 @@ function HomePage() {
           </Stack>
         </Card> */}
 
+
         <h2>Groups</h2>
         <Card sx={{padding: '2rem'}} variant="outlined">
           <Grid
@@ -187,7 +188,7 @@ function HomePage() {
           >
             {Array.from(groups).map((group) =>
               <Grid item xs={2} sm={4} md={4} key={group.groupId}>
-                <Card sx={{padding: '1rem', backgroundColor: 'gold'}} elevation={3}>
+                <Card sx={{padding: '1rem', backgroundColor: group.membership}} elevation={3}>
                   <h1>{group.name}</h1>
                   <Button
                     onClick={() => navigate('/group/' + group.groupId)}
