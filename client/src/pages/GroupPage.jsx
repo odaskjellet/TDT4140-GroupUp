@@ -93,6 +93,13 @@ export default function GroupPage() {
           setGroupInvitations(result);
         });
   };
+  let membership = groupInfo.membership;
+
+  if (membership === 'standard') {
+    membership = '';
+  } else {
+    membership = 'gold';
+  }
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -101,38 +108,41 @@ export default function GroupPage() {
     setSnackbarOpen(false);
   };
 
+
   const styles = {
     marginTop: '10px',
     padding: '60px',
     borderStyle: 'solid',
-    borderColor: groupInfo.membership,
-    borderRadius: '15px'
+    borderColor: membership,
+    borderRadius: '15px',
   };
 
-  let inputStyle = {
+
+  const inputStyle = {
     padding: '2rem',
-    backgroundColor: groupInfo.membership
+    backgroundColor: membership,
 
 
-  }
+  };
 
 
   const textBoxStyle = {
-    background: 'linear-gradient(to bottom, #cfc09f 22%,#634f2c 24%, #cfc09f 26%, #cfc09f 27%,#ffecb3 40%,#3a2c0f 78%',
-      color: '#fff',
-      fontFamily: 'serif',
-      position: 'relative',
-      textTransform: 'uppercase',
-      fontSize: '3vw',
-      margin: '0',
-      fontWeight: 400,
-      textAlign: 'center'
+    background: membership,
+    color: '#fff',
+    fontFamily: 'serif',
+    position: 'relative',
+    textTransform: 'uppercase',
+    fontSize: '3vw',
+    margin: '0',
+    fontWeight: 400,
+    textAlign: 'center',
 
-}
+  };
 
 
   return (<Container style={styles}>
     <br />
+    <p style={textBoxStyle}>Membership  {groupInfo.membership} </p>
     <Button
       variant='outlined'
       onClick={() => navigate('/home')}
@@ -143,7 +153,7 @@ export default function GroupPage() {
     {/* <p>ID: {groupId} </p> */}
     <p>Admin: {groupInfo.admin} </p>
     <p>Description: {groupInfo.description} </p>
-    <p style={textBoxStyle}>Membership : {groupInfo.membership} </p>
+
 
     <h2>Matches</h2>
     <Card sx={inputStyle} variant="outlined">
@@ -195,9 +205,9 @@ export default function GroupPage() {
         {Boolean(!allUsers.some((user) => (
           !groupMembers.some((e) => e.username === user.username)
         ))) && <div>
-          <p>There are noone to invite!</p>  
+          <p>There are noone to invite!</p>
         </div>}
-        
+
         <List style={{maxHeight: 150, overflow: 'auto'}}>
           {allUsers.filter((user) => (
             !groupMembers.some((e) => e.username === user.username)
