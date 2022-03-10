@@ -15,7 +15,7 @@ class Database {
 
     this.stmt_create_table_groups = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS Groups ' +
-        '(groupId string, name string, admin string, description string, PRIMARY KEY (groupId))');
+        '(groupId string, name string, admin string, description string, location string, image string, PRIMARY KEY (groupId))');
     this.stmt_create_table_groups.run();
 
     this.stmt_create_table_group_members = this.db.prepare(
@@ -30,7 +30,7 @@ class Database {
 
     this.stmt_create_table_group_matches = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS ' +
-        'GroupMatches (primaryId string, secondaryId integer, CONSTRAINT UC_GroupMatches UNIQUE (primaryId, secondaryId))');
+        'GroupMatches (primaryId string, secondaryId string, CONSTRAINT UC_GroupMatches UNIQUE (primaryId, secondaryId))');
     this.stmt_create_table_group_matches.run();
 
     this.stmt_create_table_invitations_to_group = this.db.prepare(
@@ -75,8 +75,8 @@ class Database {
         'VALUES (?, ?, ?, ?, ?)');
 
     this.stmt_insert_group = this.db.prepare(
-        'INSERT INTO Groups (groupId, name, admin, description) ' +
-        'VALUES (?, ?, ?, ?)');
+        'INSERT INTO Groups (groupId, name, admin, description, location, image) ' +
+        'VALUES (?, ?, ?, ?, ?, ?)');
 
     this.stmt_insert_user_into_group = this.db.prepare(
         'INSERT INTO GroupMembers (groupId, username) VALUES (?, ?)');
@@ -148,9 +148,12 @@ class Database {
    * @param {string} name
    * @param {string} admin username
    * @param {string} description
+   * @param {string} location
+   * @param {string} image
    */
-  insertGroup(groupId, name, admin, description) {
-    this.stmt_insert_group.run(groupId, name, admin, description);
+  insertGroup(groupId, name, admin, description, location, image) {
+    this.stmt_insert_group.run(
+        groupId, name, admin, description, location, image);
   }
 
   /**

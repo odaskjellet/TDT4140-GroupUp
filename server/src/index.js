@@ -48,9 +48,10 @@ server.put('/api/try-login', (request, result) => {
 });
 
 server.put('/api/insert-group', (request, result) => {
+  console.log('\n\n\nBODY', request.body, '\n\n\n');
   if (validGroupname(request.body.name)) {
     db.insertGroup(request.body.groupId, request.body.name,
-        request.body.admin, request.body.description);
+        request.body.admin, request.body.description, request.body.location, request.body.image);
     db.addUserToGroup(request.body.groupId, request.body.admin);
     result.send('OK');
   } else {
