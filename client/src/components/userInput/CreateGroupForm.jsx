@@ -73,11 +73,11 @@ export default function CreateGroupForm() {
                 inputProps={{'data-testid': 'membership-option'}}
                 labelId="membership-label"
                 label='membership'
-                defaultValue={'standard'}
+                defaultValue={'silver'}
                 control={control}
                 render={({field}) => (
                     <Select {...field}>
-                      <MenuItem value={'Standard'}>Standard</MenuItem>
+                      <MenuItem value={'Silver'}>Silver</MenuItem>
                       <MenuItem value={'Gold'}>Gold</MenuItem>
                     </Select>
                 )}

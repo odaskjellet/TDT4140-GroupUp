@@ -105,15 +105,17 @@ export default function GroupPage() {
     marginTop: '10px',
     padding: '60px',
     borderStyle: 'solid',
-    borderColor: 'gold',
+    borderColor: groupInfo.membership,
     borderRadius: '15px'
   };
 
-  const inputStyle = {
+  let inputStyle = {
     padding: '2rem',
-    backgroundColor: 'gold'
+    backgroundColor: groupInfo.membership
+
 
   }
+
 
   const textBoxStyle = {
     background: 'linear-gradient(to bottom, #cfc09f 22%,#634f2c 24%, #cfc09f 26%, #cfc09f 27%,#ffecb3 40%,#3a2c0f 78%',

@@ -187,7 +187,7 @@ function HomePage() {
           >
             {Array.from(groups).map((group) =>
               <Grid item xs={2} sm={4} md={4} key={group.groupId}>
-                <Card sx={{padding: '1rem'}} elevation={3}>
+                <Card sx={{padding: '1rem', backgroundColor: 'gold'}} elevation={3}>
                   <h1>{group.name}</h1>
                   <Button
                     onClick={() => navigate('/group/' + group.groupId)}
