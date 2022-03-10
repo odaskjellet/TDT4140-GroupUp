@@ -113,6 +113,7 @@ export default function GroupPage() {
     {/* <p>ID: {groupId} </p> */}
     <p>Admin: {groupInfo.admin} </p>
     <p>Description: {groupInfo.description} </p>
+    <p>Membership: {groupInfo.membership} </p>
 
     <h2>Matches</h2>
     <Card sx={{padding: '2rem'}} variant="outlined">
