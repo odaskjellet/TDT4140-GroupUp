@@ -101,7 +101,35 @@ export default function GroupPage() {
     setSnackbarOpen(false);
   };
 
-  return (<Container>
+  const styles = {
+    marginTop: '10px',
+    padding: '60px',
+    borderStyle: 'solid',
+    borderColor: 'gold',
+    borderRadius: '15px'
+  };
+
+  const inputStyle = {
+    padding: '2rem',
+    backgroundColor: 'gold'
+
+  }
+
+  const textBoxStyle = {
+    background: 'linear-gradient(to bottom, #cfc09f 22%,#634f2c 24%, #cfc09f 26%, #cfc09f 27%,#ffecb3 40%,#3a2c0f 78%',
+      color: '#fff',
+      fontFamily: 'serif',
+      position: 'relative',
+      textTransform: 'uppercase',
+      fontSize: '3vw',
+      margin: '0',
+      fontWeight: 400,
+      textAlign: 'center'
+
+}
+
+
+  return (<Container style={styles}>
     <br />
     <Button
       variant='outlined'
@@ -113,10 +141,10 @@ export default function GroupPage() {
     {/* <p>ID: {groupId} </p> */}
     <p>Admin: {groupInfo.admin} </p>
     <p>Description: {groupInfo.description} </p>
-    <p>Membership: {groupInfo.membership} </p>
+    <p style={textBoxStyle}>Membership : {groupInfo.membership} </p>
 
     <h2>Matches</h2>
-    <Card sx={{padding: '2rem'}} variant="outlined">
+    <Card sx={inputStyle} variant="outlined">
       <Grid
         container
         spacing={{xs: 2, md: 3}}
