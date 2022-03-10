@@ -1,7 +1,7 @@
 import React, {useContext, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
-import {Card, Button, Stack, TextField, Alert} from '@mui/material';
+import {Card, Button, Stack, TextField, Alert, Chip} from '@mui/material';
 import {nanoid} from 'nanoid';
 import {UserContext} from '../../contexts/User';
 
@@ -10,6 +10,7 @@ export default function CreateGroupForm() {
   const {register, formState: {errors}, handleSubmit} = useForm();
   const [userState, _] = useContext(UserContext);
   const navigate = useNavigate();
+
   const onSubmit = async (data) => {
     setBadRequest(false);
     data.groupId = nanoid();
@@ -63,7 +64,7 @@ export default function CreateGroupForm() {
           />
         </div>
 
-        {/* <div>
+        <div>
           <TextField
             disabled
             fullWidth
@@ -74,20 +75,35 @@ export default function CreateGroupForm() {
             type={'text'}
             {...register('interests', {required: false})}
           />
-        </div> */}
+        </div>
 
-        {/* <div>
+        <div>
           <TextField
-            disabled
             fullWidth
             margin="normal"
-            error={errors.members}
-            label="Add members - TODO"
+            error={errors.image}
+            helperText={errors.image && 'Image URL is required.'}
+            label="Image URL"
             type={'text'}
-            {...register('members', {required: false})}
+            {...register('image', {required: false})}
           />
-        </div> */}
+        </div>
+
+        <div>
+          <TextField
+            fullWidth
+            margin="normal"
+            error={errors.location}
+            helperText={errors.location && 'Location is required.'}
+            label="Location"
+            inputProps={{'data-testid': 'location-input'}}
+            type={'text'}
+            {...register('location', {required: true})}
+          />
+        </div>
+
         <br></br>
+        
         <Stack
           spacing={2}
           direction="row"

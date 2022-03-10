@@ -17,6 +17,7 @@ describe('Create group', () => {
     cy.url().should('include', '/create-group');
     cy.get('[data-testid="group-name-input"]').type('MyCoolGroup');
     cy.get('[data-testid="description-input"]').type('VIDYA GAEMZ');
+    cy.get('[data-testid="location-input"]').type('Trondheim');
     cy.contains(/Create group/i).click();
     cy.contains(/Home/i).click();
   });
@@ -27,6 +28,7 @@ describe('Create group', () => {
     cy.url().should('include', '/create-group');
     cy.get('[data-testid="group-name-input"]').type('123');
     cy.get('[data-testid="description-input"]').type('VIDYA GAEMZ');
+    cy.get('[data-testid="location-input"]').type('Trondheim');
     cy.contains(/Create group/i).click();
     cy.contains(/Something went wrong!/i);
     cy.visit('/home');
