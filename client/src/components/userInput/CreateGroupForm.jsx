@@ -9,20 +9,15 @@ export default function CreateGroupForm() {
   const [badRequest, setBadRequest] = useState(false);
   const {register, formState: {errors}, handleSubmit, control} = useForm();
   const [userState, _] = useContext(UserContext);
-  // const [interests, setInterests] = useState([]);
+  const [interests, setInterests] = useState([]);
   const navigate = useNavigate();
   const filter = createFilterOptions();
-
-  // useEffect(() => {
-  //   register({ name: 'interests' });
-  // })
 
   const onSubmit = async (data) => {
     setBadRequest(false);
     data.groupId = nanoid();
     data.admin = userState.username;
-    console.log(data);
-    return;
+    data.interests = interests;
     fetch('/api/insert-group', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
@@ -71,36 +66,6 @@ export default function CreateGroupForm() {
             {...register('description', {required: true})}
           />
         </div>
-{/* 
-        <div><Autocomplete
-        multiple
-        id="tags-outlined"
-        options={interests}
-        getOptionLabel={(option) => option.title}
-        defaultValue={[top100Films[13]]}
-        filterSelectedOptions
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            variant="outlined"
-            label="filterSelectedOptions"
-            placeholder="Favorites"
-          />
-        )}
-      /></div> */}
-
-        {/* <div>
-          <TextField
-            disabled
-            fullWidth
-            margin="normal"
-            error={errors.interests}
-            helperText={errors.interests && 'Interests are required.'}
-            label="Interests - TODO"
-            type={'text'}
-            {...register('interests', {required: false})}
-          />
-        </div> */}
 
         <div>
           <TextField
@@ -127,39 +92,20 @@ export default function CreateGroupForm() {
           />
         </div>
 
-        <Controller
-          name="interests"
-          control={control}
-          onChange = {(event, newValue, reason) => (newValue)}
-          onInputChange = {(event, data) => (data)}
-          defaultValue={[]}
-          render={({field}) => (
             <Autocomplete
-              {...field}
               multiple
               freeSolo
               autoSelect
-              // value={interests}
               options={interestOptions}
-              getOptionLabel={(option) => option.title}
-              // onChange={(event, value) => {
-              //   if (value && value.freeSolo) {
-              //     setInterests({
-              //       title: value.inputValue
-              //     });
-              //   } else {
-              //     setInterests(value);
-              //   }
-              // }}
+              getOptionLabel={(option) => option}
+              onChange={(event, value) => {
+                setInterests(value);
+              }}
               filterOptions={(options, params) => {
                 const filtered = filter(options, params);
 
                 if (params.inputValue !== "") {
-                  filtered.push({
-                    freeSolo: true,
-                    value: params.inputValue,
-                    title: params.inputValue
-                  });
+                  filtered.push(params.inputValue);
                 }
 
                 return filtered;
@@ -174,8 +120,6 @@ export default function CreateGroupForm() {
                 />
               )}
             />
-          )}
-        />
 
 
         <br></br>
@@ -211,14 +155,14 @@ export default function CreateGroupForm() {
 }
 
 const interestOptions = [
-  {title: "Astrology"},
-  {title: "Chess"},
-  {title: "Gaming"},
-  {title: "Skiing"},
-  {title: "Traveling"},
-  {title: "Sports"},
-  {title: "Food"},
-  {title: "Wine"},
-  {title: "Movies"},
-  {title: "Paragliding"},
+  "Astrology",
+  "Chess",
+  "Gaming",
+  "Skiing",
+  "Traveling",
+  "Sports",
+  "Food",
+  "Wine",
+  "Movies",
+  "Paragliding",
 ]

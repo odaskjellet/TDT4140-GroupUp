@@ -53,6 +53,11 @@ server.put('/api/insert-group', (request, result) => {
     db.insertGroup(request.body.groupId, request.body.name,
         request.body.admin, request.body.description, request.body.location, request.body.image);
     db.addUserToGroup(request.body.groupId, request.body.admin);
+    if (request.body.interests) {
+      request.body.interests.forEach((interest) => {
+        db.addGroupInterest(request.body.groupId, interest);
+      })
+    }
     result.send('OK');
   } else {
     const errorData = alertErrors(registration_errors);
