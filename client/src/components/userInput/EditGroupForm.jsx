@@ -14,10 +14,12 @@ export default function EditGroupForm() {
   const navigate = useNavigate();
   const filter = createFilterOptions();
   const [groupInfo, setGroupInfo] = useState({});
-
+  const [loading, setLoading] = useState(true);
 
   useEffect(async () => {
     await fetchGroupInfo();
+    await fetchGroupInterests();
+    setLoading(false);
   }, []);
 
   const fetchGroupInfo = async () => {
@@ -28,7 +30,20 @@ export default function EditGroupForm() {
     }).then((res) => res.json())
         .then((result) => {
           setGroupInfo(result);
-          setInterests(result.interests);
+        });
+  };
+
+  const fetchGroupInterests = async () => {
+    await fetch('/api/get-group-interests', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        groupId: groupId,
+      }),
+    }).then((res) => res.json()).
+        then((result) => {
+          setInterests(result);
+          console.log(result);
         });
   };
 
@@ -53,8 +68,8 @@ export default function EditGroupForm() {
     });
   };
 
-  if (!groupInfo.groupId) {
-    return <>loading..</>
+  if (loading) {
+    return <div>loading..</div>
   } else {
     return (
       <Card elevation={5}>
@@ -139,36 +154,35 @@ export default function EditGroupForm() {
             />
           </div>
   
-              <Autocomplete
-                multiple
-                freeSolo
-                autoSelect
-                defaultValue={groupInfo.interests}
-                options={interestOptions}
-                getOptionLabel={(option) => option}
-                onChange={(event, value) => {
-                  setInterests(value);
-                }}
-                filterOptions={(options, params) => {
-                  const filtered = filter(options, params);
-  
-                  if (params.inputValue !== "") {
-                    filtered.push(params.inputValue);
-                  }
-  
-                  return filtered;
-                }}
-                style={{ width: 300 }}
-                renderInput={params => (
-                  <TextField {...params}
-                    margin="normal"
-                    label="Interests"
-                    variant="outlined"
-                    fullWidth
-                  />
-                )}
+          <Autocomplete
+            multiple
+            freeSolo
+            autoSelect
+            defaultValue={interests.map(e => e.interest)}
+            options={interestOptions}
+            getOptionLabel={(option) => option}
+            onChange={(event, value) => {
+              setInterests(value);
+            }}
+            filterOptions={(options, params) => {
+              const filtered = filter(options, params);
+
+              if (params.inputValue !== "") {
+                filtered.push(params.inputValue);
+              }
+
+              return filtered;
+            }}
+            style={{ width: 300 }}
+            renderInput={params => (
+              <TextField {...params}
+                margin="normal"
+                label="Interests"
+                variant="outlined"
+                fullWidth
               />
-  
+            )}
+          />
   
           <br></br>
           
