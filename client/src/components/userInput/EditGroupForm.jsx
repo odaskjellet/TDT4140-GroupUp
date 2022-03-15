@@ -43,7 +43,7 @@ export default function EditGroupForm() {
     }).then((res) => res.json()).
         then((result) => {
           setInterests(result);
-          console.log(result);
+          //console.log(result);
         });
   };
 
