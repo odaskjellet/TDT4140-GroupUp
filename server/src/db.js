@@ -30,7 +30,7 @@ class Database {
 
     this.stmt_create_table_group_matches = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS ' +
-        'GroupMatches (primaryId string, secondaryId integer, CONSTRAINT UC_GroupMatches UNIQUE (primaryId, secondaryId))');
+        'GroupMatches (primaryId string, secondaryId integer, isSuperLike string, CONSTRAINT UC_GroupMatches UNIQUE (primaryId, secondaryId))');
     this.stmt_create_table_group_matches.run();
 
     this.stmt_create_table_invitations_to_group = this.db.prepare(
@@ -73,6 +73,9 @@ class Database {
         'SELECT primaryId AS groupId FROM GroupMatches WHERE secondaryId = ?)' +
         'USING (groupId)');
 
+    this.stmt_get_group_match_superlike = this.db.prepare(
+        "SELECT secondaryId FROM (SELECT * FROM GroupMatches WHERE isSuperLike = 'true') WHERE primaryId = ? "); 
+  
     this.stmt_get_incomplete_group_matches = this.db.prepare(
         'SELECT secondaryId AS groupId FROM GroupMatches WHERE primaryId = ?');
 
@@ -88,7 +91,7 @@ class Database {
         'INSERT INTO GroupMembers (groupId, username) VALUES (?, ?)');
 
     this.stmt_match_groups = this.db.prepare(
-        'INSERT INTO GroupMatches (primaryId, secondaryId) VALUES (?, ?)');
+        'INSERT INTO GroupMatches (primaryId, secondaryId, isSuperLike) VALUES (?, ?, ?)');
 
     this.stmt_try_login = this.db.prepare(
         'SELECT * FROM Users WHERE (username = ? AND password = ?)');
@@ -244,9 +247,10 @@ class Database {
    * Groups have to match both ways to have a complete match.
    * @param {string} primaryId
    * @param {string} secondaryId
+   * @param {string} isSuperLike
    */
-  matchGroups(primaryId, secondaryId) {
-    this.stmt_match_groups.run(primaryId, secondaryId);
+  matchGroups(primaryId, secondaryId, isSuperLike) {
+    this.stmt_match_groups.run(primaryId, secondaryId, isSuperLike);
   }
 
   /**
@@ -256,6 +260,15 @@ class Database {
    */
   getGroupMatches(groupId) {
     return this.stmt_get_group_matches.all(groupId, groupId);
+  }
+
+  /**
+     * Format: [{primaryId: string}, ...]
+     * @param {string} primaryId
+     * @return returns the groups that have superliked the group primaryId
+     */
+  getSuperLikes(primaryId) {
+    return this.stmt_get_group_match_superlike.all(primaryId);
   }
 
   /**

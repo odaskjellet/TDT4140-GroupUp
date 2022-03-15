@@ -98,7 +98,7 @@ server.put('/api/insert-group-interest', (request, result) => {
 });
 
 server.put('/api/match-groups', (request, result) => {
-  db.matchGroups(request.body.primaryId, request.body.secondaryId);
+  db.matchGroups(request.body.primaryId, request.body.secondaryId, request.body.isSuperLike);
   result.send('OK');
 });
 

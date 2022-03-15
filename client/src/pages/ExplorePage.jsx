@@ -57,6 +57,7 @@ export default function ExplorePage() {
       body: JSON.stringify({
         primaryId: selectedGroupA.groupId,
         secondaryId: selectedGroupBId,
+        isSuperLike: 'false',
       }),
     }).then((res) => {
       if (res.ok) {
