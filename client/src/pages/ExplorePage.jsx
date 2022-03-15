@@ -14,6 +14,7 @@ export default function ExplorePage() {
   const [userState, _] = useContext(UserContext);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [incompleteMatches, setIncompleteMatches] = useState([]);
+  //const [groupMembership, setGroupMembership] = useState('');
 
   useEffect(async () => {
     await fetchAllGroups();
@@ -50,14 +51,14 @@ export default function ExplorePage() {
         });
   };
 
-  const createMatch = async () => {
+  const createMatch = async (isSuperLike) => {
     fetch('/api/match-groups', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         primaryId: selectedGroupA.groupId,
         secondaryId: selectedGroupBId,
-        isSuperLike: 'false',
+        isSuperLike: isSuperLike,
       }),
     }).then((res) => {
       if (res.ok) {
@@ -67,6 +68,20 @@ export default function ExplorePage() {
       }
     });
   };
+
+  /*
+  const getGroupMembership = async (groupId) => {
+    fetch('/api/get-group-membership', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({groupId: groupId}),
+    }).then((res) => res.json())
+      .then((result) => {
+        setGroupMembership(result);
+    });
+  };
+  */
+  
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -163,12 +178,23 @@ export default function ExplorePage() {
               <Button
                 variant='contained'
                 disabled={
+                    true
+                }
+                onClick={() => {
+                  createMatch("true");
+                  setDialogOpen(false);
+                }}>
+                  <span>Super Like!</span>
+              </Button>
+              <Button
+                variant='contained'
+                disabled={
                   Boolean(incompleteMatches.some((e) => 
                     e.groupId === selectedGroupBId
                   ))
                 }
                 onClick={() => {
-                  createMatch();
+                  createMatch("false");
                   setDialogOpen(false);
                 }}
               >

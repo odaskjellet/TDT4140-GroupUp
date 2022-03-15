@@ -92,6 +92,12 @@ server.put('/api/get-group-members', (request, result) => {
   result.send(JSON.stringify(db.getGroupMembers(request.body.groupId)));
 });
 
+
+server.put('/api/get-group-membership', (request, result) => {
+  result.send(JSON.stringify(db.getGroupMembership(request.body.groupId)));
+})
+
+
 server.put('/api/insert-group-interest', (request, result) => {
   db.addGroupInterest(request.body.groupId, request.body.interest);
   result.send('OK');
