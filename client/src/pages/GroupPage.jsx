@@ -176,6 +176,7 @@ export default function GroupPage() {
     ))}
 
 
+
     <h2>Matches</h2>
     <Card sx={inputStyle} variant="outlined">
       <Grid
