@@ -6,14 +6,21 @@ import { useContext } from 'react';
 import { Card, InputLabel, MenuItem, Select, TextField, FormControl, Stack, Button, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import classes from './FilterMenu.module.css';
 import NestedListItems from '../../components/userInput/NestedListItems';
-import UseSelectFilter from '../../components/userInput/UseSelectFilter';
-
+import InterestFilter from './InterestFilter';
+import LocationFilter from './LocationFilter';
+import AgeFilter from './AgeFilter';
+import SizeFilter from './SizeFilter';
 
 function FilterMenu() {
     return (
         <div className={classes.FilterMenu}>
             <Card>
-            <UseSelectFilter />
+            <InterestFilter />
+            <LocationFilter />
+            <h3>Filter on age</h3>
+            <AgeFilter />
+            <SizeFilter />
+
             </Card>
         </div>
 
