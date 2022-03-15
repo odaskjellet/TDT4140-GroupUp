@@ -15,7 +15,7 @@ class Database {
 
     this.stmt_create_table_groups = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS Groups ' +
-        '(groupId string, name string, admin string, description string, membership string, PRIMARY KEY (groupId))');
+        '(groupId string, name string, admin string, description string, membership string, location string, image string, PRIMARY KEY (groupId))');
     this.stmt_create_table_groups.run();
 
     this.stmt_create_table_group_members = this.db.prepare(
@@ -30,7 +30,7 @@ class Database {
 
     this.stmt_create_table_group_matches = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS ' +
-        'GroupMatches (primaryId string, secondaryId integer, CONSTRAINT UC_GroupMatches UNIQUE (primaryId, secondaryId))');
+        'GroupMatches (primaryId string, secondaryId string, CONSTRAINT UC_GroupMatches UNIQUE (primaryId, secondaryId))');
     this.stmt_create_table_group_matches.run();
 
     this.stmt_create_table_invitations_to_group = this.db.prepare(
@@ -81,8 +81,8 @@ class Database {
         'VALUES (?, ?, ?, ?, ?)');
 
     this.stmt_insert_group = this.db.prepare(
-        'INSERT INTO Groups (groupId, name, admin, description, membership) ' +
-        'VALUES (?, ?, ?, ?, ?)');
+        'INSERT INTO Groups (groupId, name, admin, description, membership, location, image) ' +
+        'VALUES (?, ?, ?, ?, ?, ?, ?)');
 
     this.stmt_insert_user_into_group = this.db.prepare(
         'INSERT INTO GroupMembers (groupId, username) VALUES (?, ?)');
@@ -95,6 +95,9 @@ class Database {
 
     this.stmt_insert_group_interest = this.db.prepare(
         'INSERT INTO GroupInterests (groupId, interest) VALUES (?, ?)');
+    
+    this.stmt_remove_group_interest = this.db.prepare(
+        'DELETE FROM GroupInterests WHERE groupId = ? AND interest = ?')
 
     this.stmt_invite_user_to_group = this.db.prepare(
         'INSERT INTO InvitationsToGroup (username, groupId) VALUES (?, ?)');
@@ -107,6 +110,9 @@ class Database {
 
     this.stmt_get_group_invitations = this.db.prepare(
         'SELECT username FROM InvitationsToGroup WHERE groupId = ?');
+
+    this.stmt_update_group_attributes = this.db.prepare(
+        'UPDATE Groups SET name = ?, description = ?, location = ?, image = ? WHERE groupId = ?');
     
     this.stmt_get_groups_of_size = this.db.prepare(
       'SELECT groupId FROM (SELECT groupId, COUNT(*) AS size FROM groupMembers GROUP BY groupId) WHERE size = ?');
@@ -164,9 +170,12 @@ class Database {
    * @param {string} admin username
    * @param {string} description
    * @param {string} membership
+   * @param {string} location
+   * @param {string} image
    */
-  insertGroup(groupId, name, admin, description, membership) {
-    this.stmt_insert_group.run(groupId, name, admin, description, membership);
+  insertGroup(groupId, name, admin, description, membership, location, image) {
+    this.stmt_insert_group.run(
+        groupId, name, admin, description, membership, location, image);
   }
 
   /**
@@ -240,6 +249,15 @@ class Database {
   }
 
   /**
+   * Deletes the given interest from the given group.
+   * @param {string} groupId 
+   * @param {string} interest 
+   */
+  deleteGroupInterest(groupId, interest) {
+    this.stmt_remove_group_interest.run(groupId, interest);
+  }
+
+  /**
    * Matches groups, one-way.
    * Groups have to match both ways to have a complete match.
    * @param {string} primaryId
@@ -310,6 +328,19 @@ class Database {
     return this.stmt_get_group_invitations.all(groupId);
   }
 
+  /**
+   * @param {string} groupId
+   * @param {string} name
+   * @param {string} description
+   * @param {string} location
+   * @param {string} image
+   *
+   */
+  updateGroupAttributes(groupId, name, description, location, image ) {
+    this.stmt_update_group_attributes.run(
+        name, description, location, image, groupId);
+  }
+  
   getAllGroups() {
     return this.stmt_get_all_groups.all();
   }

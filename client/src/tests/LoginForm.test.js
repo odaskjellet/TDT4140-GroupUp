@@ -14,11 +14,11 @@ beforeEach(() => {
   document.body.appendChild(container);
 
   render(
-    <BrowserRouter>
-      <UserProvider>
-        <LoginForm/>
-      </UserProvider>
-    </BrowserRouter>, container);
+      <BrowserRouter>
+        <UserProvider>
+          <LoginForm/>
+        </UserProvider>
+      </BrowserRouter>, container);
 });
 
 afterEach(() => {

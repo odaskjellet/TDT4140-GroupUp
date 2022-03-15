@@ -1,4 +1,4 @@
-import {Button, Card, Container, Grid, Dialog, DialogTitle, Box, List, ListItem, ListItemText, Snackbar, Alert} from '@mui/material';
+import {Button, Card, Container, Grid, Dialog, DialogTitle, Box, List, ListItem, ListItemText, Snackbar, Alert, Chip} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 
@@ -8,9 +8,10 @@ export default function GroupPage() {
   const [groupMatches, setGroupMatches] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [groupMembers, setGroupMembers] = useState([]);
   const [groupInvitations, setGroupInvitations] = useState([]);
+  const [interests, setInterests] = useState([]);
   const navigate = useNavigate();
 
   useEffect(async () => {
@@ -19,6 +20,7 @@ export default function GroupPage() {
     await fetchAllUsers();
     await fetchGroupMembers();
     await fetchGroupInvites();
+    await fetchGroupInterests();
   }, [groupId]);
 
   const fetchGroupInfo = async () => {
@@ -101,6 +103,19 @@ export default function GroupPage() {
     membership = 'gold';
   }
 
+  const fetchGroupInterests = async () => {
+    await fetch('/api/get-group-interests', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        groupId: groupId,
+      }),
+    }).then((res) => res.json()).
+        then((result) => {
+          setInterests(result);
+        });
+  };
+
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -147,10 +162,19 @@ export default function GroupPage() {
     >
       Home
     </Button>
+    
     <h1>Welcome to {groupInfo.name}</h1>
     {/* <p>ID: {groupId} </p> */}
     <p>Admin: {groupInfo.admin} </p>
     <p>Description: {groupInfo.description} </p>
+    <p>Location: {groupInfo.location}</p>
+    <p>Image link: {groupInfo.image}</p>
+    <img src={groupInfo.image} alt="" style={{maxWidth: '500px'}}/>
+    <p>Interests</p>
+    {interests.map((interest) => (
+      <Chip label={interest.interest}/>
+    ))}
+
 
 
     <h2>Matches</h2>
@@ -160,7 +184,7 @@ export default function GroupPage() {
         spacing={{xs: 2, md: 3}}
         columns={{xs: 4, sm: 8, md: 12}}
       >
-        {Array.from(groupMatches).map((match) =>
+        {groupMatches.map((match) =>
           <Grid item xs={2} sm={4} md={4} key={match.groupId}>
             <Card sx={{padding: '1rem'}} elevation={3}>
               <h1>{match.name}</h1>
