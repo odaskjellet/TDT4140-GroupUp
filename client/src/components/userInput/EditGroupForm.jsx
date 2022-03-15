@@ -2,7 +2,6 @@ import React, {useContext, useState, useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useForm, Controller} from 'react-hook-form';
 import {Card, Button, Stack, TextField, Alert, FormControl, InputLabel, Select, MenuItem, Chip, Autocomplete, createFilterOptions} from '@mui/material';
-import {nanoid} from 'nanoid';
 import {UserContext} from '../../contexts/User';
 
 export default function EditGroupForm() {
@@ -43,7 +42,6 @@ export default function EditGroupForm() {
     }).then((res) => res.json()).
         then((result) => {
           setInterests(result);
-          //console.log(result);
         });
   };
 
@@ -74,7 +72,7 @@ export default function EditGroupForm() {
     return (
       <Card elevation={5}>
         <form style={{padding: '2rem'}} onSubmit={handleSubmit(onSubmit)}>
-          <h2>Create a new group</h2>
+          <h2>Edit group</h2>
           <div>
             <TextField
               required
@@ -193,7 +191,7 @@ export default function EditGroupForm() {
             alignItems="center"
           >
             <Button
-              onClick={() => navigate('/home')}
+              onClick={() => navigate('/group/' + groupId)}
             >
               Cancel
             </Button>
@@ -207,7 +205,7 @@ export default function EditGroupForm() {
               variant="contained"
               type="submit"
             >
-              Create Group
+              Save
             </Button>
           </Stack>
   

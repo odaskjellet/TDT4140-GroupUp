@@ -95,13 +95,8 @@ export default function GroupPage() {
           setGroupInvitations(result);
         });
   };
-  let membership = groupInfo.membership;
-
-  if (membership === 'standard') {
-    membership = '';
-  } else {
-    membership = 'gold';
-  }
+  
+  const membership = groupInfo.membership === 'standard' ? '' : 'gold';
 
   const fetchGroupInterests = async () => {
     await fetch('/api/get-group-interests', {
@@ -135,8 +130,6 @@ export default function GroupPage() {
 
   const inputStyle = {
     padding: '2rem',
-
-
   };
 
 
@@ -170,16 +163,16 @@ export default function GroupPage() {
     </Button>
     
     <h1>Welcome to {groupInfo.name}</h1>
-    {/* <p>ID: {groupId} </p> */}
-    <p>Admin: {groupInfo.admin} </p>
-    <p>Description: {groupInfo.description} </p>
-    <p>Location: {groupInfo.location}</p>
-    <p>Image link: {groupInfo.image}</p>
-    <img src={groupInfo.image} alt="" style={{maxWidth: '500px'}}/>
-    <p>Interests</p>
     {interests.map((interest) => (
       <Chip label={interest.interest}/>
     ))}
+    {/* <p>ID: {groupId} </p> */}
+    <p>Admin: {groupInfo.admin} </p>
+    <p>Location: {groupInfo.location}</p>
+    <br />
+    <p>{groupInfo.description} </p>
+    {/* <p>Image link: {groupInfo.image}</p> */}
+    <img src={groupInfo.image} alt="" style={{maxWidth: '500px'}}/>
 
 
 
