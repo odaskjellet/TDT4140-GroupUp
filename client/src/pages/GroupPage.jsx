@@ -162,6 +162,12 @@ export default function GroupPage() {
     >
       Home
     </Button>
+
+    <Button
+      onClick={() => navigate('/edit-group/' + groupId)}
+    >
+      Edit
+    </Button>
     
     <h1>Welcome to {groupInfo.name}</h1>
     {/* <p>ID: {groupId} </p> */}

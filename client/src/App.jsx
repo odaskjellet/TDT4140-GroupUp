@@ -12,6 +12,7 @@ import {CssBaseline} from '@mui/material';
 import LightSwitch from './components/LightSwitch';
 import GroupPage from './pages/GroupPage';
 import ExplorePage from './pages/ExplorePage';
+import EditGroupPage from './pages/EditGroupPage';
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/home" element={<HomePage/>}/>
           <Route path="/create-group" element={<CreateGroupPage/>}/>
           <Route path="/group/:groupId" element={<GroupPage/>} />
+          <Route path="/edit-group/:groupId" element={<EditGroupPage/>} />
           <Route path="/explore" element={<ExplorePage/>} />
         </Routes>
       </UserProvider>
