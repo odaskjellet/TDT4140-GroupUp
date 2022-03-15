@@ -117,6 +117,7 @@ export default function EditGroupForm() {
               margin="normal"
               error={errors.image}
               defaultValue={groupInfo.image}
+              inputProps={{'data-testid': 'image-input'}}
               helperText={errors.image && 'Image URL is required.'}
               label="Image URL"
               type={'text'}

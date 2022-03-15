@@ -94,6 +94,7 @@ export default function CreateGroupForm() {
             fullWidth
             margin="normal"
             error={errors.image}
+            inputProps={{'data-testid': 'image-input'}}
             helperText={errors.image && 'Image URL is required.'}
             label="Image URL"
             type={'text'}

@@ -39,6 +39,19 @@ describe('Update group', () => {
     
     cy.get('.MuiButton-root').contains(/Edit/i).click();
     cy.url().should('include', '/edit-group/g1');
+
+    cy.get('[data-testid="group-name-input"]')
+        .invoke('val').should('eq', 'groupA');
+
+    cy.get('[data-testid="description-input"]')
+        .invoke('val').should('eq', 'En fin gruppe.');
+    
+    cy.get('[data-testid="location-input"]')
+        .invoke('val').should('eq', 'Oslo');
+    
+    cy.get('[data-testid="image-input"]')
+      .invoke('val').should('eq', 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg');
+
   });
 
 })
