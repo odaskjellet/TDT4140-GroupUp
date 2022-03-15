@@ -68,6 +68,7 @@ test('insert and get groups', () => {
     admin: 'AdminNavn',
     description: 'Kul gruppe',
     location: null,
+    membership: null,
     image: null,
   });
 });
@@ -103,13 +104,13 @@ test('get groups with user', () => {
   db.addUserToGroup('g1', 'henrik');
 
   expect(db.getGroupsWithUser('per')).toEqual([
-    {groupId: 'g0', name: 'A'},
-    {groupId: 'g1', name: 'B'},
-    {groupId: 'g2', name: 'C'},
+    {groupId: 'g0', name: 'A', membership: null},
+    {groupId: 'g1', name: 'B', membership: null},
+    {groupId: 'g2', name: 'C', membership: null},
   ]);
   expect(db.getGroupsWithUser('henrik')).toEqual([
-    {groupId: 'g0', name: 'A'},
-    {groupId: 'g1', name: 'B'},
+    {groupId: 'g0', name: 'A', membership: null},
+    {groupId: 'g1', name: 'B', membership: null},
   ]);
 });
 
@@ -191,7 +192,7 @@ test('get invitations for user', () => {
 
 test('get group attributes', () => {
   db.insertUser('henrik', 'password123', 20);
-  db.insertGroup('g1', 'Gruppe 1', 'henrik', 'En fin gruppe.', 'Oslo',
+  db.insertGroup('g1', 'Gruppe 1', 'henrik', 'En fin gruppe.', null, 'Oslo',
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg');
   const group = db.getGroup('g1');
   expect(group).toEqual({
@@ -199,6 +200,7 @@ test('get group attributes', () => {
     name: 'Gruppe 1',
     admin: 'henrik',
     description: 'En fin gruppe.',
+    membership: null,
     location: 'Oslo',
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg',
   });
@@ -206,7 +208,7 @@ test('get group attributes', () => {
 
 test('update group attributes', () => {
   db.insertUser('henrik', 'password123', 20);
-  db.insertGroup('g1', 'Gruppe 1', 'henrik', 'En fin gruppe.', 'Oslo',
+  db.insertGroup('g1', 'Gruppe 1', 'henrik', 'En fin gruppe.', null, 'Oslo',
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg');
 
   expect(db.getGroup('g1')).toEqual({
@@ -214,6 +216,7 @@ test('update group attributes', () => {
     name: 'Gruppe 1',
     admin: 'henrik',
     description: 'En fin gruppe.',
+    membership: null,
     location: 'Oslo',
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg',
   });
@@ -225,10 +228,56 @@ test('update group attributes', () => {
     name: 'Kult nytt navn',
     admin: 'henrik',
     description: 'En ny kulere beskrivelse',
+    membership: null,
     location: 'Trondheim',
     image: 'https://wallpaperaccess.com/full/154009.jpg',
   });
 });
+
+test('get groups of size', () => {
+  db.insertUser('henrik', 'henrik123', 20);
+  db.insertUser('per', 'passord123', 21);
+
+  db.insertGroup(0, 'A');
+  db.insertGroup(1, 'B');
+
+  db.addUserToGroup(0, 'per');
+  db.addUserToGroup(1, 'per');
+
+  db.addUserToGroup(0, 'henrik');
+
+  expect(db.getGroupsOfSize(1)).toEqual([
+    {groupId: 1}
+  ]);
+  expect(db.getGroupsOfSize(2)).toEqual([
+    {groupId: 0}
+  ]);
+});
+
+test('get groups of with average age between given age', () => {
+  db.insertUser('henrik', 'henrik123', 20);
+  db.insertUser('per', 'passord123', 24);
+  db.insertUser('per2', 'passord123', 24);
+  db.insertGroup(0, 'A');
+  db.insertGroup(1, 'B');
+  db.addUserToGroup(0, 'per');
+  db.addUserToGroup(1, 'per');
+  db.addUserToGroup(1, 'per2');
+  db.addUserToGroup(0, 'henrik');
+
+  expect(db.getGroupsOfAge(23, 25)).toEqual([
+    {groupId: 1}
+  ]);
+  
+
+  expect(db.getGroupsOfAge(20, 23)).toEqual([
+    {
+    groupId: 1,
+    groupId: 0
+  }
+  ]);
+});
+ 
 
 
 /*

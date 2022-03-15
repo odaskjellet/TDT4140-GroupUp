@@ -20,19 +20,23 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build",
-    "test": "react-scripts test --watchAll=false",
+    "test": "react-scripts test --watchAll=false --coverage",
     "eject": "react-scripts eject",
     "cypress": "cypress open",
     "lint": "npx eslint .",
-    "lint:fix": "npx eslint . --fix"
+    "lint:fix": "npx eslint . --fix",
+    "cypress:coverage": "npx nyc report --report=lcov"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
     ]
+  },
+  "nyc": {
+    "exclude": ["src/reportWebVitals.js"]
   },
   "browserslist": {
     "production": [
@@ -47,6 +51,8 @@
     ]
   },
   "devDependencies": {
+    "@cypress/code-coverage": "^3.9.12",
+    "@cypress/instrument-cra": "^1.4.0",
     "@testing-library/cypress": "^8.0.2",
     "cypress": "^9.4.1",
     "eslint": "^8.8.0",

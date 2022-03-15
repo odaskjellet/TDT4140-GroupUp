@@ -15,7 +15,7 @@ class Database {
 
     this.stmt_create_table_groups = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS Groups ' +
-        '(groupId string, name string, admin string, description string, location string, image string, PRIMARY KEY (groupId))');
+        '(groupId string, name string, admin string, description string, membership string, location string, image string, PRIMARY KEY (groupId))');
     this.stmt_create_table_groups.run();
 
     this.stmt_create_table_group_members = this.db.prepare(
@@ -46,12 +46,15 @@ class Database {
 
     this.stmt_get_group = this.db.prepare(
         'SELECT * FROM Groups WHERE groupId = ?');
+    
+    this.stmt_get_all_groups = this.db.prepare(
+      'SELECT * FROM Groups');
 
     this.stmt_get_groups = this.db.prepare(
         'SELECT groupId, name FROM Groups');
 
     this.stmt_get_groups_with_user = this.db.prepare(
-        'SELECT groupId, name FROM GroupMembers JOIN Groups USING ' +
+        'SELECT groupId, name, membership FROM GroupMembers JOIN Groups USING ' +
         '(groupId) WHERE GroupMembers.username = ?');
 
     this.stmt_get_group_members = this.db.prepare(
@@ -59,6 +62,9 @@ class Database {
 
     this.stmt_get_group_interests = this.db.prepare(
         'SELECT interest FROM GroupInterests WHERE (groupId = ?)');
+    
+    this.stmt_get_groups_with_interest = this.db.prepare(
+      'SELECT groupID FROM GroupInterests WHERE (interest = ?)');
 
     this.stmt_get_group_matches = this.db.prepare(
         'SELECT groupId, name FROM Groups JOIN ' +
@@ -75,8 +81,8 @@ class Database {
         'VALUES (?, ?, ?, ?, ?)');
 
     this.stmt_insert_group = this.db.prepare(
-        'INSERT INTO Groups (groupId, name, admin, description, location, image) ' +
-        'VALUES (?, ?, ?, ?, ?, ?)');
+        'INSERT INTO Groups (groupId, name, admin, description, membership, location, image) ' +
+        'VALUES (?, ?, ?, ?, ?, ?, ?)');
 
     this.stmt_insert_user_into_group = this.db.prepare(
         'INSERT INTO GroupMembers (groupId, username) VALUES (?, ?)');
@@ -107,6 +113,15 @@ class Database {
 
     this.stmt_update_group_attributes = this.db.prepare(
         'UPDATE Groups SET name = ?, description = ?, location = ?, image = ? WHERE groupId = ?');
+    
+    this.stmt_get_groups_of_size = this.db.prepare(
+      'SELECT groupId FROM (SELECT groupId, COUNT(*) AS size FROM groupMembers GROUP BY groupId) WHERE size = ?');
+    
+    this.stmt_get_groups_of_age = this.db.prepare(
+      'SELECT groupId FROM (SELECT groupId, AVG(age) AS average FROM GroupMembers INNER JOIN Users ON GroupMembers.username = Users.username GROUP BY groupId) WHERE (average >= ? AND average <= ?)');
+
+    //this.stmt_get_groups_at_location = this.db.prepare(
+    //  'SELECT groupId FROM Groups WHERE location = ?');
   }
 
   /**
@@ -154,16 +169,17 @@ class Database {
    * @param {string} name
    * @param {string} admin username
    * @param {string} description
+   * @param {string} membership
    * @param {string} location
    * @param {string} image
    */
-  insertGroup(groupId, name, admin, description, location, image) {
+  insertGroup(groupId, name, admin, description, membership, location, image) {
     this.stmt_insert_group.run(
-        groupId, name, admin, description, location, image);
+        groupId, name, admin, description, membership, location, image);
   }
 
   /**
-   * Format: {id: string, name: string, admin: string, description: string}
+   * Format: {id: string, name: string, admin: string, description: string, membership: string}
    * @param {string} groupId
    * @return attributes of the group with the given username
    */
@@ -213,6 +229,14 @@ class Database {
    */
   getGroupInterests(groupId) {
     return this.stmt_get_group_interests.all(groupId);
+  }
+
+  getGroupWithInterest(interest) {
+    return this.stmt_get_groups_with_interest.all(interest);
+  }
+
+  getGroupsOfSize(size) {
+    return this.stmt_get_groups_of_size.all(size);
   }
 
   /**
@@ -275,11 +299,11 @@ class Database {
    * If accepted, adds the user to the group.
    * If declined, removes the invitation.
    * @param {string} username
-   * @param {string} answer
+   * @param accept rw
    * @param {string} groupId
    */
   answerGroupInvitation(username, accept, groupId) {
-    if (!this.getUserInvitations(username).some((e) => e.groupId == groupId)) {
+    if (!this.getUserInvitations(username).some((e) => e.groupId === groupId)) {
       throw Error('Cannot answer an invitation that does not exist!');
     }
     if (accept) {
@@ -316,6 +340,19 @@ class Database {
     this.stmt_update_group_attributes.run(
         name, description, location, image, groupId);
   }
+  
+  getAllGroups() {
+    return this.stmt_get_all_groups.all();
+  }
+
+  getGroupsOfAge(lowAge, highAge) {
+    return this.stmt_get_groups_of_age.all(lowAge, highAge);
+  }
+
+  getGroupsAtLocation(location) {
+    return this.stmt_get_groups_at_location(location);
+  }
+
 }
 
 module.exports = {Database};

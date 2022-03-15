@@ -130,6 +130,7 @@ describe('api', () => {
       groupId: 'g1',
       description: 'En fin gruppe.',
       location: 'Oslo',
+      membership: 'standard',
       image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg',
     };
     const requestOptions = {
@@ -187,6 +188,7 @@ describe('api', () => {
         groupId: 'g1',
         name: 'Nytt navn',
         description: 'Kul gruppe',
+        membership: 'standard',
         location: 'Trondheim',
         image: '',
       }),
@@ -203,6 +205,7 @@ describe('api', () => {
       name: 'Nytt navn',
       admin: 'henrik',
       description: 'Kul gruppe',
+      membership: 'standard',
       location: 'Trondheim',
       image: '',
     });

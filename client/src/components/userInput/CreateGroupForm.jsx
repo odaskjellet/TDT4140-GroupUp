@@ -1,9 +1,10 @@
 import React, {useContext, useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useForm, Controller} from 'react-hook-form';
-import {Card, Button, Stack, TextField, Alert, Chip, Autocomplete, createFilterOptions} from '@mui/material';
+import {Card, Button, Stack, TextField, Alert, FormControl, InputLabel, Select, MenuItem, Chip, Autocomplete, createFilterOptions} from '@mui/material';
 import {nanoid} from 'nanoid';
 import {UserContext} from '../../contexts/User';
+
 
 export default function CreateGroupForm() {
   const [badRequest, setBadRequest] = useState(false);
@@ -66,6 +67,27 @@ export default function CreateGroupForm() {
             {...register('description', {required: true})}
           />
         </div>
+
+        <div>
+          <FormControl fullWidth margin="normal" required>
+            <InputLabel id="member-label">Membership</InputLabel>
+            <Controller
+              name='membership'
+              inputProps={{'data-testid': 'membership-option'}}
+              labelId="membership-label"
+              label='membership'
+              defaultValue={'standard'}
+              control={control}
+              render={({field}) => (
+                <Select {...field}>
+                  <MenuItem value={'standard'}>Standard</MenuItem>
+                  <MenuItem value={'Gold'}>Gold</MenuItem>
+                </Select>
+              )}
+            />
+          </FormControl>
+        </div>
+
 
         <div>
           <TextField

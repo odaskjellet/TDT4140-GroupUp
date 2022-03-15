@@ -95,6 +95,13 @@ export default function GroupPage() {
           setGroupInvitations(result);
         });
   };
+  let membership = groupInfo.membership;
+
+  if (membership === 'standard') {
+    membership = '';
+  } else {
+    membership = 'gold';
+  }
 
   const fetchGroupInterests = async () => {
     await fetch('/api/get-group-interests', {
@@ -116,8 +123,39 @@ export default function GroupPage() {
     setSnackbarOpen(false);
   };
 
-  return (<Container>
+
+  const styles = {
+    marginTop: '10px',
+    padding: '60px',
+    borderStyle: 'solid',
+    borderColor: membership,
+    borderRadius: '15px',
+  };
+
+
+  const inputStyle = {
+    padding: '2rem',
+
+
+  };
+
+
+  const textBoxStyle = {
+    color: membership,
+    fontFamily: 'serif',
+    position: 'relative',
+    textTransform: 'uppercase',
+    fontSize: '3vw',
+    margin: '0',
+    fontWeight: 400,
+    textAlign: 'center',
+
+  };
+
+
+  return (<Container style={styles}>
     <br />
+    <p style={textBoxStyle}>  {groupInfo.membership} Membership </p>
     <Button
       variant='outlined'
       onClick={() => navigate('/home')}
@@ -137,8 +175,9 @@ export default function GroupPage() {
       <Chip label={interest.interest}/>
     ))}
 
+
     <h2>Matches</h2>
-    <Card sx={{padding: '2rem'}} variant="outlined">
+    <Card sx={inputStyle} variant="outlined">
       <Grid
         container
         spacing={{xs: 2, md: 3}}

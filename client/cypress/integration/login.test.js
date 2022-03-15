@@ -30,7 +30,7 @@ describe('Login page', () => {
     cy.contains(/A password is required./i);
   });
 
-  it('Create a sample user', async () => {
+  it('Create a sample user', () => {
     const requestOptions = {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
@@ -41,7 +41,7 @@ describe('Login page', () => {
         email: 'tester123@gmail.com',
       }),
     };
-    await fetch('/api/insert-user', requestOptions);
+    fetch('/api/insert-user', requestOptions);
     cy.visit('/login');
     cy.get('[data-testid="username-input"]').clear();
     cy.get('[data-testid="username-input"]').type('testUser');

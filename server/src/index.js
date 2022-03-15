@@ -6,6 +6,7 @@ const server = express();
 let db = new Database(
   process.argv[2] === 'test' ? ':memory:' : './data/database.db');
 
+
 server.use(express.json());
 server.use(express.urlencoded({extended: true}));
 
@@ -27,7 +28,7 @@ server.put('/api/get-user', (request, result) => {
 
 server.put('/api/insert-user', (request, result) => {
   if (!db.tryLogin(request.body.username, request.body.password) &&
-    validInformation(request.body.username, request.body.password, request.body.age, request.body.email)) {
+      validInformation(request.body.username, request.body.password, request.body.age, request.body.email)) {
     db.insertUser(request.body.username, request.body.password, request.body.age, request.body.email, request.body.gender);
     result.send('OK');
   } else {
@@ -51,7 +52,7 @@ server.put('/api/insert-group', (request, result) => {
   console.log('\n\n\nBODY', request.body, '\n\n\n');
   if (validGroupname(request.body.name)) {
     db.insertGroup(request.body.groupId, request.body.name,
-        request.body.admin, request.body.description, request.body.location, request.body.image);
+        request.body.admin, request.body.description, request.body.membership, request.body.location, request.body.image);
     db.addUserToGroup(request.body.groupId, request.body.admin);
     if (request.body.interests) {
       request.body.interests.forEach((interest) => {
@@ -142,6 +143,14 @@ server.put('/api/get-group-invitations', (request, result) => {
 server.put('/api/update-group-attributes', (request, result) => {
   db.updateGroupAttributes(request.body.groupId, request.body.name, request.body.description, request.body.location, request.body.image);
   result.send('OK');
+});
+
+server.put('/api/get-all-groups', (request, result) => {
+  result.send(JSON.stringify(db.getAllGroups()));
+});
+
+server.put('/api/get-groups-with-interest', (request, result) => {
+  result.send(JSON.stringify(db.getGroupWithInterest(request)));
 });
 
 server.listen(PORT, () => {
@@ -245,4 +254,25 @@ function clearErrors(registration_errors) {
   return null;
 }
 
+let filteredGroups = [];
 
+function filterGroups(filterOption, option) {
+  let newGroups = [];
+  switch(filterOption) {
+    case interest:
+        newGroups = db.getGroupWithInterest(option); //TODO test db.getGroupsWithInterests
+        break;
+    case location:
+        newGroups = db.getGroupsAtLocation(option);
+      break;
+    case age:
+      newGroups = db.getGroupsOfAge(option[0], option[1]);
+      break;
+    case groupSize:
+      newGroups = db.getGroupsOfSize(option);
+      break;
+  }
+
+  let intersection = newGroups.filter(x => filterGroups.includes(x));
+  filterGroups = intersection;
+}
