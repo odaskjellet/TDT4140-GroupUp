@@ -16,6 +16,7 @@ export default function GroupPage() {
   const [groupInvitations, setGroupInvitations] = useState([]);
   const [interests, setInterests] = useState([]);
   const [groupDialogOpen, setGroupDialogOpen] = useState(false);
+  const [matchMembers, setMatchMembers] = useState([]);
 
   const navigate = useNavigate();
 
@@ -27,6 +28,7 @@ export default function GroupPage() {
     await fetchGroupInvites();
     await fetchGroupInterests();
     await fetchMatchInfo();
+    await fetchMacthMembers();
   }, [groupId]);
 
   const fetchGroupInfo = async () => {
@@ -103,6 +105,19 @@ export default function GroupPage() {
         });
   };
 
+  const fetchMatchMembers = async (groupId) => {
+    await fetch('/api/get-group-members', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        groupId: groupId,
+      }),
+    }).then((res) => res.json()).
+        then((result) => {
+          setMatchMembers(result);
+        });
+  };
+
   const fetchGroupInvites = async () => {
     await fetch('/api/get-group-invitations', {
       method: 'PUT',
@@ -140,7 +155,7 @@ export default function GroupPage() {
 
   const setAndOpenGroupDialog = (groupId) => {
     fetchMatchInfo(groupId);
-
+    fetchMatchMembers(groupId);
     setGroupDialogOpen(true);
 
 
@@ -228,15 +243,27 @@ export default function GroupPage() {
 
     <Dialog style={{minHeight: '100%', maxHeight: '100%'}}    onClose={() => groupDialogOpen(false)} open={groupDialogOpen}>
       <Container sx={{padding: '1rem'}} >
+        {/* <p>Image link: {groupInfo.image}</p> */}
         <img src={matchInfo.image} alt="" style={{maxWidth: '350px', borderRadius: '15px' }}/>
+
         <DialogTitle style={{textAlign: 'center',
           position: 'relative',
           textTransform: 'uppercase',}}>{matchInfo.name}</DialogTitle>
+
         <p>Admin: {matchInfo.admin} </p>
         <p>Location: {matchInfo.location}</p>
         <p>Description: {matchInfo.description} </p>
-        {/* <p>Image link: {groupInfo.image}</p> */}
 
+        <p>Members: </p>
+        <List style={{maxHeight: 150, overflow: 'auto'}}>
+          {Array.from(matchMembers).map((user) =>
+            <ListItem
+              key={user.username}
+              value={user.username}>
+              <ListItemText primary={user.username}></ListItemText>
+          </ListItem>)
+        }
+      </List>
 
         <Box textAlign='center'>
           <Button
