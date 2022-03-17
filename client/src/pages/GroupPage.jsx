@@ -221,7 +221,7 @@ export default function GroupPage() {
     
     <h1>Welcome to {groupInfo.name}</h1>
     {interests.map((interest) => (
-      <Chip label={interest.interest}/>
+      <Chip label={interest.interest} sx={{margin: '0.5rem'}} color='primary'/>
     ))}
     {/* <p>ID: {groupId} </p> */}
     <p>Admin: {groupInfo.admin} </p>
@@ -258,7 +258,7 @@ export default function GroupPage() {
     <Dialog style={{minHeight: '100%', maxHeight: '100%'}}    onClose={() => groupDialogOpen(false)} open={groupDialogOpen}>
       <Container sx={{padding: '1rem'}} >
         {/* <p>Image link: {groupInfo.image}</p> */}
-        <img src={matchInfo.image} alt="" style={{maxWidth: '350px', borderRadius: '15px' }}/>
+        <img src={matchInfo.image} alt="" style={{borderRadius: '15px' , display: 'block', marginLeft: 'auto', marginRight: 'auto', width: '80%',}}/>
 
         <DialogTitle style={{textAlign: 'center',
           position: 'relative',
@@ -280,11 +280,12 @@ export default function GroupPage() {
       </List>
         <p>Interests: </p>
         {interests.map((interest) => (
-            <Chip color='primary' label={interest.interest}/>
+            <Chip sx={{margin: '0.5rem'}} color='primary' label={interest.interest}/>
         ))}
-
+ 
         <Box textAlign='center'>
           <Button
+            sx={{margin: 'rem'}}
             variant='outlined'
             onClick={() => setGroupDialogOpen(false)}
           >
