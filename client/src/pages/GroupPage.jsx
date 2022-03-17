@@ -226,16 +226,17 @@ export default function GroupPage() {
       </Grid>
     </Card>
 
-    <Dialog onClose={() => groupDialogOpen(false)} open={groupDialogOpen}>
+    <Dialog style={{minHeight: '100%', maxHeight: '100%'}}    onClose={() => groupDialogOpen(false)} open={groupDialogOpen}>
       <Container sx={{padding: '1rem'}} >
-        <DialogTitle>{matchInfo.name}</DialogTitle>
-
+        <img src={matchInfo.image} alt="" style={{maxWidth: '350px', borderRadius: '15px' }}/>
+        <DialogTitle style={{textAlign: 'center',
+          position: 'relative',
+          textTransform: 'uppercase',}}>{matchInfo.name}</DialogTitle>
         <p>Admin: {matchInfo.admin} </p>
         <p>Location: {matchInfo.location}</p>
-        <br />
-        <p>{matchInfo.description} </p>
+        <p>Description: {matchInfo.description} </p>
         {/* <p>Image link: {groupInfo.image}</p> */}
-        <img src={matchInfo.image} alt="" style={{maxWidth: '500px'}}/>
+
 
         <Box textAlign='center'>
           <Button
