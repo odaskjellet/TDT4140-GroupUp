@@ -80,6 +80,8 @@ describe('Pop up match info', () => {
                 // Did not create match
             }
         });
+    })
+
 
         it('existing values should appear', () => {
             cy.visit('group/g1');
@@ -93,4 +95,4 @@ describe('Pop up match info', () => {
         })
 
 
-    })}
+    })
