@@ -151,7 +151,7 @@ export default function EditGroupForm() {
               {...register('location', {required: true})}
             />
           </div>
-  
+          
           <Autocomplete
             multiple
             freeSolo

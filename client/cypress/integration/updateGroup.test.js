@@ -30,11 +30,12 @@ describe('Update group', () => {
         location: 'Oslo',
         membership: 'standard',
         image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg',
+        interests: ['Fishing', 'Golf'],
       }),
     });
   });
 
-  it('should edit a group', () => {
+  it('existing values should appear', () => {
     cy.visit('group/g1');
     
     cy.get('.MuiButton-root').contains(/Edit/i).click();
@@ -51,7 +52,10 @@ describe('Update group', () => {
     
     cy.get('[data-testid="image-input"]')
       .invoke('val').should('eq', 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg');
-
+    
+    cy.contains('Fishing');
+    cy.contains('Golf');
+    
   });
 
 })
