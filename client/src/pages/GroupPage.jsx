@@ -12,6 +12,7 @@ export default function GroupPage() {
   const [groupMembers, setGroupMembers] = useState([]);
   const [groupInvitations, setGroupInvitations] = useState([]);
   const [interests, setInterests] = useState([]);
+  const [groupDialogOpen, setGroupDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(async () => {
@@ -21,6 +22,7 @@ export default function GroupPage() {
     await fetchGroupMembers();
     await fetchGroupInvites();
     await fetchGroupInterests();
+    await fetchMatchInfo();
   }, [groupId]);
 
   const fetchGroupInfo = async () => {
@@ -42,6 +44,17 @@ export default function GroupPage() {
     }).then((res) => res.json())
         .then((result) => {
           setGroupMatches(result);
+        });
+  };
+
+  const fetchMatchInfo = async (groupId) => {
+    await fetch('/api/get-group', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({groupId: groupId}),
+    }).then((res) => res.json())
+        .then((result) => {
+          setGroupInfo(result);
         });
   };
 
@@ -118,6 +131,13 @@ export default function GroupPage() {
     setSnackbarOpen(false);
   };
 
+  const setAndOpenGroupDialog = (groupId) => {
+
+    setGroupDialogOpen(true);
+
+
+  }
+
 
   const styles = {
     marginTop: '10px',
@@ -188,7 +208,7 @@ export default function GroupPage() {
             <Card sx={{padding: '1rem'}} elevation={3}>
               <h1>{match.name}</h1>
               <Button
-                onClick={() => navigate('/group/' + match.groupId)}
+                onClick={() => setAndOpenGroupDialog(match.groupId)}
               >
                 Visit
               </Button>
@@ -197,6 +217,22 @@ export default function GroupPage() {
         )}
       </Grid>
     </Card>
+
+    <Dialog onClose={() => groupDialogOpen(false)} open={groupDialogOpen}>
+      <Container sx={{padding: '1rem'}} >
+        <DialogTitle>Name of group</DialogTitle>
+        <p textalign='center'>Cool info</p>
+        <br />
+        <Box textAlign='center'>
+          <Button
+            variant='outlined'
+            onClick={() => setGroupDialogOpen(false)}
+          >
+              Close
+          </Button>
+        </Box>
+      </Container>
+    </Dialog>
 
     <h2>Members</h2>
     <List>
