@@ -11,6 +11,7 @@ export default function GroupPage() {
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   const [groupMembers, setGroupMembers] = useState([]);
   const [groupInvitations, setGroupInvitations] = useState([]);
+  const [groupSuperlikes, setGroupSuperlikes] = useState([]);
   const navigate = useNavigate();
 
   useEffect(async () => {
@@ -19,6 +20,7 @@ export default function GroupPage() {
     await fetchAllUsers();
     await fetchGroupMembers();
     await fetchGroupInvites();
+    await fetchSuperLikes();
   }, [groupId]);
 
   const fetchGroupInfo = async () => {
@@ -50,6 +52,19 @@ export default function GroupPage() {
           setAllUsers(result);
         });
   };
+
+  const fetchSuperLikes = async () => {
+    await fetch('/api/get-group-superlikes', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        groupId: groupId
+      }),
+    }).then(res => res.json())
+    .then(result => {
+      setGroupSuperlikes(result);
+    });
+  }
 
   const sendInvite = async (username) => {
     await fetch('/api/invite-user-to-group', {
@@ -148,7 +163,7 @@ export default function GroupPage() {
         spacing={{xs: 2, md: 3}}
         columns={{xs: 4, sm: 8, md: 12}}
       >
-        {Array.from(groupMatches).map((match) =>
+        {groupMatches.map((match) =>
           <Grid item xs={2} sm={4} md={4} key={match.groupId}>
             <Card sx={{padding: '1rem'}} elevation={3}>
               <h1>{match.name}</h1>
@@ -156,6 +171,23 @@ export default function GroupPage() {
                 onClick={() => navigate('/group/' + match.groupId)}
               >
                 Visit
+              </Button>
+            </Card>
+          </Grid>,
+        )}
+        {groupSuperlikes.map((match) =>
+          <Grid item xs={2} sm={4} md={4} key={match.groupId}>
+            <Card sx={{padding: '1rem'}} elevation={3}>
+              <h1>{match.name}</h1>
+              <Button
+                onClick={() => console.log('TODO: implement decline!')}
+              >
+                Decline
+              </Button>
+              <Button
+                onClick={() => console.log('TODO: implement accept!')}
+              >
+                Like Back
               </Button>
             </Card>
           </Grid>,

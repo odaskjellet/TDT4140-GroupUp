@@ -73,8 +73,8 @@ class Database {
         'SELECT primaryId AS groupId FROM GroupMatches WHERE secondaryId = ?)' +
         'USING (groupId)');
 
-    this.stmt_get_group_match_superlike = this.db.prepare(
-        "SELECT secondaryId FROM (SELECT * FROM GroupMatches WHERE isSuperLike = 'true') WHERE primaryId = ? "); 
+    this.stmt_get_group_superlikes = this.db.prepare(
+        "SELECT Groups.groupId, Groups.name FROM GroupMatches INNER JOIN Groups ON GroupMatches.secondaryId = Groups.groupId WHERE isSuperLike = 'true' AND primaryId = ?");
   
     this.stmt_get_incomplete_group_matches = this.db.prepare(
         'SELECT secondaryId AS groupId FROM GroupMatches WHERE primaryId = ?');
@@ -257,7 +257,7 @@ class Database {
   }
 
   /**
-   * Format: [{groupId: string}, ...]
+   * Format: [{groupId: string, name: string}, ...]
    * @param {string} groupId
    * @return the groups that the given groups has matched with
    */
@@ -266,12 +266,14 @@ class Database {
   }
 
   /**
-     * Format: [{primaryId: string}, ...]
-     * @param {string} primaryId
-     * @return returns the groups that have superliked the group primaryId
-     */
-  getSuperLikes(primaryId) {
-    return this.stmt_get_group_match_superlike.all(primaryId);
+     * Format: [{groupId: string, name: string}, ...]
+     * @param {string} groupId
+     * @return returns the groups that have superliked the given groupId (primaryId)     */
+  getSuperLikes(groupId) {
+    let matches = this.getGroupMatches(groupId);
+    let result = this.stmt_get_group_superlikes.all(groupId)
+                    .filter(group => !matches.includes(group));
+    return result;
   }
 
   /**
