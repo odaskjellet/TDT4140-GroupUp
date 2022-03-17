@@ -139,6 +139,7 @@ server.put('/api/get-groups-with-interest', (request, result) => {
 
 server.put('/api/filter-groups', (request, result) => {
   filterGroups(request.body.option, request.body.data);
+  
 });
 
 server.listen(PORT, () => {
@@ -258,6 +259,7 @@ function filterGroups(filterOption, option) {
       break;
     case "groupSize":
       newGroups = db.getGroupsOfSize(option);
+      result.send(JSON.stringify(db.getGroupsOfSize(option)));
       break;
   }
 

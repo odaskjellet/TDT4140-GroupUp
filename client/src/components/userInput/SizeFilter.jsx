@@ -1,16 +1,18 @@
 
 import * as React from 'react';
-import { display } from '@mui/system';
-import { ToggleButton, TextField, CheckBox, Button } from '@mui/material';
+import { color, display } from '@mui/system';
+import { ToggleButton, TextField, CheckBox, Button} from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import { Style } from '@mui/icons-material';
+import {useForm} from 'react-hook-form';
+
 
 export default function SizeFilter() {
 
     const [getToggle, setToggle] = React.useState(true);
-    const [value, setValue] = React.useState('');
+    const [value, setValue] = React.useState(1);
 
-    const handleChange = async (option, data) => {
+    const onSubmit = async (option, data) => {
         if (!getToggle) {
             console.log(data);
             //setBadLogin(false);
@@ -32,7 +34,7 @@ export default function SizeFilter() {
         }
 
     };
-
+    
     return (
         <div>
             <h3>Filter on group size?</h3>
@@ -40,35 +42,27 @@ export default function SizeFilter() {
                 value="check"
                 onChange={() => {
                     setToggle(!getToggle);
-                    console.log(getToggle)
-
+                    console.log(getToggle);
                 }}>
                 <CheckIcon />
             </ToggleButton>
-
 
             <TextField
 
                 disabled={getToggle}
                 label="Group size"
                 type={'number'}
-                value={value}
-                onChange={(event) => { setValue(event.target.value) } // calling the handleChange function
-                }
                 inputProps={{ 'data-size': 'size-input' }}
-                margin="normal"
-                sx={{ width: 200 }}
-
-            />
-            <Button
-            aria-label="Button"
-            data-testid="size-button"
-            variant="contained"
-            type="submit"
-            onChange={() => console.log(value)}
-          >
-            Submit size filter
-          </Button>
+                onChange={(e) => {
+                    const { value } = e.target;
+                    if (value.match('.')) {
+                        setValue({value: parseInt(value)})
+                    }
+                    console.log({value});
+                    onSubmit("groupSize",{value});
+                  }}                
+                sx={{ width: 200}}
+                ></TextField>
         </div>
     );
 };

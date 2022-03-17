@@ -7,6 +7,8 @@ export default function AgeFilter() {
     const [val, setVal]=React.useState([18,99])
     const updateRange=(e,data) => {
         setVal(data);
+        console.log(data)
+        
     }
 
     const handleChange = (event, newValue) => {
