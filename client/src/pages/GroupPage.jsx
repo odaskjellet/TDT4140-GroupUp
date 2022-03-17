@@ -14,6 +14,7 @@ export default function GroupPage() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [groupMembers, setGroupMembers] = useState([]);
   const [groupInvitations, setGroupInvitations] = useState([]);
+  const [groupSuperlikes, setGroupSuperlikes] = useState([]);
   const [interests, setInterests] = useState([]);
   const [groupDialogOpen, setGroupDialogOpen] = useState(false);
   const [matchMembers, setMatchMembers] = useState([]);
@@ -28,6 +29,7 @@ export default function GroupPage() {
     await fetchAllUsers();
     await fetchGroupMembers();
     await fetchGroupInvites();
+    await fetchSuperLikes();
     await fetchGroupInterests();
     await fetchAdminEmail();
     await fetchMatchInfo();
@@ -75,6 +77,19 @@ export default function GroupPage() {
           setAllUsers(result);
         });
   };
+
+  const fetchSuperLikes = async () => {
+    await fetch('/api/get-group-superlikes', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        groupId: groupId
+      }),
+    }).then(res => res.json())
+    .then(result => {
+      setGroupSuperlikes(result);
+    });
+  }
 
   const sendInvite = async (username) => {
     await fetch('/api/invite-user-to-group', {
@@ -131,8 +146,45 @@ export default function GroupPage() {
           setGroupInvitations(result);
         });
   };
-  
-  const membership = groupInfo.membership === 'standard' ? '' : 'gold';
+
+  const declineMatch = async (secondaryId) => {
+    fetch('/api/downgrade-superlike', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        primaryId: groupId,
+        secondaryId: secondaryId,
+      }),
+    }).then((res) => {
+      if (res.ok) {
+        console.log('Declined!')
+        fetchSuperLikes();
+      } else {
+        console.log('Could not decline!')
+      }
+    });
+  }
+
+  const acceptMatch = async (primaryId) => {
+    fetch('/api/match-groups', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        primaryId: primaryId,
+        secondaryId: groupId,
+        isSuperLike: 'false',
+      }),
+    }).then((res) => {
+      if (res.ok) {
+        console.log('Accepted superlike match!')
+        fetchMatches();
+        fetchSuperLikes();
+      } else {
+        console.log('Failed to accept superlike match!')
+      }
+    });
+  };
+
 
   const fetchGroupInterests = async () => {
     await fetch('/api/get-group-interests', {
@@ -203,19 +255,17 @@ export default function GroupPage() {
     marginTop: '10px',
     padding: '60px',
     borderStyle: 'solid',
-    borderColor: membership,
+    borderColor: groupInfo.membership === 'gold' ? 'gold' : '',
     borderRadius: '15px',
     textAlign: 'center',
   };
-
 
   const inputStyle = {
     padding: '2rem',
   };
 
-
   const textBoxStyle = {
-    color: membership,
+    color: groupInfo.membership === 'gold' ? 'gold' : '',
     fontFamily: 'serif',
     position: 'relative',
     textTransform: 'uppercase',
@@ -282,6 +332,23 @@ export default function GroupPage() {
             </Card>
           </Grid>,
         )}
+        {groupSuperlikes.map((match) =>
+          <Grid item xs={2} sm={4} md={4} key={match.groupId}>
+            <Card sx={{padding: '1rem'}} elevation={3}>
+              <h1>{match.name}</h1>
+              <Button
+                onClick={() => declineMatch(match.groupId)}
+              >
+                Decline
+              </Button>
+              <Button
+                onClick={() => acceptMatch(match.groupId)}
+              >
+                Like Back
+              </Button>
+            </Card>
+          </Grid>,
+        )}
       </Grid>
     </Card>
 
@@ -328,7 +395,7 @@ export default function GroupPage() {
 
     <h2>Members</h2>
     <List>
-      {Array.from(groupMembers).map((user) =>
+      {groupMembers.map((user) =>
         <ListItem
           style={{textAlign: 'center'}}
           key={user.username}
@@ -357,28 +424,29 @@ export default function GroupPage() {
         ))) && <div>
           <p>There are noone to invite!</p>
         </div>}
-
-        <List style={{maxHeight: 150, overflow: 'auto'}}>
-          {allUsers.filter((user) => (
-            !groupMembers.some((e) => e.username === user.username)
-          )).map((user) =>
-            <ListItem
-              key={user.username}
-              value={user.username}>
-              <ListItemText primary={user.username}></ListItemText>
-              <Button
-                variant='contained'
-                disabled=
-                  {groupInvitations.some((e) => e.username === user.username)}
-                onClick={async () => {
-                  await sendInvite(user.username);
-                  await fetchGroupInvites();
-                }}
-              >Invite</Button>
-            </ListItem>)
-          }
-        </List>
-
+        {Boolean(groupMembers.length) &&
+          <List style={{maxHeight: 150, overflow: 'auto'}}>
+            {allUsers.filter((user) => (
+              !groupMembers.some((e) => e.username === user.username)
+            )).map((user) =>
+              <ListItem
+                key={user.username}
+                value={user.username}>
+                <ListItemText primary={user.username}></ListItemText>
+                <Button
+                  variant='contained'
+                  disabled=
+                    {groupInvitations.some((e) => e.username === user.username)}
+                  onClick={async () => {
+                    await sendInvite(user.username);
+                    await fetchGroupInvites();
+                  }}
+                >Invite</Button>
+              </ListItem>)
+            }
+          </List>
+        }
+        
         <Box textAlign='center'>
           <Button
             variant='outlined'
