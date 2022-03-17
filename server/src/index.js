@@ -137,6 +137,10 @@ server.put('/api/get-groups-with-interest', (request, result) => {
   result.send(JSON.stringify(db.getGroupWithInterest(request)));
 });
 
+server.put('/api/filter-groups', (request, result) => {
+  filterGroups(request.body.option, request.body.data);
+});
+
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
@@ -243,22 +247,23 @@ let filteredGroups = [];
 function filterGroups(filterOption, option) {
   let newGroups = [];
   switch(filterOption) {
-    case interest:
+    case "interest":
         newGroups = db.getGroupWithInterest(option); //TODO test db.getGroupsWithInterests
         break;
-    case location:
+    case "location":
         newGroups = db.getGroupsAtLocation(option);
       break;
-    case age:
+    case "age":
       newGroups = db.getGroupsOfAge(option[0], option[1]);
       break;
-    case groupSize:
+    case "groupSize":
       newGroups = db.getGroupsOfSize(option);
       break;
   }
 
   let intersection = newGroups.filter(x => filterGroups.includes(x));
-  filterGroups = intersection;
+  filteredGroups = intersection;
+
 }
 
 

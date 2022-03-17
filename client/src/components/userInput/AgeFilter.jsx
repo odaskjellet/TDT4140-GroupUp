@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Slider from '@mui/material/Slider'
+import Stack from '@mui/material/Stack'
 import { display } from '@mui/system';
 
 export default function AgeFilter() {
@@ -12,7 +13,9 @@ export default function AgeFilter() {
         console.log(oldValue);   
     }
     return (
-        <Slider
+        
+        <Stack alignItems="center">
+            <Slider
             onChangeCommitted={updateRange}
             value={val}
             step={1}
@@ -20,6 +23,7 @@ export default function AgeFilter() {
             max={99}
             valueLabelDisplay="on"
             sx={{ width: 150 }}
-        />
+            />
+        </Stack>
     );
 };

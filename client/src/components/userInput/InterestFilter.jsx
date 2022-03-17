@@ -20,10 +20,16 @@ const MenuProps = {
 };
 
 const interests = [
-  'Chess',
   'Astrology',
+  'Chess',
+  'Gaming',
+  'Skiing',
+  'Traveling',
+  'Sports',
   'Food',
   'Wine',
+  'Movies',
+  'Paragliding',
 ];
 
 export default function FilterOnInterest() {

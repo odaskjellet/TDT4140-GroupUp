@@ -25,17 +25,37 @@ const locations = [
 ];
 
 export default function FilterOnLocation() {
-  const [personName, setPersonName] = React.useState([]);
+  const [locationName, setLocationName] = React.useState([]);
 
-  const handleChange = (event) => {
+  const handleChange = async (option,data) => {
+    //setBadLogin(false);
+    fetch('/api/get-groups-at-location', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(option,data),
+    }).then((res) => {
+      if (res.ok) {
+        console.log("OK!");
+        //userDispatch({type: 'login', username: data.username});
+        //navigate('../home');
+      } else {
+        //setBadLogin(true);
+        console.log("Feil!");
+        console.log(res);
+      }
+    });
+  };
+
+/*   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
+    setLocationName(
+      onSubmit(value,"location")
       // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
+      //typeof value === 'string' ? value.split(',') : value,
     );
-  };
+  }; */
 
   return (
     <div>
@@ -45,16 +65,16 @@ export default function FilterOnLocation() {
           labelId="demo-multiple-checkbox-label"
           id="demo-multiple-checkbox"
           multiple
-          value={personName}
+          value={locationName}
           onChange={handleChange}
           input={<OutlinedInput label="Locations" />}
           renderValue={(selected) => selected.join(', ')}
           MenuProps={MenuProps}
         >
-          {locations.map((name) => (
-            <MenuItem key={name} value={name}>
-              <Checkbox checked={personName.indexOf(name) > -1} />
-              <ListItemText primary={name} />
+          {locations.map((location) => (
+            <MenuItem key={location} value={location}>
+              <Checkbox checked={locationName.indexOf(location) > -1} />
+              <ListItemText primary={location} />
             </MenuItem>
           ))}
         </Select>
