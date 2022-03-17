@@ -29,8 +29,6 @@ export default function GroupPage() {
     await fetchGroupInvites();
     await fetchSuperLikes();
     await fetchGroupInterests();
-    await fetchMatchInfo();
-    await fetchMacthMembers();
   }, [groupId]);
 
   const fetchGroupInfo = async () => {
@@ -54,8 +52,6 @@ export default function GroupPage() {
           setMatchInfo(result);
         });
   };
-
-
 
   const fetchMatches = async () => {
     await fetch('/api/get-group-matches', {
@@ -364,7 +360,7 @@ export default function GroupPage() {
 
     <h2>Members</h2>
     <List>
-      {Array.from(groupMembers).map((user) =>
+      {groupMembers.map((user) =>
         <ListItem
           key={user.username}
           value={user.username}>
@@ -392,28 +388,29 @@ export default function GroupPage() {
         ))) && <div>
           <p>There are noone to invite!</p>
         </div>}
-
-        <List style={{maxHeight: 150, overflow: 'auto'}}>
-          {allUsers.filter((user) => (
-            !groupMembers.some((e) => e.username === user.username)
-          )).map((user) =>
-            <ListItem
-              key={user.username}
-              value={user.username}>
-              <ListItemText primary={user.username}></ListItemText>
-              <Button
-                variant='contained'
-                disabled=
-                  {groupInvitations.some((e) => e.username === user.username)}
-                onClick={async () => {
-                  await sendInvite(user.username);
-                  await fetchGroupInvites();
-                }}
-              >Invite</Button>
-            </ListItem>)
-          }
-        </List>
-
+        {Boolean(groupMembers.length) &&
+          <List style={{maxHeight: 150, overflow: 'auto'}}>
+            {allUsers.filter((user) => (
+              !groupMembers.some((e) => e.username === user.username)
+            )).map((user) =>
+              <ListItem
+                key={user.username}
+                value={user.username}>
+                <ListItemText primary={user.username}></ListItemText>
+                <Button
+                  variant='contained'
+                  disabled=
+                    {groupInvitations.some((e) => e.username === user.username)}
+                  onClick={async () => {
+                    await sendInvite(user.username);
+                    await fetchGroupInvites();
+                  }}
+                >Invite</Button>
+              </ListItem>)
+            }
+          </List>
+        }
+        
         <Box textAlign='center'>
           <Button
             variant='outlined'
