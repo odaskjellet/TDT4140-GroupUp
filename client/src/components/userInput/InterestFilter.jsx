@@ -33,15 +33,16 @@ const interests = [
 ];
 
 export default function FilterOnInterest() {
-  const [personName, setPersonName] = React.useState([]);
+  const [interest, setInterest] = React.useState([]);
 
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
+    setInterest(
       // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
+      console.log({value})
     );
   };
 
@@ -53,7 +54,7 @@ export default function FilterOnInterest() {
           labelId="demo-multiple-checkbox-label"
           id="demo-multiple-checkbox"
           multiple
-          value={personName}
+          value={interest}
           onChange={handleChange}
           input={<OutlinedInput label="Interests" />}
           renderValue={(selected) => selected.join(', ')}
@@ -61,7 +62,7 @@ export default function FilterOnInterest() {
         >
           {interests.map((name) => (
             <MenuItem key={name} value={name}>
-              <Checkbox checked={personName.indexOf(name) > -1} />
+              <Checkbox checked={interest.indexOf(name) > -1} />
               <ListItemText primary={name} />
             </MenuItem>
           ))}
