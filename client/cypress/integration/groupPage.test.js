@@ -85,11 +85,13 @@ describe('Pop up match info', () => {
 
         it('existing values should appear', () => {
             cy.visit('group/g1');
+
             cy.contains(/Visit/i).click();
 
-            cy.contains(/Admin: henrik/i)
-            cy.contains(/Location: Oslo/i)
-            cy.contains(/Description: En fin gruppe./i)
+            cy.get('#group-admin', {timeout: 500}).should('be.visible');
+            cy.get('#group-admin', {timeout: 500}).invoke('text').should('eq', 'Admin: henrik ')
+            cy.get('#group-location').invoke('text').should('eq', 'Location: Oslo');
+            cy.get('#group-description').invoke('text').should('eq', 'Description: En fin gruppe. ');
 
 
         })
