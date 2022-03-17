@@ -82,7 +82,6 @@ export default function ExplorePage() {
     }).then((res) => res.json())
       .then((result) => {
         setGroupMembership(result.membership);
-        console.log(result.membership);
     });
   };
 
@@ -93,6 +92,10 @@ export default function ExplorePage() {
     setSnackbarOpen(false);
   };
 
+  let superLikeButtonStyle = groupMembership === 'gold' 
+    ? {backgroundColor: 'gold', color: 'black'}
+    : {}
+  
   return (
     <Container>
       <br />
@@ -115,7 +118,7 @@ export default function ExplorePage() {
               variant='contained'
               onClick={() => {
                 setSelectedGroupA(group);
-                setSelectedGroupBId(null);
+                setSelectedGroupBId('');
                 setGroupMembership('standard');
                 fetchIncompleteMatches(group.groupId);
                 setDialogOpen(true);
@@ -183,6 +186,7 @@ export default function ExplorePage() {
               <Button
                 variant='contained'
                 disabled={groupMembership !== 'gold'}
+                style={superLikeButtonStyle}
                 onClick={() => {
                   createMatch("true");
                   setDialogOpen(false);

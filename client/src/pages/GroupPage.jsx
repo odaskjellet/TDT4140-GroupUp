@@ -93,13 +93,6 @@ export default function GroupPage() {
           setGroupInvitations(result);
         });
   };
-  let membership = groupInfo.membership;
-
-  if (membership === 'standard') {
-    membership = '';
-  } else {
-    membership = 'gold';
-  }
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -108,25 +101,20 @@ export default function GroupPage() {
     setSnackbarOpen(false);
   };
 
-
   const styles = {
     marginTop: '10px',
     padding: '60px',
     borderStyle: 'solid',
-    borderColor: membership,
+    borderColor: groupInfo.membership === 'gold' ? 'gold' : '',
     borderRadius: '15px',
   };
 
-
   const inputStyle = {
     padding: '2rem',
-
-
   };
 
-
   const textBoxStyle = {
-    color: membership,
+    color: groupInfo.membership === 'gold' ? 'gold' : '',
     fontFamily: 'serif',
     position: 'relative',
     textTransform: 'uppercase',
