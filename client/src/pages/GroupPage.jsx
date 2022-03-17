@@ -109,12 +109,34 @@ export default function GroupPage() {
         });
   };
 
+  const declineMatch = async (secondaryId) => {
+    console.log(secondaryId);
+    fetch('/api/downgrade-superlike', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        primaryId: groupId,
+        secondaryId: secondaryId,
+      }),
+    }).then((res) => {
+      if (res.ok) {
+        console.log('Declined!')
+        fetchSuperLikes();
+      } else {
+        console.log('Could not decline!')
+      }
+    });
+  }
+
+
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
     setSnackbarOpen(false);
   };
+
+  
 
   const styles = {
     marginTop: '10px',
@@ -180,7 +202,7 @@ export default function GroupPage() {
             <Card sx={{padding: '1rem'}} elevation={3}>
               <h1>{match.name}</h1>
               <Button
-                onClick={() => console.log('TODO: implement decline!')}
+                onClick={() => declineMatch(match.groupId)}
               >
                 Decline
               </Button>

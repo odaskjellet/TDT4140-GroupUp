@@ -120,6 +120,10 @@ class Database {
     this.stmt_get_group_membership = this.db.prepare(
       'SELECT membership FROM Groups WHERE groupId = ?'
     )
+    
+    this.stmt_downgrade_superlike = this.db.prepare(
+      "UPDATE GroupMatches SET isSuperLike = 'false' WHERE primaryId = ? AND secondaryId = ?");
+    
     //this.stmt_get_groups_at_location = this.db.prepare(
     //  'SELECT groupId FROM Groups WHERE location = ?');
   }
@@ -275,6 +279,16 @@ class Database {
                     .filter(group => !matches.includes(group));
     return result;
   }
+
+  /**
+   * Downgrades a superlike
+   * @param {string} primaryId
+   * @param {string} secondaryId
+   */
+  downgradeSuperlike(primaryId, secondaryId) {
+    this.stmt_downgrade_superlike.run(primaryId, secondaryId);
+  }
+
 
   /**
    * Format: [{groupId: string}, ...]

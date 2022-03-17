@@ -116,6 +116,11 @@ server.put('/api/get-group-superlikes', (request, result) => {
   result.send(JSON.stringify(db.getSuperLikes(request.body.groupId)));
 });
 
+server.put('/api/downgrade-superlike', (request, result) => {
+  db.downgradeSuperlike(request.body.primaryId, request.body.secondaryId);
+  result.send('OK');
+});
+
 server.put('/api/get-incomplete-group-matches', (request, result) => {
   result.send(
       JSON.stringify(db.getIncompleteGroupMatches(request.body.groupId)));
