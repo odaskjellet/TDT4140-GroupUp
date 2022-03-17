@@ -17,6 +17,8 @@ export default function GroupPage() {
   const [interests, setInterests] = useState([]);
   const [groupDialogOpen, setGroupDialogOpen] = useState(false);
   const [matchMembers, setMatchMembers] = useState([]);
+  const [contactInfo, setContactInfo] = useState({});
+  const [matchContactInfo, setMatchContactInfo] = useState({});
 
   const navigate = useNavigate();
 
@@ -27,8 +29,10 @@ export default function GroupPage() {
     await fetchGroupMembers();
     await fetchGroupInvites();
     await fetchGroupInterests();
+    await fetchAdminEmail();
     await fetchMatchInfo();
-    await fetchMacthMembers();
+    await fetchMatchMembers();
+    await fetchMatchAdminEmail();
   }, [groupId]);
 
   const fetchGroupInfo = async () => {
@@ -39,9 +43,9 @@ export default function GroupPage() {
     }).then((res) => res.json())
         .then((result) => {
           setGroupInfo(result);
+          fetchAdminEmail(result.admin)
         });
   };
-
   const fetchMatchInfo = async (groupId) => {
     await fetch('/api/get-group', {
       method: 'PUT',
@@ -50,11 +54,9 @@ export default function GroupPage() {
     }).then((res) => res.json())
         .then((result) => {
           setMatchInfo(result);
+          fetchMatchAdminEmail(result.admin)
         });
   };
-
-
-
   const fetchMatches = async () => {
     await fetch('/api/get-group-matches', {
       method: 'PUT',
@@ -65,7 +67,6 @@ export default function GroupPage() {
           setGroupMatches(result);
         });
   };
-
 
   const fetchAllUsers = async () => {
     await fetch('/api/get-users')
@@ -159,6 +160,29 @@ export default function GroupPage() {
     });
   };
 
+  const fetchAdminEmail = async(user) => {
+    await fetch('/api/get-user', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username: user,
+      }),
+    }).then((res) => res.json()).then((result) => {
+      setContactInfo(result);
+      console.log(result);
+    })
+  }
+
+  const fetchMatchAdminEmail = async(user) => {
+    await fetch('/api/get-user', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username: user,
+      }),
+    }).then((res) => res.json()).then((result) => {
+      setMatchContactInfo(result);
+    })
+  }
+
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -171,8 +195,7 @@ export default function GroupPage() {
     fetchMatchInfo(groupId);
     fetchMatchMembers(groupId);
     setGroupDialogOpen(true);
-
-
+    
   }
 
 
@@ -182,6 +205,7 @@ export default function GroupPage() {
     borderStyle: 'solid',
     borderColor: membership,
     borderRadius: '15px',
+    textAlign: 'center',
   };
 
 
@@ -207,6 +231,7 @@ export default function GroupPage() {
     <br />
     <p style={textBoxStyle}>  {groupInfo.membership} Membership </p>
     <Button
+      sx={{margin: '1rem'}}
       variant='outlined'
       onClick={() => navigate('/home')}
     >
@@ -214,22 +239,26 @@ export default function GroupPage() {
     </Button>
 
     <Button
+      sx={{margin: '1rem'}}
       onClick={() => navigate('/edit-group/' + groupId)}
     >
       Edit
     </Button>
+
+    <br/>
     
+    {/* <p>Image link: {groupInfo.image}</p> */}
+    <img src={groupInfo.image} alt="" style={{maxWidth: '500px', borderRadius: '15px'}}/>
     <h1>Welcome to {groupInfo.name}</h1>
     {interests.map((interest) => (
       <Chip label={interest.interest} sx={{margin: '0.5rem'}} color='primary'/>
     ))}
     {/* <p>ID: {groupId} </p> */}
     <p>Admin: {groupInfo.admin} </p>
+    <p>Contact: {contactInfo.email} </p>
     <p>Location: {groupInfo.location}</p>
+    <p>Description: {groupInfo.description} </p>
     <br />
-    <p>{groupInfo.description} </p>
-    {/* <p>Image link: {groupInfo.image}</p> */}
-    <img src={groupInfo.image} alt="" style={{maxWidth: '500px'}}/>
 
 
 
@@ -245,6 +274,7 @@ export default function GroupPage() {
             <Card sx={{padding: '1rem'}} elevation={3}>
               <h1>{match.name}</h1>
               <Button
+              
                 onClick={() => setAndOpenGroupDialog(match.groupId)}
               >
                 Visit
@@ -265,11 +295,12 @@ export default function GroupPage() {
           textTransform: 'uppercase',}}>{matchInfo.name}</DialogTitle>
 
         <p id={"group-admin"}>Admin: {matchInfo.admin} </p>
+        <p id={"group-contactinfo"}>Contact: {matchContactInfo.email}</p>
         <p id={"group-location"}>Location: {matchInfo.location}</p>
         <p id={"group-description"}>Description: {matchInfo.description} </p>
 
         <p>Members: </p>
-        <List style={{maxHeight: 150, overflow: 'auto'}}>
+        <List style={{maxHeight: 150, overflow: 'auto',}}>
           {Array.from(matchMembers).map((user) =>
             <ListItem
               key={user.username}
@@ -285,7 +316,7 @@ export default function GroupPage() {
  
         <Box textAlign='center'>
           <Button
-            sx={{margin: 'rem'}}
+            sx={{margin: '1rem'}}
             variant='outlined'
             onClick={() => setGroupDialogOpen(false)}
           >
@@ -299,6 +330,7 @@ export default function GroupPage() {
     <List>
       {Array.from(groupMembers).map((user) =>
         <ListItem
+          style={{textAlign: 'center'}}
           key={user.username}
           value={user.username}>
           <ListItemText primary={user.username}></ListItemText>
