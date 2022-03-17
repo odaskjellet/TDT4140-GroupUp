@@ -98,6 +98,12 @@ server.put('/api/get-group-members', (request, result) => {
   result.send(JSON.stringify(db.getGroupMembers(request.body.groupId)));
 });
 
+
+server.put('/api/get-group-membership', (request, result) => {
+  result.send(JSON.stringify(db.getGroupMembership(request.body.groupId)));
+})
+
+
 server.put('/api/insert-group-interest', (request, result) => {
   db.addGroupInterest(request.body.groupId, request.body.interest);
   result.send('OK');
@@ -109,12 +115,21 @@ server.put('/api/delete-group-interest', (request, result) => {
 });
 
 server.put('/api/match-groups', (request, result) => {
-  db.matchGroups(request.body.primaryId, request.body.secondaryId);
+  db.matchGroups(request.body.primaryId, request.body.secondaryId, request.body.isSuperLike);
   result.send('OK');
 });
 
 server.put('/api/get-group-matches', (request, result) => {
   result.send(JSON.stringify(db.getGroupMatches(request.body.groupId)));
+});
+
+server.put('/api/get-group-superlikes', (request, result) => {
+  result.send(JSON.stringify(db.getSuperLikes(request.body.groupId)));
+});
+
+server.put('/api/downgrade-superlike', (request, result) => {
+  db.downgradeSuperlike(request.body.primaryId, request.body.secondaryId);
+  result.send('OK');
 });
 
 server.put('/api/get-incomplete-group-matches', (request, result) => {

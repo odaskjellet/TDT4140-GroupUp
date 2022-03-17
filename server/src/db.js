@@ -30,7 +30,7 @@ class Database {
 
     this.stmt_create_table_group_matches = this.db.prepare(
         'CREATE TABLE IF NOT EXISTS ' +
-        'GroupMatches (primaryId string, secondaryId string, CONSTRAINT UC_GroupMatches UNIQUE (primaryId, secondaryId))');
+        'GroupMatches (primaryId string, secondaryId integer, isSuperLike string, CONSTRAINT UC_GroupMatches UNIQUE (primaryId, secondaryId))');
     this.stmt_create_table_group_matches.run();
 
     this.stmt_create_table_invitations_to_group = this.db.prepare(
@@ -73,6 +73,9 @@ class Database {
         'SELECT primaryId AS groupId FROM GroupMatches WHERE secondaryId = ?)' +
         'USING (groupId)');
 
+    this.stmt_get_group_superlikes = this.db.prepare(
+        "SELECT Groups.groupId, Groups.name FROM GroupMatches INNER JOIN Groups ON GroupMatches.secondaryId = Groups.groupId WHERE isSuperLike = 'true' AND primaryId = ?");
+  
     this.stmt_get_incomplete_group_matches = this.db.prepare(
         'SELECT secondaryId AS groupId FROM GroupMatches WHERE primaryId = ?');
 
@@ -88,7 +91,7 @@ class Database {
         'INSERT INTO GroupMembers (groupId, username) VALUES (?, ?)');
 
     this.stmt_match_groups = this.db.prepare(
-        'INSERT INTO GroupMatches (primaryId, secondaryId) VALUES (?, ?)');
+        'INSERT INTO GroupMatches (primaryId, secondaryId, isSuperLike) VALUES (?, ?, ?)');
 
     this.stmt_try_login = this.db.prepare(
         'SELECT * FROM Users WHERE (username = ? AND password = ?)');
@@ -120,6 +123,13 @@ class Database {
     this.stmt_get_groups_of_age = this.db.prepare(
       'SELECT groupId FROM (SELECT groupId, AVG(age) AS average FROM GroupMembers INNER JOIN Users ON GroupMembers.username = Users.username GROUP BY groupId) WHERE (average >= ? AND average <= ?)');
 
+    this.stmt_get_group_membership = this.db.prepare(
+      'SELECT membership FROM Groups WHERE groupId = ?'
+    )
+    
+    this.stmt_downgrade_superlike = this.db.prepare(
+      "UPDATE GroupMatches SET isSuperLike = 'false' WHERE primaryId = ? AND secondaryId = ?");
+    
     //this.stmt_get_groups_at_location = this.db.prepare(
     //  'SELECT groupId FROM Groups WHERE location = ?');
   }
@@ -262,19 +272,46 @@ class Database {
    * Groups have to match both ways to have a complete match.
    * @param {string} primaryId
    * @param {string} secondaryId
+   * @param {string} isSuperLike
    */
-  matchGroups(primaryId, secondaryId) {
-    this.stmt_match_groups.run(primaryId, secondaryId);
+  matchGroups(primaryId, secondaryId, isSuperLike) {
+    this.stmt_match_groups.run(primaryId, secondaryId, isSuperLike);
   }
 
   /**
-   * Format: [{groupId: string}, ...]
+   * Format: [{groupId: string, name: string}, ...]
    * @param {string} groupId
    * @return the groups that the given groups has matched with
    */
   getGroupMatches(groupId) {
     return this.stmt_get_group_matches.all(groupId, groupId);
   }
+
+  /**
+     * Format: [{groupId: string, name: string}, ...]
+     * @param {string} groupId
+     * @return returns the groups that have superliked the given groupId (primaryId)
+  */
+  getSuperLikes(groupId) {
+    let result = [];
+    let matches = this.getGroupMatches(groupId);
+    for (let group of this.stmt_get_group_superlikes.all(groupId)) {
+      if (!matches.some(match => group.groupId == match.groupId)) {
+        result.push(group);
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Downgrades a superlike
+   * @param {string} primaryId
+   * @param {string} secondaryId
+   */
+  downgradeSuperlike(primaryId, secondaryId) {
+    this.stmt_downgrade_superlike.run(primaryId, secondaryId);
+  }
+
 
   /**
    * Format: [{groupId: string}, ...]
@@ -350,7 +387,16 @@ class Database {
   }
 
   getGroupsAtLocation(location) {
-    return this.stmt_get_groups_at_location(location);
+    return this.stmt_get_groups_at_location.all(location);
+  }
+
+  /**
+   * Format: {membership: string}
+   * @param {string} groupId 
+   * @returns the membership of the given group ('standard' or 'gold')
+   */
+  getGroupMembership(groupId) {
+    return this.stmt_get_group_membership.get(groupId);
   }
 
 }
