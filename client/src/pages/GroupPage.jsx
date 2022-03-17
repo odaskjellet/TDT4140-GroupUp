@@ -29,7 +29,7 @@ export default function GroupPage() {
     await fetchGroupMembers();
     await fetchGroupInvites();
     await fetchGroupInterests();
-    await fetchAdminEmail(groupInfo.admin);
+    await fetchAdminEmail();
     await fetchMatchInfo();
     await fetchMatchMembers();
     await fetchMatchAdminEmail();
@@ -43,9 +43,9 @@ export default function GroupPage() {
     }).then((res) => res.json())
         .then((result) => {
           setGroupInfo(result);
+          fetchAdminEmail(result.admin)
         });
   };
-
   const fetchMatchInfo = async (groupId) => {
     await fetch('/api/get-group', {
       method: 'PUT',
@@ -54,11 +54,9 @@ export default function GroupPage() {
     }).then((res) => res.json())
         .then((result) => {
           setMatchInfo(result);
+          fetchMatchAdminEmail(result.admin)
         });
   };
-
-
-
   const fetchMatches = async () => {
     await fetch('/api/get-group-matches', {
       method: 'PUT',
@@ -69,7 +67,6 @@ export default function GroupPage() {
           setGroupMatches(result);
         });
   };
-
 
   const fetchAllUsers = async () => {
     await fetch('/api/get-users')
