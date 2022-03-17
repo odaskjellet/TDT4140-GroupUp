@@ -28,7 +28,7 @@ export default function GroupPage() {
     await fetchGroupInvites();
     await fetchGroupInterests();
     await fetchMatchInfo();
-    await fetchMacthMembers();
+    await fetchMatchMembers();
   }, [groupId]);
 
   const fetchGroupInfo = async () => {
