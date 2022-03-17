@@ -264,9 +264,9 @@ export default function GroupPage() {
           position: 'relative',
           textTransform: 'uppercase',}}>{matchInfo.name}</DialogTitle>
 
-        <p>Admin: {matchInfo.admin} </p>
-        <p>Location: {matchInfo.location}</p>
-        <p>Description: {matchInfo.description} </p>
+        <p id={"group-admin"}>Admin: {matchInfo.admin} </p>
+        <p id={"group-location"}>Location: {matchInfo.location}</p>
+        <p id={"group-description"}>Description: {matchInfo.description} </p>
 
         <p>Members: </p>
         <List style={{maxHeight: 150, overflow: 'auto'}}>
