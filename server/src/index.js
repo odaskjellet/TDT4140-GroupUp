@@ -157,6 +157,19 @@ server.put('/api/get-group-invitations', (request, result) => {
 
 server.put('/api/update-group-attributes', (request, result) => {
   db.updateGroupAttributes(request.body.groupId, request.body.name, request.body.description, request.body.location, request.body.image);
+  const interests = db.getGroupInterests(request.body.groupId);
+  console.log(interests)
+  interests.forEach((interest)=> {
+
+    db.deleteGroupInterest(request.body.groupId, interest.interest);
+  })
+
+  if (request.body.interests) {
+    request.body.interests.forEach((interest) => {
+      db.addGroupInterest(request.body.groupId, interest);
+    })
+
+  }
   result.send('OK');
 });
 
@@ -167,6 +180,7 @@ server.put('/api/get-all-groups', (request, result) => {
 server.put('/api/get-groups-with-interest', (request, result) => {
   result.send(JSON.stringify(db.getGroupWithInterest(request)));
 });
+
 
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
