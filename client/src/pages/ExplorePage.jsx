@@ -14,7 +14,7 @@ export default function ExplorePage() {
   const [userState, _] = useContext(UserContext);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [incompleteMatches, setIncompleteMatches] = useState([]);
-  //const [groupMembership, setGroupMembership] = useState('');
+  const [groupMembership, setGroupMembership] = useState('');
 
   useEffect(async () => {
     await fetchAllGroups();
@@ -69,7 +69,11 @@ export default function ExplorePage() {
     });
   };
 
-  /*
+  const onSelect = async (e) => {
+    setSelectedGroupBId(e.target.value);
+    await getGroupMembership(e.target.value);
+  }
+
   const getGroupMembership = async (groupId) => {
     fetch('/api/get-group-membership', {
       method: 'PUT',
@@ -77,11 +81,10 @@ export default function ExplorePage() {
       body: JSON.stringify({groupId: groupId}),
     }).then((res) => res.json())
       .then((result) => {
-        setGroupMembership(result);
+        setGroupMembership(result.membership);
+        console.log(result.membership);
     });
   };
-  */
-  
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -112,6 +115,8 @@ export default function ExplorePage() {
               variant='contained'
               onClick={() => {
                 setSelectedGroupA(group);
+                setSelectedGroupBId(null);
+                setGroupMembership('standard');
                 fetchIncompleteMatches(group.groupId);
                 setDialogOpen(true);
               }}
@@ -148,7 +153,7 @@ export default function ExplorePage() {
                 labelId='group-select-label'
                 label='Group'
                 value={selectedGroupBId}
-                onChange={(e) => setSelectedGroupBId(e.target.value)}
+                onChange={onSelect}
               >
                 {Array.from(myGroups).filter((group) =>
                   (group.groupId !== selectedGroupA.groupId),
@@ -177,9 +182,7 @@ export default function ExplorePage() {
               </Button>
               <Button
                 variant='contained'
-                disabled={
-                    true
-                }
+                disabled={groupMembership !== 'gold'}
                 onClick={() => {
                   createMatch("true");
                   setDialogOpen(false);
@@ -189,9 +192,10 @@ export default function ExplorePage() {
               <Button
                 variant='contained'
                 disabled={
-                  Boolean(incompleteMatches.some((e) => 
-                    e.groupId === selectedGroupBId
-                  ))
+                  Boolean(
+                    incompleteMatches.some((e) => 
+                      e.groupId === selectedGroupBId))
+                    || selectedGroupBId === null
                 }
                 onClick={() => {
                   createMatch("false");

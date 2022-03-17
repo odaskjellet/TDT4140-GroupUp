@@ -77,7 +77,7 @@ export default function CreateGroupForm() {
               render={({field}) => (
                 <Select {...field}>
                   <MenuItem value={'standard'}>Standard</MenuItem>
-                  <MenuItem value={'Gold'}>Gold</MenuItem>
+                  <MenuItem value={'gold'}>Gold</MenuItem>
                 </Select>
               )}
             />

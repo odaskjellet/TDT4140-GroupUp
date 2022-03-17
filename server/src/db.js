@@ -338,8 +338,13 @@ class Database {
     return this.stmt_get_groups_at_location.all(location);
   }
 
+  /**
+   * Format: {membership: string}
+   * @param {string} groupId 
+   * @returns the membership of the given group ('standard' or 'gold')
+   */
   getGroupMembership(groupId) {
-    return this.stmt_get_group_membership.all(groupId);
+    return this.stmt_get_group_membership.get(groupId);
   }
 
 }
