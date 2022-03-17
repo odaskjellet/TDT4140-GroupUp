@@ -17,6 +17,8 @@ export default function GroupPage() {
   const [interests, setInterests] = useState([]);
   const [groupDialogOpen, setGroupDialogOpen] = useState(false);
   const [matchMembers, setMatchMembers] = useState([]);
+  const [contactInfo, setContactInfo] = useState({});
+  const [matchContactInfo, setMatchContactInfo] = useState({});
 
   const navigate = useNavigate();
 
@@ -27,8 +29,10 @@ export default function GroupPage() {
     await fetchGroupMembers();
     await fetchGroupInvites();
     await fetchGroupInterests();
+    await fetchAdminEmail(groupInfo.admin);
     await fetchMatchInfo();
-    await fetchMacthMembers();
+    await fetchMatchMembers();
+    await fetchMatchAdminEmail();
   }, [groupId]);
 
   const fetchGroupInfo = async () => {
@@ -159,6 +163,29 @@ export default function GroupPage() {
     });
   };
 
+  const fetchAdminEmail = async(user) => {
+    await fetch('/api/get-user', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username: user,
+      }),
+    }).then((res) => res.json()).then((result) => {
+      setContactInfo(result);
+      console.log(result);
+    })
+  }
+
+  const fetchMatchAdminEmail = async(user) => {
+    await fetch('/api/get-user', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username: user,
+      }),
+    }).then((res) => res.json()).then((result) => {
+      setMatchContactInfo(result);
+    })
+  }
+
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -171,8 +198,7 @@ export default function GroupPage() {
     fetchMatchInfo(groupId);
     fetchMatchMembers(groupId);
     setGroupDialogOpen(true);
-
-
+    
   }
 
 
@@ -225,6 +251,7 @@ export default function GroupPage() {
     ))}
     {/* <p>ID: {groupId} </p> */}
     <p>Admin: {groupInfo.admin} </p>
+    <p>Contact: {contactInfo.email} </p>
     <p>Location: {groupInfo.location}</p>
     <br />
     <p>{groupInfo.description} </p>
@@ -265,6 +292,7 @@ export default function GroupPage() {
           textTransform: 'uppercase',}}>{matchInfo.name}</DialogTitle>
 
         <p id={"group-admin"}>Admin: {matchInfo.admin} </p>
+        <p id={"group-contactinfo"}>Contact: {matchContactInfo.email}</p>
         <p id={"group-location"}>Location: {matchInfo.location}</p>
         <p id={"group-description"}>Description: {matchInfo.description} </p>
 
