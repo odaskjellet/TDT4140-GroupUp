@@ -146,6 +146,19 @@ export default function GroupPage() {
         });
   };
 
+  const fetchMatchGroupInterest = async (groupId) => {
+    await fetch('/api/get-group-interests', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        groupId: groupId,
+      }),
+    }).then((res) => res.json()).
+    then((result) => {
+      setInterests(result);
+    });
+  };
+
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -154,6 +167,7 @@ export default function GroupPage() {
   };
 
   const setAndOpenGroupDialog = (groupId) => {
+    fetchMatchGroupInterest(groupId)
     fetchMatchInfo(groupId);
     fetchMatchMembers(groupId);
     setGroupDialogOpen(true);
@@ -264,6 +278,10 @@ export default function GroupPage() {
           </ListItem>)
         }
       </List>
+        <p>Interests: </p>
+        {interests.map((interest) => (
+            <Chip color='primary' label={interest.interest}/>
+        ))}
 
         <Box textAlign='center'>
           <Button
