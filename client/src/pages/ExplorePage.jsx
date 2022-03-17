@@ -92,7 +92,9 @@ export default function ExplorePage() {
     setSnackbarOpen(false);
   };
 
-  let superLikeButtonStyle = groupMembership === 'gold' 
+  let matchExists = Boolean(incompleteMatches.some((e) => e.groupId === selectedGroupBId))
+
+  let superLikeButtonStyle = (!matchExists && groupMembership === 'gold')
     ? {backgroundColor: 'gold', color: 'black'}
     : {}
   
@@ -185,7 +187,7 @@ export default function ExplorePage() {
               </Button>
               <Button
                 variant='contained'
-                disabled={groupMembership !== 'gold'}
+                disabled={matchExists || groupMembership !== 'gold'}
                 style={superLikeButtonStyle}
                 onClick={() => {
                   createMatch("true");
@@ -195,26 +197,17 @@ export default function ExplorePage() {
               </Button>
               <Button
                 variant='contained'
-                disabled={
-                  Boolean(
-                    incompleteMatches.some((e) => 
-                      e.groupId === selectedGroupBId))
-                    || selectedGroupBId === null
-                }
+                disabled={matchExists || selectedGroupBId === '' }
                 onClick={() => {
                   createMatch("false");
                   setDialogOpen(false);
                 }}
               >
                 {
-                  !Boolean(incompleteMatches.some((e) => 
-                    e.groupId === selectedGroupBId
-                  )) && <span>Confirm</span>
+                  !matchExists && <span>Confirm</span>
                 }
                 {
-                  Boolean(incompleteMatches.some((e) => 
-                    e.groupId === selectedGroupBId
-                  )) && <span>Match already initiated</span>
+                  matchExists && <span>Match already initiated</span>
                 }
               </Button>
             </Stack>
