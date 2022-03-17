@@ -31,10 +31,6 @@ export default function GroupPage() {
     await fetchGroupInvites();
     await fetchSuperLikes();
     await fetchGroupInterests();
-    await fetchAdminEmail();
-    await fetchMatchInfo();
-    await fetchMatchMembers();
-    await fetchMatchAdminEmail();
   }, [groupId]);
 
   const fetchGroupInfo = async () => {
