@@ -5,6 +5,9 @@ import {useNavigate, useParams} from 'react-router-dom';
 export default function GroupPage() {
   const {groupId} = useParams();
   const [groupInfo, setGroupInfo] = useState({});
+  const [matchInfo, setMatchInfo] = useState({});
+
+
   const [groupMatches, setGroupMatches] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
@@ -13,6 +16,7 @@ export default function GroupPage() {
   const [groupInvitations, setGroupInvitations] = useState([]);
   const [interests, setInterests] = useState([]);
   const [groupDialogOpen, setGroupDialogOpen] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(async () => {
@@ -36,6 +40,19 @@ export default function GroupPage() {
         });
   };
 
+  const fetchMatchInfo = async (groupId) => {
+    await fetch('/api/get-group', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({groupId: groupId}),
+    }).then((res) => res.json())
+        .then((result) => {
+          setMatchInfo(result);
+        });
+  };
+
+
+
   const fetchMatches = async () => {
     await fetch('/api/get-group-matches', {
       method: 'PUT',
@@ -47,16 +64,6 @@ export default function GroupPage() {
         });
   };
 
-  const fetchMatchInfo = async (groupId) => {
-    await fetch('/api/get-group', {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({groupId: groupId}),
-    }).then((res) => res.json())
-        .then((result) => {
-          setGroupInfo(result);
-        });
-  };
 
   const fetchAllUsers = async () => {
     await fetch('/api/get-users')
@@ -132,6 +139,7 @@ export default function GroupPage() {
   };
 
   const setAndOpenGroupDialog = (groupId) => {
+    fetchMatchInfo(groupId);
 
     setGroupDialogOpen(true);
 
@@ -220,9 +228,15 @@ export default function GroupPage() {
 
     <Dialog onClose={() => groupDialogOpen(false)} open={groupDialogOpen}>
       <Container sx={{padding: '1rem'}} >
-        <DialogTitle>Name of group</DialogTitle>
-        <p textalign='center'>Cool info</p>
+        <DialogTitle>{matchInfo.name}</DialogTitle>
+
+        <p>Admin: {matchInfo.admin} </p>
+        <p>Location: {matchInfo.location}</p>
         <br />
+        <p>{matchInfo.description} </p>
+        {/* <p>Image link: {groupInfo.image}</p> */}
+        <img src={matchInfo.image} alt="" style={{maxWidth: '500px'}}/>
+
         <Box textAlign='center'>
           <Button
             variant='outlined'
