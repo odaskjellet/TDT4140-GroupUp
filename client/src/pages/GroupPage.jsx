@@ -110,7 +110,6 @@ export default function GroupPage() {
   };
 
   const declineMatch = async (secondaryId) => {
-    console.log(secondaryId);
     fetch('/api/downgrade-superlike', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
@@ -127,6 +126,26 @@ export default function GroupPage() {
       }
     });
   }
+
+  const acceptMatch = async (primaryId) => {
+    fetch('/api/match-groups', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        primaryId: primaryId,
+        secondaryId: groupId,
+        isSuperLike: 'false',
+      }),
+    }).then((res) => {
+      if (res.ok) {
+        console.log('Accepted superlike match!')
+        fetchMatches();
+        fetchSuperLikes();
+      } else {
+        console.log('Failed to accept superlike match!')
+      }
+    });
+  };
 
 
   const handleSnackbarClose = (event, reason) => {
@@ -207,7 +226,7 @@ export default function GroupPage() {
                 Decline
               </Button>
               <Button
-                onClick={() => console.log('TODO: implement accept!')}
+                onClick={() => acceptMatch(match.groupId)}
               >
                 Like Back
               </Button>

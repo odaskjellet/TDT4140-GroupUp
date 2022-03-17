@@ -272,11 +272,16 @@ class Database {
   /**
      * Format: [{groupId: string, name: string}, ...]
      * @param {string} groupId
-     * @return returns the groups that have superliked the given groupId (primaryId)     */
+     * @return returns the groups that have superliked the given groupId (primaryId)
+  */
   getSuperLikes(groupId) {
+    let result = [];
     let matches = this.getGroupMatches(groupId);
-    let result = this.stmt_get_group_superlikes.all(groupId)
-                    .filter(group => !matches.includes(group));
+    for (let group of this.stmt_get_group_superlikes.all(groupId)) {
+      if (!matches.some(match => group.groupId == match.groupId)) {
+        result.push(group);
+      }
+    }
     return result;
   }
 
