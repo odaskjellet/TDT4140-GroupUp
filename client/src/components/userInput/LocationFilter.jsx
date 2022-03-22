@@ -24,27 +24,31 @@ const locations = [
   'Trondheim'
 ];
 
-export default function FilterOnLocation() {
+export default function FilterOnLocation(callback) {
   const [locationName, setLocationName] = React.useState([]);
 
-  const handleChange = async (option,data) => {
-    //setBadLogin(false);
-    fetch('/api/get-groups-at-location', {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(option,data),
-    }).then((res) => {
-      if (res.ok) {
-        console.log("OK!");
-        //userDispatch({type: 'login', username: data.username});
-        //navigate('../home');
-      } else {
-        //setBadLogin(true);
-        console.log("Feil!");
-        console.log(res);
-      }
-    });
-  };
+  // const handleChange = async (option,data) => {
+  //   //setBadLogin(false);
+  //   fetch('/api/get-groups-at-location', {
+  //     method: 'PUT',
+  //     headers: {'Content-Type': 'application/json'},
+  //     body: JSON.stringify(option,data),
+  //   }).then((res) => {
+  //     if (res.ok) {
+  //       console.log("OK!");
+  //       //userDispatch({type: 'login', username: data.username});
+  //       //navigate('../home');
+  //     } else {
+  //       //setBadLogin(true);
+  //       console.log("Feil!");
+  //       console.log(res);
+  //     }
+  //   });
+  // };
+
+  const handleChange = (option, data) => {
+    callback(data)
+  }
 
 /*   const handleChange = (event) => {
     const {

@@ -138,8 +138,8 @@ server.put('/api/get-groups-with-interest', (request, result) => {
 });
 
 server.put('/api/filter-groups', (request, result) => {
-  filterGroups(request.body.option, request.body.data);
-  
+  result.send(
+      JSON.stringify(filterGroups(request.body)))
 });
 
 server.listen(PORT, () => {
@@ -243,27 +243,15 @@ function clearErrors(registration_errors) {
   return null;
 }
 
- function filterGroups(filterOption, option) {
-  let newGroups = [];
-  switch(filterOption) {
-    case "interest":
-        newGroups = db.getGroupWithInterest(option); //TODO test db.getGroupsWithInterests
-        break;
-    case "location":
-        newGroups = db.getGroupsAtLocation(option);
-      break;
-    case "age":
-      newGroups = db.getGroupsOfAge(option[0], option[1]);
-      break;
-    case "groupSize":
-      newGroups = db.getGroupsOfSize(option);
-      result.send(JSON.stringify(db.getGroupsOfSize(option)));
-      break;
-  }
-
-  let intersection = newGroups.filter(x => filteredGroups.includes(x));
-  filteredGroups = intersection;
-
+function filterGroups(data) {
+  const arrays = [
+    db.getGroupWithInterest(data.interest),
+    db.getGroupsAtLocation(data.location),
+    db.getGroupsOfAge(data.ageLow, data.ageHigh),
+    db.getGroupsOfSize(data.size),
+  ];
+  const intersection = arrays.reduce(
+    (a, b) => a.filter(c => b.some(d => d.groupId === c.groupId))
+  )
+  return intersection;
 }
-
-

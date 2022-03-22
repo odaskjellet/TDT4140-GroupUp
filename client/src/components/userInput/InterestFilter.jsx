@@ -51,8 +51,8 @@ export default function FilterOnInterest() {
       <FormControl sx={{ m: 1, width: 200 }}>
         <InputLabel id="demo-multiple-checkbox-label">Interests</InputLabel>
         <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
+          labelId="interest-checkbox-label"
+          id="interest-checkbox"
           multiple
           value={interest}
           onChange={handleChange}
