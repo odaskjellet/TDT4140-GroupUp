@@ -294,7 +294,7 @@ export default function GroupPage() {
     <br/>
     
     {/* <p>Image link: {groupInfo.image}</p> */}
-    <img src={groupInfo.image} alt="" style={{maxWidth: '500px', borderRadius: '15px'}}/>
+    <img src={groupInfo.image} alt="" style={{maxWidth: '500px', maxHeight: '500px', borderRadius: '15px'}}/>
     <h1>Welcome to {groupInfo.name}</h1>
     {interests.map((interest) => (
       <Chip label={interest.interest} sx={{margin: '0.5rem'}} color='primary'/>
