@@ -7,7 +7,7 @@ function FilterMenu(props) {
   const [locations, setLocations] = React.useState([]);
   const [interests, setInterests] = React.useState([]);
   const [getToggle, setToggle] = React.useState(true);
-  const [size, setSize] = React.useState(1);
+  const [size, setSize] = React.useState([1,50]);
   const [age, setAge] = React.useState([18, 99]);
 
   const locationOptions = [ // TODO: Should get from server
@@ -47,13 +47,16 @@ function FilterMenu(props) {
       setAge(data);
   }
 
+  const updateSizeRange = (e, data) => {
+      setSize(data);
+  }
+
   const handleInterestChange = (event) => {
     const {
       target: { value },
     } = event;
     setInterests(
       typeof value === 'string' ? value.split(',') : value,
-      console.log({value})
     );
   };
 
@@ -63,7 +66,6 @@ function FilterMenu(props) {
     } = event;
     setLocations(
       typeof value === 'string' ? value.split(',') : value,
-      console.log({value})
     );
   };
   
@@ -72,11 +74,10 @@ function FilterMenu(props) {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            interest: interests[0],
-            location: locations[0],
-            ageLow: age[0],
-            ageHigh: age[1],
-            size: size
+            interests: interests,
+            locations: locations,
+            ageRange: age,
+            sizeRange: size
           }),
       }).then((res) => res.json())
       .then((result) => {
@@ -104,10 +105,10 @@ function FilterMenu(props) {
             MenuProps={MenuProps}
             >
             {interestOptions.map((name) => (
-                <MenuItem key={name} value={name}>
-                <Checkbox checked={interests.indexOf(name) > -1} />
-                <ListItemText primary={name} />
-                </MenuItem>
+              <MenuItem key={name} value={name}>
+              <Checkbox checked={interests.indexOf(name) > -1} />
+              <ListItemText primary={name} />
+              </MenuItem>
             ))}
             </Select>
           </FormControl>
@@ -127,10 +128,10 @@ function FilterMenu(props) {
             MenuProps={MenuProps}
             >
             {locationOptions.map((location) => (
-                <MenuItem key={location} value={location}>
-                <Checkbox checked={locations.indexOf(location) > -1} />
-                <ListItemText primary={location} />
-                </MenuItem>
+              <MenuItem key={location} value={location}>
+              <Checkbox checked={locations.indexOf(location) > -1} />
+              <ListItemText primary={location} />
+              </MenuItem>
             ))}
             </Select>
           </FormControl>
@@ -140,41 +141,30 @@ function FilterMenu(props) {
           <h3>Filter on age</h3>
            <Stack alignItems="center">
             <Slider
-                onChangeCommitted={updateAgeRange}
-                value={age}
-                step={1}
-                min={18}
-                max={99}
-                valueLabelDisplay="on"
-                sx={{ width: 150 }}
+              onChangeCommitted={updateAgeRange}
+              value={age}
+              step={1}
+              min={18}
+              max={99}
+              valueLabelDisplay="on"
+              sx={{ width: 150 }}
             />
           </Stack>
           
           {/* Group size */}
 
-          <h3>Filter on group size?</h3>
-            <ToggleButton
-                value="check"
-                onChange={() => {
-                    setToggle(!getToggle);
-                    console.log(getToggle);
-                }}>
-                <CheckIcon />
-            </ToggleButton>
-
-            <TextField
-                disabled={getToggle}
-                label="Group size"
-                type={'number'}
-                inputProps={{ 'data-size': 'size-input' }}
-                onChange={(e) => {
-                    const { value } = e.target;
-                    if (value.match('.')) {
-                        setSize(parseInt(value))
-                    }
-                  }}                
-                sx={{ width: 200}}
-            ></TextField>
+          <h3>Group size</h3>
+           <Stack alignItems="center">
+            <Slider
+              onChangeCommitted={updateSizeRange}
+              value={size}
+              step={1}
+              min={1}
+              max={50}
+              valueLabelDisplay="on"
+              sx={{ width: 150 }}
+            />
+          </Stack>
         </Card>
     </div>
   )

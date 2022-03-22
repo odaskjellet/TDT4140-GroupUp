@@ -118,7 +118,7 @@ class Database {
         'UPDATE Groups SET name = ?, description = ?, location = ?, image = ? WHERE groupId = ?');
     
     this.stmt_get_groups_of_size = this.db.prepare(
-      'SELECT groupId FROM (SELECT groupId, COUNT(*) AS size FROM groupMembers GROUP BY groupId) WHERE size = ?');
+      'SELECT groupId FROM (SELECT groupId, COUNT(*) AS size FROM groupMembers GROUP BY groupId) WHERE size >= ? AND size <= ?');
     
     this.stmt_get_groups_of_age = this.db.prepare(
       'SELECT groupId FROM (SELECT groupId, AVG(age) AS average FROM GroupMembers INNER JOIN Users ON GroupMembers.username = Users.username GROUP BY groupId) WHERE (average >= ? AND average <= ?)');
@@ -245,8 +245,8 @@ class Database {
     return this.stmt_get_groups_with_interest.all(interest);
   }
 
-  getGroupsOfSize(size) {
-    return this.stmt_get_groups_of_size.all(size);
+  getGroupsOfSize(sizeLow, sizeHigh) {
+    return this.stmt_get_groups_of_size.all(sizeLow, sizeHigh);
   }
 
   /**

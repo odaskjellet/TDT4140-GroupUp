@@ -291,21 +291,30 @@ function filterGroups(data) {
   console.log(data);
   const arrays = [db.getAllGroups()]
 
-  if (data.interest !== undefined) {
-    arrays.push(db.getGroupWithInterest(data.interest))
+  if (data.interests !== undefined) {
+    data.interests.forEach(interest => {
+      arrays.push(db.getGroupWithInterest(interest))
+    })
   }
-  if (data.location !== undefined) {
-    arrays.push(db.getGroupsAtLocation(data.location))
+  if (data.locations !== undefined && data.locations.length) {
+    const locations = []
+    data.locations.forEach(location => {
+      db.getGroupsAtLocation(location).forEach(group => {
+        locations.push(group);
+      })
+    })
+    arrays.push(locations)
   }
-  if (data.ageLow !== undefined && data.ageHigh !== undefined) {
-    arrays.push(db.getGroupsOfAge(data.ageLow, data.ageHigh))
+  if (data.ageRange !== undefined && data.ageRange.length) {
+    arrays.push(db.getGroupsOfAge(data.ageRange[0], data.ageRange[1]))
+  }
+  if (data.sizeRange !== undefined && data.sizeRange.length) {
+    arrays.push(db.getGroupsOfSize(data.sizeRange[0], data.sizeRange[1]))
   } 
-  if (data.size !== undefined) {
-    arrays.push(db.getGroupsOfSize(data.size))
-  }
-  
+  console.log(arrays)
   const intersection = arrays.reduce(
     (a, b) => a.filter(c => b.some(d => d.groupId === c.groupId))
   )
+  console.log('intersection', intersection)
   return intersection;
 }
