@@ -7,7 +7,6 @@ import LoginForm from '../components/userInput/LoginForm';
  * @return {JSX.Element}
  * @constructor
  */
-
 function LoginPage() {
   return <Container>
     <div style={{textAlign:'center'}}>
@@ -19,4 +18,3 @@ function LoginPage() {
 }
 
 export default LoginPage;
-
