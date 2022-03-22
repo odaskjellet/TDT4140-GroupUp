@@ -243,9 +243,7 @@ function clearErrors(registration_errors) {
   return null;
 }
 
-let filteredGroups = [];
-
-function filterGroups(filterOption, option) {
+ function filterGroups(filterOption, option) {
   let newGroups = [];
   switch(filterOption) {
     case "interest":
@@ -263,7 +261,7 @@ function filterGroups(filterOption, option) {
       break;
   }
 
-  let intersection = newGroups.filter(x => filterGroups.includes(x));
+  let intersection = newGroups.filter(x => filteredGroups.includes(x));
   filteredGroups = intersection;
 
 }

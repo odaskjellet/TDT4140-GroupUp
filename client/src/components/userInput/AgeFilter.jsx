@@ -11,12 +11,12 @@ export default function AgeFilter() {
         onSubmit("age", data);
 
     }
-    const onSubmit = async (option, data) => {
+    const onSubmit = async (data) => {
         console.log(data);
         fetch('/api/filter-groups', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify('groupSize', data),
+            body: JSON.stringify('age', data),
         }).then((res) => {
             if (res.ok) {
                 console.log("OK!");
