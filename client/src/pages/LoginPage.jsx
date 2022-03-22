@@ -7,11 +7,16 @@ import LoginForm from '../components/userInput/LoginForm';
  * @return {JSX.Element}
  * @constructor
  */
+
 function LoginPage() {
   return <Container>
-    <h1 style={{textAlign: 'center', margin: '4rem'}}>Welcome to GroupUp</h1>
+    <div style={{textAlign:'center'}}>
+      <img src="/logoGU.png" style={{margin: '0.5rem', maxHeight: '200px'}}/> 
+      <h1 style={{textAlign: 'center', margin: '2rem'}}>Welcome to GroupUp</h1>
+    </div>
     <LoginForm/>
   </Container>;
 }
 
 export default LoginPage;
+
