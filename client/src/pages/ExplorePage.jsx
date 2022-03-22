@@ -18,17 +18,17 @@ export default function ExplorePage() {
   const [groupMembership, setGroupMembership] = useState('');
 
   useEffect(async () => {
-    await fetchAllGroups();
+    // await fetchAllGroups();
     await fetchMyGroups();
   }, []);
 
-  const fetchAllGroups = async () => {
-    fetch('/api/get-groups')
-        .then((res) => res.json())
-        .then((result) => {
-          setAllGroups(result);
-        });
-  };
+  // const fetchAllGroups = async () => {
+  //   fetch('/api/get-groups')
+  //       .then((res) => res.json())
+  //       .then((result) => {
+  //         setAllGroups(result);
+  //       });
+  // };
 
   const fetchMyGroups = async () => {
     fetch('/api/get-groups-with-user', {
@@ -93,6 +93,10 @@ export default function ExplorePage() {
     setSnackbarOpen(false);
   };
 
+  function filterCallback(data) {
+    setAllGroups(data);
+  }
+
   let matchExists = Boolean(incompleteMatches.some((e) => e.groupId === selectedGroupBId))
 
   let superLikeButtonStyle = (!matchExists && groupMembership === 'gold')
@@ -113,7 +117,7 @@ export default function ExplorePage() {
       <p>Find the perfect match.</p>
       <div
       style={{width:"20%",height:"46%",display:"table",float:"left",position:"sticky",}}>
-        <FilterMenu />
+        <FilterMenu filterCallback={filterCallback} />
       </div>
       <div
       style={{width:"75%",display:"table", float:"right"}}>

@@ -1,21 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, InputLabel, MenuItem, Select, TextField, FormControl, Stack, Checkbox, OutlinedInput, ListItemText, Slider, ToggleButton } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import classes from './FilterMenu.module.css';
 
-function FilterMenu() {
-  const [locationName, setLocationName] = React.useState([]);
+function FilterMenu(props) {
+  const [locations, setLocations] = React.useState([]);
   const [interests, setInterests] = React.useState([]);
   const [getToggle, setToggle] = React.useState(true);
   const [size, setSize] = React.useState(1);
-  const [age, setAge] = React.useState([18, 99])
-  
-  const locations = [ // Should get from server
+  const [age, setAge] = React.useState([18, 99]);
+
+  const locationOptions = [ // TODO: Should get from server
     'Oslo',
     'Trondheim'
   ];
 
-  const interestOptions = [ // Should get from server
+  const interestOptions = [ // TODO: Should get from server
     'Astrology',
     'Chess',
     'Gaming',
@@ -39,10 +39,12 @@ function FilterMenu() {
     },
   };
   
+  useEffect(() => {
+    fetchFilteredGroups();
+  }, [locations, interests, size, age])
 
   const updateAgeRange = (e, data) => {
       setAge(data);
-      fetchFilteredGroups()
   }
 
   const handleInterestChange = (event) => {
@@ -53,18 +55,16 @@ function FilterMenu() {
       typeof value === 'string' ? value.split(',') : value,
       console.log({value})
     );
-    fetchFilteredGroups()
   };
 
   const handleLocationChange = (event) => {
     const {
       target: { value },
     } = event;
-    setLocationName(
+    setLocations(
       typeof value === 'string' ? value.split(',') : value,
       console.log({value})
     );
-    fetchFilteredGroups()
   };
   
   const fetchFilteredGroups = async () => {
@@ -73,14 +73,14 @@ function FilterMenu() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             interest: interests[0],
-            location: locationName,
+            location: locations[0],
             ageLow: age[0],
             ageHigh: age[1],
             size: size
           }),
       }).then((res) => res.json())
       .then((result) => {
-        console.log(result);
+        props.filterCallback(result);
       })
     };
 
@@ -120,15 +120,15 @@ function FilterMenu() {
             labelId="location-checkbox-label"
             id="location-checkbox"
             multiple
-            value={locationName}
+            value={locations}
             onChange={handleLocationChange}
             input={<OutlinedInput label="Locations" />}
             renderValue={(selected) => selected.join(', ')}
             MenuProps={MenuProps}
             >
-            {locations.map((location) => (
+            {locationOptions.map((location) => (
                 <MenuItem key={location} value={location}>
-                <Checkbox checked={locationName.indexOf(location) > -1} />
+                <Checkbox checked={locations.indexOf(location) > -1} />
                 <ListItemText primary={location} />
                 </MenuItem>
             ))}
@@ -170,7 +170,7 @@ function FilterMenu() {
                 onChange={(e) => {
                     const { value } = e.target;
                     if (value.match('.')) {
-                        setSize({value: parseInt(value)})
+                        setSize(parseInt(value))
                     }
                   }}                
                 sx={{ width: 200}}

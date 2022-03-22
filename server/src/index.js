@@ -288,12 +288,22 @@ function clearErrors(registration_errors) {
 }
 
 function filterGroups(data) {
-  const arrays = [
-    db.getGroupWithInterest(data.interest),
-    db.getGroupsAtLocation(data.location),
-    db.getGroupsOfAge(data.ageLow, data.ageHigh),
-    db.getGroupsOfSize(data.size),
-  ];
+  console.log(data);
+  const arrays = [db.getAllGroups()]
+
+  if (data.interest !== undefined) {
+    arrays.push(db.getGroupWithInterest(data.interest))
+  }
+  if (data.location !== undefined) {
+    arrays.push(db.getGroupsAtLocation(data.location))
+  }
+  if (data.ageLow !== undefined && data.ageHigh !== undefined) {
+    arrays.push(db.getGroupsOfAge(data.ageLow, data.ageHigh))
+  } 
+  if (data.size !== undefined) {
+    arrays.push(db.getGroupsOfSize(data.size))
+  }
+  
   const intersection = arrays.reduce(
     (a, b) => a.filter(c => b.some(d => d.groupId === c.groupId))
   )
