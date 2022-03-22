@@ -132,6 +132,14 @@ class Database {
     
     this.stmt_downgrade_superlike = this.db.prepare(
       "UPDATE GroupMatches SET isSuperLike = 'false' WHERE primaryId = ? AND secondaryId = ?");
+
+    this.stmt_get_locations = this.db.prepare(
+      'SELECT DISTINCT location FROM Groups'
+    )
+
+    this.stmt_get_interests = this.db.prepare(
+      'SELECT DISTINCT interest FROM GroupInterests'
+    )
   }
 
   /**
@@ -399,6 +407,21 @@ class Database {
     return this.stmt_get_group_membership.get(groupId);
   }
 
+  /**
+   * Format [{location: string}, ...]
+   * @returns 
+   */
+  getLocations() {
+    return this.stmt_get_locations.all();
+  }
+
+  /**
+   * Format [{interest: string}, ...]
+   * @returns 
+   */
+   getInterests() {
+    return this.stmt_get_interests.all();
+  }
 }
 
 module.exports = {Database};

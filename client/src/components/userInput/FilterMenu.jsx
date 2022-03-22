@@ -1,32 +1,15 @@
 import React, { useEffect } from 'react';
-import { Card, InputLabel, MenuItem, Select, TextField, FormControl, Stack, Checkbox, OutlinedInput, ListItemText, Slider, ToggleButton } from '@mui/material';
+import { Card, InputLabel, MenuItem, Select, TextField, FormControl, Stack, Checkbox, OutlinedInput, ListItemText, Slider } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import classes from './FilterMenu.module.css';
 
 function FilterMenu(props) {
   const [locations, setLocations] = React.useState([]);
   const [interests, setInterests] = React.useState([]);
-  const [getToggle, setToggle] = React.useState(true);
   const [size, setSize] = React.useState([1,50]);
   const [age, setAge] = React.useState([18, 99]);
-
-  const locationOptions = [ // TODO: Should get from server
-    'Oslo',
-    'Trondheim'
-  ];
-
-  const interestOptions = [ // TODO: Should get from server
-    'Astrology',
-    'Chess',
-    'Gaming',
-    'Skiing',
-    'Traveling',
-    'Sports',
-    'Food',
-    'Wine',
-    'Movies',
-    'Paragliding',
-  ];
+  const [locationOptions, setLocationOptions] = React.useState([]);
+  const [interestOptions, setInterestOptions] = React.useState([])
   
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -39,7 +22,9 @@ function FilterMenu(props) {
     },
   };
   
-  useEffect(() => {
+  useEffect(async () => {
+    await fetchLocations();
+    await fetchInterests();
     fetchFilteredGroups();
   }, [locations, interests, size, age])
 
@@ -69,24 +54,38 @@ function FilterMenu(props) {
     );
   };
   
+  const fetchLocations = async () => {
+    fetch('/api/locations')
+      .then(res => res.json())
+      .then(result => setLocationOptions(result))
+  }
+
+  const fetchInterests = async () => {
+    fetch('/api/interests')
+      .then(res => res.json())
+      .then(result => setInterestOptions(result))
+  }
+
   const fetchFilteredGroups = async () => {
-      fetch('/api/filter-groups', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            interests: interests,
-            locations: locations,
-            ageRange: age,
-            sizeRange: size
-          }),
-      }).then((res) => res.json())
-      .then((result) => {
-        props.filterCallback(result);
-      })
-    };
+    fetch('/api/filter-groups', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          interests: interests,
+          locations: locations,
+          ageRange: age,
+          sizeRange: size
+        }),
+    }).then((res) => res.json())
+    .then((result) => {
+      props.filterCallback(result);
+    })
+  };
 
-
-  return (
+  if (locationOptions.length == 0) {
+    return <div>Loading..</div>
+  } else {
+    return (
       <div className={classes.FilterMenu}>
         <Card>
 
@@ -167,7 +166,7 @@ function FilterMenu(props) {
           </Stack>
         </Card>
     </div>
-  )
+  )}
 }
 
 export default FilterMenu;

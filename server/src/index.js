@@ -186,6 +186,16 @@ server.put('/api/filter-groups', (request, result) => {
       JSON.stringify(filterGroups(request.body)))
 });
 
+server.get('/api/locations', (request, result) => {
+  const locations = db.getLocations().map(e => e.location);
+  result.send(JSON.stringify(locations));
+})
+
+server.get('/api/interests', (request, result) => {
+  const interests = db.getInterests().map(e => e.interest);
+  result.send(JSON.stringify(interests));
+})
+
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
@@ -311,10 +321,10 @@ function filterGroups(data) {
   if (data.sizeRange !== undefined && data.sizeRange.length) {
     arrays.push(db.getGroupsOfSize(data.sizeRange[0], data.sizeRange[1]))
   } 
-  console.log(arrays)
+
   const intersection = arrays.reduce(
     (a, b) => a.filter(c => b.some(d => d.groupId === c.groupId))
   )
-  console.log('intersection', intersection)
+
   return intersection;
 }
