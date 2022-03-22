@@ -6,13 +6,13 @@ import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import {UserProvider} from './contexts/User';
 import CreateGroupPage from './pages/CreateGroupPage';
-import MyProfilePage from './pages/MyProfilePage';
 import IndexPage from './pages/IndexPage';
 import {ColorModeProvider} from './contexts/ColorMode';
 import {CssBaseline} from '@mui/material';
 import LightSwitch from './components/LightSwitch';
 import GroupPage from './pages/GroupPage';
 import ExplorePage from './pages/ExplorePage';
+import EditGroupPage from './pages/EditGroupPage';
 
 export default function App() {
   return (
@@ -25,8 +25,8 @@ export default function App() {
           <Route path="/register" element={<RegisterPage/>}/>
           <Route path="/home" element={<HomePage/>}/>
           <Route path="/create-group" element={<CreateGroupPage/>}/>
-          <Route path="/user" element={<MyProfilePage/>}/>
           <Route path="/group/:groupId" element={<GroupPage/>} />
+          <Route path="/edit-group/:groupId" element={<EditGroupPage/>} />
           <Route path="/explore" element={<ExplorePage/>} />
         </Routes>
       </UserProvider>

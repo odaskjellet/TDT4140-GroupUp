@@ -15,6 +15,7 @@ export default function ExplorePage() {
   const [userState, _] = useContext(UserContext);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [incompleteMatches, setIncompleteMatches] = useState([]);
+  const [groupMembership, setGroupMembership] = useState('');
 
   useEffect(async () => {
     await fetchAllGroups();
@@ -51,13 +52,14 @@ export default function ExplorePage() {
         });
   };
 
-  const createMatch = async () => {
+  const createMatch = async (isSuperLike) => {
     fetch('/api/match-groups', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         primaryId: selectedGroupA.groupId,
         secondaryId: selectedGroupBId,
+        isSuperLike: isSuperLike,
       }),
     }).then((res) => {
       if (res.ok) {
@@ -68,6 +70,22 @@ export default function ExplorePage() {
     });
   };
 
+  const onSelect = async (e) => {
+    setSelectedGroupBId(e.target.value);
+    await getGroupMembership(e.target.value);
+  }
+
+  const getGroupMembership = async (groupId) => {
+    fetch('/api/get-group-membership', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({groupId: groupId}),
+    }).then((res) => res.json())
+      .then((result) => {
+        setGroupMembership(result.membership);
+    });
+  };
+
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -75,6 +93,12 @@ export default function ExplorePage() {
     setSnackbarOpen(false);
   };
 
+  let matchExists = Boolean(incompleteMatches.some((e) => e.groupId === selectedGroupBId))
+
+  let superLikeButtonStyle = (!matchExists && groupMembership === 'gold')
+    ? {backgroundColor: 'gold', color: 'black'}
+    : {}
+  
   return (
     <Container>
       <br />
@@ -102,6 +126,8 @@ export default function ExplorePage() {
               variant='contained'
               onClick={() => {
                 setSelectedGroupA(group);
+                setSelectedGroupBId('');
+                setGroupMembership('standard');
                 fetchIncompleteMatches(group.groupId);
                 setDialogOpen(true);
               }}
@@ -139,7 +165,7 @@ export default function ExplorePage() {
                 labelId='group-select-label'
                 label='Group'
                 value={selectedGroupBId}
-                onChange={(e) => setSelectedGroupBId(e.target.value)}
+                onChange={onSelect}
               >
                 {Array.from(myGroups).filter((group) =>
                   (group.groupId !== selectedGroupA.groupId),
@@ -168,25 +194,27 @@ export default function ExplorePage() {
               </Button>
               <Button
                 variant='contained'
-                disabled={
-                  Boolean(incompleteMatches.some((e) => 
-                    e.groupId === selectedGroupBId
-                  ))
-                }
+                disabled={matchExists || groupMembership !== 'gold'}
+                style={superLikeButtonStyle}
                 onClick={() => {
-                  createMatch();
+                  createMatch("true");
+                  setDialogOpen(false);
+                }}>
+                  <span>Super Like!</span>
+              </Button>
+              <Button
+                variant='contained'
+                disabled={matchExists || selectedGroupBId === '' }
+                onClick={() => {
+                  createMatch("false");
                   setDialogOpen(false);
                 }}
               >
                 {
-                  !Boolean(incompleteMatches.some((e) => 
-                    e.groupId === selectedGroupBId
-                  )) && <span>Confirm</span>
+                  !matchExists && <span>Confirm</span>
                 }
                 {
-                  Boolean(incompleteMatches.some((e) => 
-                    e.groupId === selectedGroupBId
-                  )) && <span>Match already initiated</span>
+                  matchExists && <span>Match already initiated</span>
                 }
               </Button>
             </Stack>

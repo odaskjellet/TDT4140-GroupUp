@@ -1,21 +1,24 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {Controller, useForm} from 'react-hook-form';
-import {Card, Button, Stack, TextField, Alert, FormControl, InputLabel, Select, MenuItem} from '@mui/material';
+import {useForm, Controller} from 'react-hook-form';
+import {Card, Button, Stack, TextField, Alert, FormControl, InputLabel, Select, MenuItem, Chip, Autocomplete, createFilterOptions} from '@mui/material';
 import {nanoid} from 'nanoid';
 import {UserContext} from '../../contexts/User';
-
 
 
 export default function CreateGroupForm() {
   const [badRequest, setBadRequest] = useState(false);
   const {register, formState: {errors}, handleSubmit, control} = useForm();
   const [userState, _] = useContext(UserContext);
+  const [interests, setInterests] = useState([]);
   const navigate = useNavigate();
+  const filter = createFilterOptions();
+
   const onSubmit = async (data) => {
     setBadRequest(false);
     data.groupId = nanoid();
     data.admin = userState.username;
+    data.interests = interests;
     fetch('/api/insert-group', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
@@ -69,49 +72,81 @@ export default function CreateGroupForm() {
           <FormControl fullWidth margin="normal" required>
             <InputLabel id="member-label">Membership</InputLabel>
             <Controller
-                name='membership'
-                inputProps={{'data-testid': 'membership-option'}}
-                labelId="membership-label"
-                label='membership'
-                defaultValue={'standard'}
-                control={control}
-                render={({field}) => (
-                    <Select {...field}>
-                      <MenuItem value={'Standard'}>Standard</MenuItem>
-                      <MenuItem value={'Gold'}>Gold</MenuItem>
-                    </Select>
-                )}
+              name='membership'
+              inputProps={{'data-testid': 'membership-option'}}
+              labelId="membership-label"
+              label='membership'
+              defaultValue={'standard'}
+              control={control}
+              render={({field}) => (
+                <Select {...field}>
+                  <MenuItem value={'standard'}>Standard</MenuItem>
+                  <MenuItem value={'gold'}>Gold</MenuItem>
+                </Select>
+              )}
             />
           </FormControl>
         </div>
 
 
-
-        {/* <div>
+        <div>
           <TextField
-            disabled
             fullWidth
             margin="normal"
-            error={errors.interests}
-            helperText={errors.interests && 'Interests are required.'}
-            label="Interests - TODO"
+            error={errors.image}
+            inputProps={{'data-testid': 'image-input'}}
+            helperText={errors.image && 'Image URL is required.'}
+            label="Image URL"
             type={'text'}
-            {...register('interests', {required: false})}
+            {...register('image', {required: false})}
           />
-        </div> */}
+        </div>
 
-        {/* <div>
+        <div>
           <TextField
-            disabled
             fullWidth
             margin="normal"
-            error={errors.members}
-            label="Add members - TODO"
+            error={errors.location}
+            helperText={errors.location && 'Location is required.'}
+            label="Location"
+            inputProps={{'data-testid': 'location-input'}}
             type={'text'}
-            {...register('members', {required: false})}
+            {...register('location', {required: true})}
           />
-        </div> */}
+        </div>
+
+            <Autocomplete
+              multiple
+              freeSolo
+              autoSelect
+              options={interestOptions}
+              getOptionLabel={(option) => option}
+              onChange={(event, value) => {
+                setInterests(value);
+              }}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+
+                if (params.inputValue !== "") {
+                  filtered.push(params.inputValue);
+                }
+
+                return filtered;
+              }}
+              style={{ width: 300 }}
+              renderInput={params => (
+                <TextField {...params}
+                  margin="normal"
+                  label="Interests"
+                  variant="outlined"
+                  fullWidth
+                />
+              )}
+            />
+
+
         <br></br>
+        
         <Stack
           spacing={2}
           direction="row"
@@ -141,3 +176,16 @@ export default function CreateGroupForm() {
     </Card>
   );
 }
+
+const interestOptions = [
+  "Astrology",
+  "Chess",
+  "Gaming",
+  "Skiing",
+  "Traveling",
+  "Sports",
+  "Food",
+  "Wine",
+  "Movies",
+  "Paragliding",
+]

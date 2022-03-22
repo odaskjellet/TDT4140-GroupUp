@@ -28,7 +28,7 @@ server.put('/api/get-user', (request, result) => {
 
 server.put('/api/insert-user', (request, result) => {
   if (!db.tryLogin(request.body.username, request.body.password) &&
-    validInformation(request.body.username, request.body.password, request.body.age, request.body.email)) {
+      validInformation(request.body.username, request.body.password, request.body.age, request.body.email)) {
     db.insertUser(request.body.username, request.body.password, request.body.age, request.body.email, request.body.gender);
     result.send('OK');
   } else {
@@ -49,10 +49,16 @@ server.put('/api/try-login', (request, result) => {
 });
 
 server.put('/api/insert-group', (request, result) => {
+  console.log('\n\n\nBODY', request.body, '\n\n\n');
   if (validGroupname(request.body.name)) {
     db.insertGroup(request.body.groupId, request.body.name,
-        request.body.admin, request.body.description, request.body.membership);
+        request.body.admin, request.body.description, request.body.membership, request.body.location, request.body.image);
     db.addUserToGroup(request.body.groupId, request.body.admin);
+    if (request.body.interests) {
+      request.body.interests.forEach((interest) => {
+        db.addGroupInterest(request.body.groupId, interest);
+      })
+    }
     result.send('OK');
   } else {
     const errorData = alertErrors(registration_errors);
@@ -84,7 +90,7 @@ server.put('/api/add-user-to-group', (request, result) => {
   result.send('OK');
 });
 
-server.get('/api/get-group-interests', (request, result) => {
+server.put('/api/get-group-interests', (request, result) => {
   result.send(JSON.stringify(db.getGroupInterests(request.body.groupId)));
 });
 
@@ -92,18 +98,38 @@ server.put('/api/get-group-members', (request, result) => {
   result.send(JSON.stringify(db.getGroupMembers(request.body.groupId)));
 });
 
+
+server.put('/api/get-group-membership', (request, result) => {
+  result.send(JSON.stringify(db.getGroupMembership(request.body.groupId)));
+})
+
+
 server.put('/api/insert-group-interest', (request, result) => {
   db.addGroupInterest(request.body.groupId, request.body.interest);
   result.send('OK');
 });
 
+server.put('/api/delete-group-interest', (request, result) => {
+  db.deleteGroupInterest(request.body.groupId, request.body.interest);
+  result.send('OK');
+});
+
 server.put('/api/match-groups', (request, result) => {
-  db.matchGroups(request.body.primaryId, request.body.secondaryId);
+  db.matchGroups(request.body.primaryId, request.body.secondaryId, request.body.isSuperLike);
   result.send('OK');
 });
 
 server.put('/api/get-group-matches', (request, result) => {
   result.send(JSON.stringify(db.getGroupMatches(request.body.groupId)));
+});
+
+server.put('/api/get-group-superlikes', (request, result) => {
+  result.send(JSON.stringify(db.getSuperLikes(request.body.groupId)));
+});
+
+server.put('/api/downgrade-superlike', (request, result) => {
+  db.downgradeSuperlike(request.body.primaryId, request.body.secondaryId);
+  result.send('OK');
 });
 
 server.put('/api/get-incomplete-group-matches', (request, result) => {
@@ -127,6 +153,24 @@ server.put('/api/answer-invite', (request, result) => {
 
 server.put('/api/get-group-invitations', (request, result) => {
   result.send(JSON.stringify(db.getGroupInvitations(request.body.groupId)));
+});
+
+server.put('/api/update-group-attributes', (request, result) => {
+  db.updateGroupAttributes(request.body.groupId, request.body.name, request.body.description, request.body.location, request.body.image);
+  const interests = db.getGroupInterests(request.body.groupId);
+  console.log(interests)
+  interests.forEach((interest)=> {
+
+    db.deleteGroupInterest(request.body.groupId, interest.interest);
+  })
+
+  if (request.body.interests) {
+    request.body.interests.forEach((interest) => {
+      db.addGroupInterest(request.body.groupId, interest);
+    })
+
+  }
+  result.send('OK');
 });
 
 server.put('/api/get-all-groups', (request, result) => {
