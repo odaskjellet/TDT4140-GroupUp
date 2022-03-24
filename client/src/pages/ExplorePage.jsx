@@ -125,7 +125,6 @@ export default function ExplorePage() {
         {Array.from(allGroups).map((group) => (
           <Card key={group.groupId} sx={{padding: '2rem'}}>
             <h2>{group.name}</h2>
-            <p>Group {group.groupId}</p>
             <Button
               variant='contained'
               onClick={() => {
