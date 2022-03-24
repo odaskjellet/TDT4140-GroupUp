@@ -118,20 +118,28 @@ class Database {
         'UPDATE Groups SET name = ?, description = ?, location = ?, image = ? WHERE groupId = ?');
     
     this.stmt_get_groups_of_size = this.db.prepare(
-      'SELECT groupId FROM (SELECT groupId, COUNT(*) AS size FROM groupMembers GROUP BY groupId) WHERE size = ?');
+      'SELECT groupId FROM (SELECT groupId, COUNT(*) AS size FROM groupMembers GROUP BY groupId) WHERE size >= ? AND size <= ?');
     
     this.stmt_get_groups_of_age = this.db.prepare(
       'SELECT groupId FROM (SELECT groupId, AVG(age) AS average FROM GroupMembers INNER JOIN Users ON GroupMembers.username = Users.username GROUP BY groupId) WHERE (average >= ? AND average <= ?)');
 
+    this.stmt_get_groups_at_location = this.db.prepare(
+     'SELECT groupId FROM Groups WHERE location = ?');
+    
     this.stmt_get_group_membership = this.db.prepare(
       'SELECT membership FROM Groups WHERE groupId = ?'
     )
     
     this.stmt_downgrade_superlike = this.db.prepare(
       "UPDATE GroupMatches SET isSuperLike = 'false' WHERE primaryId = ? AND secondaryId = ?");
-    
-    //this.stmt_get_groups_at_location = this.db.prepare(
-    //  'SELECT groupId FROM Groups WHERE location = ?');
+
+    this.stmt_get_locations = this.db.prepare(
+      'SELECT DISTINCT location FROM Groups'
+    )
+
+    this.stmt_get_interests = this.db.prepare(
+      'SELECT DISTINCT interest FROM GroupInterests'
+    )
   }
 
   /**
@@ -245,8 +253,8 @@ class Database {
     return this.stmt_get_groups_with_interest.all(interest);
   }
 
-  getGroupsOfSize(size) {
-    return this.stmt_get_groups_of_size.all(size);
+  getGroupsOfSize(sizeLow, sizeHigh) {
+    return this.stmt_get_groups_of_size.all(sizeLow, sizeHigh);
   }
 
   /**
@@ -399,6 +407,21 @@ class Database {
     return this.stmt_get_group_membership.get(groupId);
   }
 
+  /**
+   * Format [{location: string}, ...]
+   * @returns 
+   */
+  getLocations() {
+    return this.stmt_get_locations.all();
+  }
+
+  /**
+   * Format [{interest: string}, ...]
+   * @returns 
+   */
+   getInterests() {
+    return this.stmt_get_interests.all();
+  }
 }
 
 module.exports = {Database};

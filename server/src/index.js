@@ -181,6 +181,20 @@ server.put('/api/get-groups-with-interest', (request, result) => {
   result.send(JSON.stringify(db.getGroupWithInterest(request)));
 });
 
+server.put('/api/filter-groups', (request, result) => {
+  result.send(
+      JSON.stringify(filterGroups(request.body)))
+});
+
+server.get('/api/locations', (request, result) => {
+  const locations = db.getLocations().map(e => e.location);
+  result.send(JSON.stringify(locations));
+})
+
+server.get('/api/interests', (request, result) => {
+  const interests = db.getInterests().map(e => e.interest);
+  result.send(JSON.stringify(interests));
+})
 
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
@@ -283,25 +297,34 @@ function clearErrors(registration_errors) {
   return null;
 }
 
-let filteredGroups = [];
+function filterGroups(data) {
+  console.log(data);
+  const arrays = [db.getAllGroups()]
 
-function filterGroups(filterOption, option) {
-  let newGroups = [];
-  switch(filterOption) {
-    case interest:
-        newGroups = db.getGroupWithInterest(option); //TODO test db.getGroupsWithInterests
-        break;
-    case location:
-        newGroups = db.getGroupsAtLocation(option);
-      break;
-    case age:
-      newGroups = db.getGroupsOfAge(option[0], option[1]);
-      break;
-    case groupSize:
-      newGroups = db.getGroupsOfSize(option);
-      break;
+  if (data.interests !== undefined) {
+    data.interests.forEach(interest => {
+      arrays.push(db.getGroupWithInterest(interest))
+    })
   }
+  if (data.locations !== undefined && data.locations.length) {
+    const locations = []
+    data.locations.forEach(location => {
+      db.getGroupsAtLocation(location).forEach(group => {
+        locations.push(group);
+      })
+    })
+    arrays.push(locations)
+  }
+  if (data.ageRange !== undefined && data.ageRange.length) {
+    arrays.push(db.getGroupsOfAge(data.ageRange[0], data.ageRange[1]))
+  }
+  if (data.sizeRange !== undefined && data.sizeRange.length) {
+    arrays.push(db.getGroupsOfSize(data.sizeRange[0], data.sizeRange[1]))
+  } 
 
-  let intersection = newGroups.filter(x => filterGroups.includes(x));
-  filterGroups = intersection;
+  const intersection = arrays.reduce(
+    (a, b) => a.filter(c => b.some(d => d.groupId === c.groupId))
+  )
+
+  return intersection;
 }
