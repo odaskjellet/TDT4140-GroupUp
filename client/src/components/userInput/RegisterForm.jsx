@@ -20,7 +20,7 @@ function RegisterForm() {
   } = useForm();
 
   const navigate = useNavigate();
-  const [userDispatch] = useContext(UserContext);
+  const [userState, userDispatch] = useContext(UserContext);
   const onSubmit = async (data) => {
     fetch('/api/insert-user', {
       method: 'PUT',

@@ -49,7 +49,7 @@ describe('Create group', () => {
     cy.contains(/Visit/i).click();
     cy.url().should('include', '/group/');
     cy.contains(/Add members/i).click();
-    cy.contains(/There are noone to invite!/i);
+    cy.contains(/There is no-one to invite!/i);
     cy.get('.MuiButton-root').contains(/Invite/i).should('have.length', 0);
     cy.contains(/Cancel/i).click();
   });

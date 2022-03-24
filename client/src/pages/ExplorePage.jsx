@@ -1,10 +1,27 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Container, Stack, Card, Grid, Button, Dialog, DialogTitle, Select, MenuItem, FormControl, InputLabel, Snackbar, Alert}
-  from '@mui/material';
+import {
+  Alert,
+  Button,
+  Card,
+  Container,
+  Dialog,
+  DialogTitle,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Snackbar,
+  Stack,
+} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../contexts/User';
 import FilterMenu from '../components/userInput/FilterMenu';
 
+/**
+ * returns the page where users can explore other groups and like them.
+ * @return {JSX.Element}
+ * @constructor
+ */
 export default function ExplorePage() {
   const navigate = useNavigate();
   const [allGroups, setAllGroups] = useState([]);
@@ -73,7 +90,7 @@ export default function ExplorePage() {
   const onSelect = async (e) => {
     setSelectedGroupBId(e.target.value);
     await getGroupMembership(e.target.value);
-  }
+  };
 
   const getGroupMembership = async (groupId) => {
     fetch('/api/get-group-membership', {
@@ -81,9 +98,9 @@ export default function ExplorePage() {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({groupId: groupId}),
     }).then((res) => res.json())
-      .then((result) => {
-        setGroupMembership(result.membership);
-    });
+        .then((result) => {
+          setGroupMembership(result.membership);
+        });
   };
 
   const handleSnackbarClose = (event, reason) => {
@@ -93,16 +110,21 @@ export default function ExplorePage() {
     setSnackbarOpen(false);
   };
 
+  /**
+ * function to filter data
+ * @param data
+ */
   function filterCallback(data) {
     setAllGroups(data);
   }
 
-  let matchExists = Boolean(incompleteMatches.some((e) => e.groupId === selectedGroupBId))
+  const matchExists = Boolean(incompleteMatches.some((e) =>
+    e.groupId === selectedGroupBId));
 
-  let superLikeButtonStyle = (!matchExists && groupMembership === 'gold')
-    ? {backgroundColor: 'gold', color: 'black'}
-    : {}
-  
+  const superLikeButtonStyle = (!matchExists && groupMembership === 'gold') ?
+    {backgroundColor: 'gold', color: 'black'} :
+    {};
+
   return (
     <Container>
       <br />
@@ -116,30 +138,31 @@ export default function ExplorePage() {
       <h1>Explore groups</h1>
       <p>Find the perfect match.</p>
       <div
-      style={{width:"20%",height:"46%",display:"table",float:"left",position:"sticky",}}>
+        style={{width: '20%', height: '46%', display: 'table',
+          float: 'left', position: 'sticky'}}>
         <FilterMenu filterCallback={filterCallback} />
       </div>
       <div
-      style={{width:"75%",display:"table", float:"right"}}>
-      <Stack spacing={2}>
-        {Array.from(allGroups).map((group) => (
-          <Card key={group.groupId} sx={{padding: '2rem'}}>
-            <h2>{group.name}</h2>
-            <Button
-              variant='contained'
-              onClick={() => {
-                setSelectedGroupA(group);
-                setSelectedGroupBId('');
-                setGroupMembership('standard');
-                fetchIncompleteMatches(group.groupId);
-                setDialogOpen(true);
-              }}
-            >
+        style={{width: '75%', display: 'table', float: 'right'}}>
+        <Stack spacing={2}>
+          {Array.from(allGroups).map((group) => (
+            <Card key={group.groupId} sx={{padding: '2rem'}}>
+              <h2>{group.name}</h2>
+              <Button
+                variant='contained'
+                onClick={() => {
+                  setSelectedGroupA(group);
+                  setSelectedGroupBId('');
+                  setGroupMembership('standard');
+                  fetchIncompleteMatches(group.groupId);
+                  setDialogOpen(true);
+                }}
+              >
               Match
-            </Button>
-          </Card>
-        ))}
-      </Stack>
+              </Button>
+            </Card>
+          ))}
+        </Stack>
       </div>
 
       <Dialog onClose={() => setDialogOpen(false)} open={dialogOpen}>
@@ -160,7 +183,8 @@ export default function ExplorePage() {
             </Stack>
           </div>}
           {Boolean(myGroups.length) && <div>
-            <p>What group do you want to match <b>{selectedGroupA.name}</b> with?</p>
+            <p>What group do you want to match
+              <b>{selectedGroupA.name}</b> with?</p>
             <br />
             <FormControl fullWidth>
               <InputLabel id="group-select-label">Group</InputLabel>
@@ -201,16 +225,16 @@ export default function ExplorePage() {
                 disabled={matchExists || groupMembership !== 'gold'}
                 style={superLikeButtonStyle}
                 onClick={() => {
-                  createMatch("true");
+                  createMatch('true');
                   setDialogOpen(false);
                 }}>
-                  <span>Super Like!</span>
+                <span>Super Like!</span>
               </Button>
               <Button
                 variant='contained'
                 disabled={matchExists || selectedGroupBId === '' }
                 onClick={() => {
-                  createMatch("false");
+                  createMatch('false');
                   setDialogOpen(false);
                 }}
               >
@@ -231,7 +255,8 @@ export default function ExplorePage() {
         autoHideDuration={4000}
         onClose={handleSnackbarClose}
       >
-        <Alert onClose={handleSnackbarClose} severity="success" sx={{width: '100%'}}>
+        <Alert onClose={handleSnackbarClose} severity="success"
+          sx={{width: '100%'}}>
           Match initiated!
         </Alert>
       </Snackbar>

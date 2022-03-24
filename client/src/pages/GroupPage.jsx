@@ -388,7 +388,7 @@ export default function GroupPage() {
         {interests.map((interest) => (
           <Chip sx={{margin: '0.5rem'}}
             color='primary' label={interest.interest}
-          key = {interest.interest}/>
+            key = {interest.interest}/>
         ))}
 
         <Box textAlign='center'>
