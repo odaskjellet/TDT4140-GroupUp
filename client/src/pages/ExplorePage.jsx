@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Container, Stack, Card, Grid, Button, Dialog, DialogTitle, Select, MenuItem, FormControl, InputLabel, Snackbar, Alert}
+import {Container, Stack, Card, Grid, Button, Dialog, DialogTitle, Select, MenuItem, FormControl, InputLabel, Snackbar, Alert, List, ListItem, ListItemText, Chip, Box}
   from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../contexts/User';
@@ -16,6 +16,10 @@ export default function ExplorePage() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [incompleteMatches, setIncompleteMatches] = useState([]);
   const [groupMembership, setGroupMembership] = useState('');
+  const [groupDialogOpen, setGroupDialogOpen] = useState(false);
+  const [groupInfo, setGroupInfo] = useState({});
+  const [interests, setInterests] = useState([]);
+  const [groupMembers, setGroupMembers] = useState([]);
 
   useEffect(async () => {
     // await fetchAllGroups();
@@ -93,6 +97,52 @@ export default function ExplorePage() {
     setSnackbarOpen(false);
   };
 
+  const fetchGroupInterest = async (groupId) => {
+    await fetch('/api/get-group-interests', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        groupId: groupId,
+      }),
+    }).then((res) => res.json()).
+    then((result) => {
+      setInterests(result);
+    });
+  };
+
+  const fetchGroupMembers = async (groupId) => {
+    await fetch('/api/get-group-members', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        groupId: groupId,
+      }),
+    }).then((res) => res.json()).
+        then((result) => {
+          setGroupMembers(result);
+        });
+  };
+
+  const fetchGroupInfo = async (groupId) => {
+    await fetch('/api/get-group', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({groupId: groupId}),
+    }).then((res) => res.json())
+        .then((result) => {
+          setGroupInfo(result);
+        });
+  };
+
+
+  const setAndOpenGroupDialog = (groupId) => {
+    fetchGroupInterest(groupId)
+    fetchGroupInfo(groupId);
+    fetchGroupMembers(groupId);
+    setGroupDialogOpen(true);
+    
+  }
+
   function filterCallback(data) {
     setAllGroups(data);
   }
@@ -137,10 +187,59 @@ export default function ExplorePage() {
             >
               Match
             </Button>
+            <Button   
+              onClick={() => setAndOpenGroupDialog(group.groupId)}
+            >
+              Group info
+            </Button>
           </Card>
         ))}
       </Stack>
       </div>
+
+      <Dialog style={{minHeight: '100%', maxHeight: '100%'}}    onClose={() => groupDialogOpen(false)} open={groupDialogOpen}>
+      <Container sx={{padding: '1rem'}} >
+        {/* <p>Image link: {groupInfo.image}</p> */}
+        <img src={groupInfo.image} alt="" style={{borderRadius: '15px' , display: 'block', marginLeft: 'auto', marginRight: 'auto', width: '80%',}}/>
+
+        <DialogTitle style={{textAlign: 'center',
+          position: 'relative',
+          textTransform: 'uppercase',}}>{groupInfo.name}</DialogTitle>
+
+        <p id={"group-admin"}>Admin: {groupInfo.admin} </p>
+        <p id={"group-location"}>Location: {groupInfo.location}</p>
+        <p id={"group-description"}>Description: {groupInfo.description} </p>
+
+        <p>Members: </p>
+        <List style={{maxHeight: 150, overflow: 'auto',}}>
+          {Array.from(groupMembers).map((user) =>
+            <ListItem
+              key={user.username}
+              value={user.username}>
+              <ListItemText primary={user.username}></ListItemText>
+          </ListItem>)
+        }
+      </List>
+        <p>Interests: </p>
+        {interests.map((interest) => (
+            <Chip sx={{margin: '0.5rem'}} color='primary' label={interest.interest}/>
+        ))}
+ 
+        <Box textAlign='center'>
+          <Button
+            sx={{margin: '1rem'}}
+            variant='outlined'
+            onClick={() => setGroupDialogOpen(false)}
+          >
+              Close
+          </Button>
+        </Box>
+      </Container>
+    </Dialog>
+
+
+
+
 
       <Dialog onClose={() => setDialogOpen(false)} open={dialogOpen}>
         <Container sx={{padding: '1rem'}}>
