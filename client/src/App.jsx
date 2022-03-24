@@ -14,6 +14,11 @@ import GroupPage from './pages/GroupPage';
 import ExplorePage from './pages/ExplorePage';
 import EditGroupPage from './pages/EditGroupPage';
 
+/**
+ * Main function that is the heart of the application.
+ * @return {JSX.Element}
+ * @constructor
+ */
 export default function App() {
   return (
     <ColorModeProvider>
@@ -31,7 +36,7 @@ export default function App() {
         </Routes>
       </UserProvider>
       <br />
-      <LightSwitch></LightSwitch>
+      <LightSwitch/>
     </ColorModeProvider>
   );
 }

@@ -9,8 +9,9 @@ import LoginForm from '../components/userInput/LoginForm';
  */
 function LoginPage() {
   return <Container>
-    <div style={{textAlign:'center'}}>
-      <img src="/logoGU.png" style={{margin: '0.5rem', maxHeight: '200px'}}/> 
+    <div style={{textAlign: 'center'}}>
+      <img src="/logoGU.png" style=
+        {{margin: '0.5rem', maxHeight: '200px'}} alt={'group up logo'}/>
       <h1 style={{textAlign: 'center', margin: '2rem'}}>Welcome to GroupUp</h1>
     </div>
     <LoginForm/>

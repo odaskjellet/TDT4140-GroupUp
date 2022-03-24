@@ -8,7 +8,7 @@ export const ColorModeContext = React.createContext(
 export const ColorModeProvider = ({children}) => {
   const storedMode = localStorage.getItem('colormode');
   const [mode, setMode] = React.useState(
-      storedMode == 'null' ? '' : storedMode);
+      storedMode === 'null' ? '' : storedMode);
   const colorMode = React.useMemo(
       () => ({
         toggleColorMode: () => {

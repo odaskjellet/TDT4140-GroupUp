@@ -1,7 +1,6 @@
 import React from 'react';
 import {render, screen} from '@testing-library/react';
 import {BrowserRouter} from 'react-router-dom';
-import {act} from 'react-dom/test-utils';
 import userEvent from '@testing-library/user-event';
 import {unmountComponentAtNode} from 'react-dom';
 import LoginForm from '../components/userInput/LoginForm';

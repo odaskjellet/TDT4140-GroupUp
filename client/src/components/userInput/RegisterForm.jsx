@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../../contexts/User';
-import {useContext} from 'react';
-import {Card, InputLabel, MenuItem, Select, TextField, FormControl, Stack, Button} from '@mui/material';
+import {Button, Card, FormControl, InputLabel, MenuItem, Select, Stack,
+  TextField} from '@mui/material';
 
 /**
  * Returns a register form wrapped in custom card div.
@@ -20,7 +20,7 @@ function RegisterForm() {
   } = useForm();
 
   const navigate = useNavigate();
-  const [userState, userDispatch] = useContext(UserContext);
+  const [userDispatch] = useContext(UserContext);
   const onSubmit = async (data) => {
     fetch('/api/insert-user', {
       method: 'PUT',
@@ -53,8 +53,11 @@ function RegisterForm() {
             fullWidth
             margin="normal"
             error={errors.username}
-            helperText={errors.username && 'A username can only include letters and cannot be longer than 40 characters.'}
-            {...register('username', {required: true, maxLength: 40, pattern: /[A-Za-z]+$/i})}
+            helperText={errors.username &&
+                'A username can only include letters' +
+                ' and cannot be longer than 40 characters.'}
+            {...register('username',
+                {required: true, maxLength: 40, pattern: /[A-Za-z]+$/i})}
           />
         </div>
 
@@ -68,7 +71,8 @@ function RegisterForm() {
             margin="normal"
             error={errors.email}
             helperText={errors.email && 'Email is required'}
-            {...register('email', {required: true, maxLength: 40})}
+            {...register('email',
+                {required: true, maxLength: 40})}
           />
         </div>
 
@@ -81,8 +85,10 @@ function RegisterForm() {
             fullWidth
             margin="normal"
             error={errors.age}
-            helperText={errors.age && 'You need to be between 18 and 99 years old.'}
-            {...register('age', {required: true, min: 18, max: 99})}
+            helperText={errors.age &&
+                'You need to be between 18 and 99 years old.'}
+            {...register('age',
+                {required: true, min: 18, max: 99})}
           />
         </div>
 
@@ -117,7 +123,8 @@ function RegisterForm() {
             margin="normal"
             error={errors.password}
             helperText={errors.password && 'A password is required.'}
-            {...register('password', {required: true, minLength: 6})}
+            {...register('password',
+                {required: true, minLength: 6})}
           />
         </div>
 
@@ -130,7 +137,8 @@ function RegisterForm() {
             fullWidth
             margin="normal"
             error={errors.passwordConfirmation}
-            helperText={errors.passwordConfirmation && 'Passwords should match!'}
+            helperText={errors.passwordConfirmation &&
+                'Passwords should match!'}
             {...register('passwordConfirmation', {
               required: true,
               validate: {

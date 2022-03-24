@@ -1,15 +1,21 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useForm, Controller} from 'react-hook-form';
-import {Card, Button, Stack, TextField, Alert, FormControl, InputLabel, Select, MenuItem, Chip, Autocomplete, createFilterOptions} from '@mui/material';
+import {Card, Button, Stack, TextField, Alert, FormControl,
+  InputLabel, Select, MenuItem, Autocomplete,
+  createFilterOptions} from '@mui/material';
 import {nanoid} from 'nanoid';
 import {UserContext} from '../../contexts/User';
 
-
+/**
+ * returns a form used to create groups.
+ * @return {JSX.Element}
+ * @constructor
+ */
 export default function CreateGroupForm() {
   const [badRequest, setBadRequest] = useState(false);
   const {register, formState: {errors}, handleSubmit, control} = useForm();
-  const [userState, _] = useContext(UserContext);
+  const [userState] = useContext(UserContext);
   const [interests, setInterests] = useState([]);
   const navigate = useNavigate();
   const filter = createFilterOptions();
@@ -28,7 +34,7 @@ export default function CreateGroupForm() {
         navigate('/group/' + data.groupId);
       } else {
         setBadRequest(true);
-        console.log('Could not register group!'); // TODO
+        console.log('Could not register group!');
         const errorMessage = await (res.json());
         console.log(errorMessage);
         alert(errorMessage);
@@ -115,38 +121,38 @@ export default function CreateGroupForm() {
           />
         </div>
 
-            <Autocomplete
-              multiple
-              freeSolo
-              autoSelect
-              options={interestOptions}
-              getOptionLabel={(option) => option}
-              onChange={(event, value) => {
-                setInterests(value);
-              }}
-              filterOptions={(options, params) => {
-                const filtered = filter(options, params);
+        <Autocomplete
+          multiple
+          freeSolo
+          autoSelect
+          options={interestOptions}
+          getOptionLabel={(option) => option}
+          onChange={(event, value) => {
+            setInterests(value);
+          }}
+          filterOptions={(options, params) => {
+            const filtered = filter(options, params);
 
-                if (params.inputValue !== "") {
-                  filtered.push(params.inputValue);
-                }
+            if (params.inputValue !== '') {
+              filtered.push(params.inputValue);
+            }
 
-                return filtered;
-              }}
-              style={{ width: 300 }}
-              renderInput={params => (
-                <TextField {...params}
-                  margin="normal"
-                  label="Interests"
-                  variant="outlined"
-                  fullWidth
-                />
-              )}
+            return filtered;
+          }}
+          style={{width: 300}}
+          renderInput={(params) => (
+            <TextField {...params}
+              margin="normal"
+              label="Interests"
+              variant="outlined"
+              fullWidth
             />
+          )}
+        />
 
 
-        <br></br>
-        
+        <br/>
+
         <Stack
           spacing={2}
           direction="row"
@@ -178,14 +184,14 @@ export default function CreateGroupForm() {
 }
 
 const interestOptions = [
-  "Astrology",
-  "Chess",
-  "Gaming",
-  "Skiing",
-  "Traveling",
-  "Sports",
-  "Food",
-  "Wine",
-  "Movies",
-  "Paragliding",
-]
+  'Astrology',
+  'Chess',
+  'Gaming',
+  'Skiing',
+  'Traveling',
+  'Sports',
+  'Food',
+  'Wine',
+  'Movies',
+  'Paragliding',
+];

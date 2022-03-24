@@ -247,10 +247,10 @@ test('get groups of size', () => {
   db.addUserToGroup(0, 'henrik');
 
   expect(db.getGroupsOfSize(1)).toEqual([
-    {groupId: 1}
+    {groupId: 1},
   ]);
   expect(db.getGroupsOfSize(2)).toEqual([
-    {groupId: 0}
+    {groupId: 0},
   ]);
 });
 
@@ -266,18 +266,18 @@ test('get groups of with average age between given age', () => {
   db.addUserToGroup(0, 'henrik');
 
   expect(db.getGroupsOfAge(23, 25)).toEqual([
-    {groupId: 1}
+    {groupId: 1},
   ]);
-  
+
 
   expect(db.getGroupsOfAge(20, 23)).toEqual([
     {
-    groupId: 1,
-    groupId: 0
-  }
+      groupId: 1,
+      groupId: 0,
+    },
   ]);
 });
- 
+
 
 test('get groups of size', () => {
   db.insertUser('henrik', 'henrik123', 20);
@@ -292,10 +292,10 @@ test('get groups of size', () => {
   db.addUserToGroup(0, 'henrik');
 
   expect(db.getGroupsOfSize(1)).toEqual([
-    {groupId: 1}
+    {groupId: 1},
   ]);
   expect(db.getGroupsOfSize(2)).toEqual([
-    {groupId: 0}
+    {groupId: 0},
   ]);
 });
 
@@ -311,18 +311,17 @@ test('get groups of with average age between given age', () => {
   db.addUserToGroup(0, 'henrik');
 
   expect(db.getGroupsOfAge(23, 25)).toEqual([
-    {groupId: 1}
+    {groupId: 1},
   ]);
-  
+
 
   expect(db.getGroupsOfAge(20, 23)).toEqual([
     {
-    groupId: 1,
-    groupId: 0
-  }
+      groupId: 1,
+      groupId: 0,
+    },
   ]);
 });
- 
 
 
 /*

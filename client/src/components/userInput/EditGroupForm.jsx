@@ -1,14 +1,19 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useForm, Controller} from 'react-hook-form';
-import {Card, Button, Stack, TextField, Alert, FormControl, InputLabel, Select, MenuItem, Chip, Autocomplete, createFilterOptions} from '@mui/material';
-import {UserContext} from '../../contexts/User';
+import {Card, Button, Stack, TextField, Alert,
+  FormControl, InputLabel, Select, MenuItem,
+  Autocomplete, createFilterOptions} from '@mui/material';
 
+/**
+ * Returns a form to edit existing groups. Group-id remains the same.
+ * @return {JSX.Element}
+ * @constructor
+ */
 export default function EditGroupForm() {
   const {groupId} = useParams();
   const [badRequest, setBadRequest] = useState(false);
   const {register, formState: {errors}, handleSubmit, control} = useForm();
-  const [userState, _] = useContext(UserContext);
   const [interests, setInterests] = useState([]);
   const navigate = useNavigate();
   const filter = createFilterOptions();
@@ -67,7 +72,7 @@ export default function EditGroupForm() {
   };
 
   if (loading) {
-    return <div>loading..</div>
+    return <div>loading..</div>;
   } else {
     return (
       <Card elevation={5}>
@@ -87,7 +92,7 @@ export default function EditGroupForm() {
               {...register('name', {required: true})}
             />
           </div>
-  
+
           <div>
             <TextField
               required
@@ -102,7 +107,7 @@ export default function EditGroupForm() {
               {...register('description', {required: true})}
             />
           </div>
-  
+
           <div>
             <FormControl fullWidth margin="normal" required>
               <InputLabel id="member-label">Membership</InputLabel>
@@ -122,8 +127,8 @@ export default function EditGroupForm() {
               />
             </FormControl>
           </div>
-  
-  
+
+
           <div>
             <TextField
               fullWidth
@@ -137,7 +142,7 @@ export default function EditGroupForm() {
               {...register('image', {required: false})}
             />
           </div>
-  
+
           <div>
             <TextField
               fullWidth
@@ -151,12 +156,12 @@ export default function EditGroupForm() {
               {...register('location', {required: true})}
             />
           </div>
-          
+
           <Autocomplete
             multiple
             freeSolo
             autoSelect
-            defaultValue={interests.map(e => e.interest)}
+            defaultValue={interests.map((e) => e.interest)}
             options={interestOptions}
             getOptionLabel={(option) => option}
             onChange={(event, value) => {
@@ -165,14 +170,14 @@ export default function EditGroupForm() {
             filterOptions={(options, params) => {
               const filtered = filter(options, params);
 
-              if (params.inputValue !== "") {
+              if (params.inputValue !== '') {
                 filtered.push(params.inputValue);
               }
 
               return filtered;
             }}
-            style={{ width: 300 }}
-            renderInput={params => (
+            style={{width: 300}}
+            renderInput={(params) => (
               <TextField {...params}
                 margin="normal"
                 label="Interests"
@@ -181,9 +186,9 @@ export default function EditGroupForm() {
               />
             )}
           />
-  
+
           <br></br>
-          
+
           <Stack
             spacing={2}
             direction="row"
@@ -208,7 +213,7 @@ export default function EditGroupForm() {
               Save
             </Button>
           </Stack>
-  
+
         </form>
       </Card>
     );
@@ -216,14 +221,14 @@ export default function EditGroupForm() {
 }
 
 const interestOptions = [
-  "Astrology",
-  "Chess",
-  "Gaming",
-  "Skiing",
-  "Traveling",
-  "Sports",
-  "Food",
-  "Wine",
-  "Movies",
-  "Paragliding",
-]
+  'Astrology',
+  'Chess',
+  'Gaming',
+  'Skiing',
+  'Traveling',
+  'Sports',
+  'Food',
+  'Wine',
+  'Movies',
+  'Paragliding',
+];

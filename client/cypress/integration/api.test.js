@@ -69,20 +69,21 @@ describe('api', () => {
     expect(result.status).to.equal(400);
   });
 
-  it('should not be able to insert a user with invalid email-address', async () => {
-    const requestOptions = {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        username: 'elskersurdeit',
-        password: 'glutenerfett',
-        age: '29',
-        email: 'v@g.com',
-      }),
-    };
-    const result = await fetch('/api/insert-user', requestOptions);
-    expect(result.status).to.equal(400);
-  });
+  it('should not be able to insert a user with invalid email-address',
+      async () => {
+        const requestOptions = {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            username: 'elskersurdeit',
+            password: 'glutenerfett',
+            age: '29',
+            email: 'v@g.com',
+          }),
+        };
+        const result = await fetch('/api/insert-user', requestOptions);
+        expect(result.status).to.equal(400);
+      });
 
   it('should be able to log in', async () => {
     const requestOptions = {
@@ -131,7 +132,8 @@ describe('api', () => {
       description: 'En fin gruppe.',
       location: 'Oslo',
       membership: 'standard',
-      image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/' +
+          'Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg',
     };
     const requestOptions = {
       method: 'PUT',
@@ -176,7 +178,8 @@ describe('api', () => {
         admin: 'henrik',
         description: 'En fin gruppe.',
         location: 'Oslo',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/' +
+            'Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg',
       }),
     });
 
@@ -237,7 +240,7 @@ describe('api', () => {
       body: JSON.stringify({
         groupId: 'g1',
       }),
-    }).then(res => res.json());
+    }).then((res) => res.json());
 
     expect(result).to.deep.equal([{interest: 'chess'}]);
 
@@ -256,10 +259,9 @@ describe('api', () => {
       body: JSON.stringify({
         groupId: 'g1',
       }),
-    }).then(res => res.json());
+    }).then((res) => res.json());
 
     expect(result2).to.deep.equal([]);
-
   });
 });
 
