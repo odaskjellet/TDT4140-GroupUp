@@ -84,93 +84,109 @@ function FilterMenu(props) {
     })
   };
 
-  if (locationOptions.length == 0) {
-    return <div>Loading..</div>
-  } else {
-    return (
-      <div className={classes.FilterMenu}>
-        <Card style={{padding: '1rem'}}>
+  const ageMarks = [
+    {value: 18, label: '18'},
+    {value: 40, label: '40'},
+    {value: 60, label: '60'},
+    {value: 80, label: '80'},
+    {value: 99, label: '99'},
+  ];
 
-          {/* Interests */}
-          
-          <FormControl sx={{ m: 1, width: 200 }}>
-            <InputLabel id="interest-checkbox-label">Interests</InputLabel>
-            <Select
-            labelId="interest-checkbox-label"
-            id="interest-checkbox"
-            multiple
-            value={interests}
-            onChange={handleInterestChange}
-            input={<OutlinedInput label="Interests" />}
-            renderValue={(selected) => selected.join(', ')}
-            MenuProps={MenuProps}
-            >
-            {interestOptions.map((name) => (
-              <MenuItem key={name} value={name}>
-              <Checkbox checked={interests.indexOf(name) > -1} />
-              <ListItemText primary={name} />
-              </MenuItem>
-            ))}
-            </Select>
-          </FormControl>
-          
-          {/* Location */}
+  const sizeMarks = [
+    {value: 1, label: '1'},
+    {value: 10, label: '10'},
+    {value: 20, label: '20'},
+    {value: 30, label: '30'},
+    {value: 40, label: '40'},
+    {value: 50, label: '50'},
+  ];
 
-          <FormControl sx={{ m: 1, width: 200 }}>
-            <InputLabel id="location-checkbox-label">Locations</InputLabel>
-            <Select
-            labelId="location-checkbox-label"
-            id="location-checkbox"
-            multiple
-            value={locations}
-            onChange={handleLocationChange}
-            input={<OutlinedInput label="Locations" />}
-            renderValue={(selected) => selected.join(', ')}
-            MenuProps={MenuProps}
-            >
-            {locationOptions.map((location) => (
-              <MenuItem key={location} value={location}>
-              <Checkbox checked={locations.indexOf(location) > -1} />
-              <ListItemText primary={location} />
-              </MenuItem>
-            ))}
-            </Select>
-          </FormControl>
-          
-          {/* Age */}
+  return (
+    <div className={classes.FilterMenu}>
+      <Card style={{padding: '1rem'}}>
 
-          <h3>Filter on age</h3>
-           <Stack alignItems="center">
-            <Slider
-              onChange={(e, data) => { setAge(data) }}
-              onChangeCommitted={updateAgeRange}
-              value={age}
-              step={1}
-              min={18}
-              max={99}
-              valueLabelDisplay="auto"
-              sx={{ width: 150 }}
-            />
-          </Stack>
-          
-          {/* Group size */}
+        {/* Interests */}
+        
+        <FormControl sx={{ m: 1, width: 200 }}>
+          <InputLabel id="interest-checkbox-label">Interests</InputLabel>
+          <Select
+          labelId="interest-checkbox-label"
+          id="interest-checkbox"
+          multiple
+          value={interests}
+          onChange={handleInterestChange}
+          input={<OutlinedInput label="Interests" />}
+          renderValue={(selected) => selected.join(', ')}
+          MenuProps={MenuProps}
+          >
+          {interestOptions.map((name) => (
+            <MenuItem key={name} value={name}>
+            <Checkbox checked={interests.indexOf(name) > -1} />
+            <ListItemText primary={name} />
+            </MenuItem>
+          ))}
+          </Select>
+        </FormControl>
+        
+        {/* Location */}
 
-          <h3>Group size</h3>
-           <Stack alignItems="center">
-            <Slider
-              onChange={(e, data) => { setSize(data) }}
-              onChangeCommitted={updateSizeRange}
-              value={size}
-              step={1}
-              min={1}
-              max={50}
-              valueLabelDisplay="auto"
-              sx={{ width: 150 }}
-            />
-          </Stack>
-        </Card>
+        <FormControl sx={{ m: 1, width: 200 }}>
+          <InputLabel id="location-checkbox-label">Locations</InputLabel>
+          <Select
+          labelId="location-checkbox-label"
+          id="location-checkbox"
+          multiple
+          value={locations}
+          onChange={handleLocationChange}
+          input={<OutlinedInput label="Locations" />}
+          renderValue={(selected) => selected.join(', ')}
+          MenuProps={MenuProps}
+          >
+          {locationOptions.map((location) => (
+            <MenuItem key={location} value={location}>
+            <Checkbox checked={locations.indexOf(location) > -1} />
+            <ListItemText primary={location} />
+            </MenuItem>
+          ))}
+          </Select>
+        </FormControl>
+        
+        {/* Age */}
+
+        <h3>Filter on age</h3>
+          <Stack alignItems="center">
+          <Slider
+            onChange={(e, data) => { setAge(data) }}
+            onChangeCommitted={updateAgeRange}
+            value={age}
+            step={1}
+            min={18}
+            max={99}
+            marks={ageMarks}
+            valueLabelDisplay="auto"
+            sx={{ width: 150 }}
+          />
+        </Stack>
+        
+        {/* Group size */}
+
+        <h3>Group size</h3>
+          <Stack alignItems="center">
+          <Slider
+            onChange={(e, data) => { setSize(data) }}
+            onChangeCommitted={updateSizeRange}
+            value={size}
+            step={1}
+            min={1}
+            max={50}
+            marks={sizeMarks}
+            valueLabelDisplay="auto"
+            sx={{ width: 150 }}
+          />
+        </Stack>
+      </Card>
     </div>
-  )}
+  )
 }
 
 export default FilterMenu;
