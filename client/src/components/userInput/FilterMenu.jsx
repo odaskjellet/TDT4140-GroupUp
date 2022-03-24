@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, InputLabel, MenuItem, Select, TextField, FormControl, Stack, Checkbox, OutlinedInput, ListItemText, Slider } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import classes from './FilterMenu.module.css';
 
 function FilterMenu(props) {
-  const [locations, setLocations] = React.useState([]);
-  const [interests, setInterests] = React.useState([]);
-  const [size, setSize] = React.useState([1,50]);
-  const [age, setAge] = React.useState([18, 99]);
-  const [locationOptions, setLocationOptions] = React.useState([]);
-  const [interestOptions, setInterestOptions] = React.useState([])
+  const [locations, setLocations] = useState([]);
+  const [interests, setInterests] = useState([]);
+  const [size, setSize] = useState([1, 50]);
+  const [age, setAge] = useState([18, 99]);
+  const [locationOptions, setLocationOptions] = useState([]);
+  const [interestOptions, setInterestOptions] = useState([])
   
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -26,14 +26,16 @@ function FilterMenu(props) {
     await fetchLocations();
     await fetchInterests();
     fetchFilteredGroups();
-  }, [locations, interests, size, age])
+  }, [locations, interests])
 
   const updateAgeRange = (e, data) => {
       setAge(data);
+      fetchFilteredGroups();
   }
 
   const updateSizeRange = (e, data) => {
       setSize(data);
+      fetchFilteredGroups();
   }
 
   const handleInterestChange = (event) => {
@@ -87,7 +89,7 @@ function FilterMenu(props) {
   } else {
     return (
       <div className={classes.FilterMenu}>
-        <Card>
+        <Card style={{padding: '1rem'}}>
 
           {/* Interests */}
           
@@ -140,12 +142,13 @@ function FilterMenu(props) {
           <h3>Filter on age</h3>
            <Stack alignItems="center">
             <Slider
+              onChange={(e, data) => { setAge(data) }}
               onChangeCommitted={updateAgeRange}
               value={age}
               step={1}
               min={18}
               max={99}
-              valueLabelDisplay="on"
+              valueLabelDisplay="auto"
               sx={{ width: 150 }}
             />
           </Stack>
@@ -155,12 +158,13 @@ function FilterMenu(props) {
           <h3>Group size</h3>
            <Stack alignItems="center">
             <Slider
+              onChange={(e, data) => { setSize(data) }}
               onChangeCommitted={updateSizeRange}
               value={size}
               step={1}
               min={1}
               max={50}
-              valueLabelDisplay="on"
+              valueLabelDisplay="auto"
               sx={{ width: 150 }}
             />
           </Stack>
