@@ -71,6 +71,8 @@ describe('Create group', () => {
     cy.contains('myUsername');
     cy.url().should('include', '/group/');
     cy.contains(/Add members/i).click();
+    cy.get('.MuiButton-root').should('have.length', 5);
+    // ^ Makes it wait for invite button to appear
     cy.get('.MuiButton-root').contains(/Invite/i).should('have.length', 1);
     cy.get('.MuiButton-root').contains(/Invite/i).click();
     cy.get('.MuiButton-root').contains(/Invite/i).should('be.disabled');

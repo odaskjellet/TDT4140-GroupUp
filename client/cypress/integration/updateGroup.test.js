@@ -11,7 +11,7 @@ describe('Update group', () => {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        username: 'myUsername',
+        username: 'henrik',
         password: 'password123',
         age: '20',
         email: 'user@mail.com',

@@ -68,14 +68,14 @@ describe('Matching Page', () => {
     cy.findByText('GruppeB');
     cy.findByText('GruppeC');
     cy.findByText('GruppeB').parent().findByText('Match').click();
-    cy.get('.MuiSelect-select').click();
+    cy.get('#group-select').click();
     cy.get('.MuiList-root').findByText('GruppeA').click();
     cy.get('.MuiButton-root').contains(/Confirm/i).click();
 
     cy.contains('Match initiated!');
 
     cy.findByText('GruppeB').parent().findByText('Match').click();
-    cy.get('.MuiSelect-select').click();
+    cy.get('#group-select').click();
     cy.get('.MuiList-root').findByText('GruppeA').click();
     cy.get('.MuiButton-root').contains(/Match already initiated/i)
         .parent().should('be.disabled');
@@ -88,7 +88,7 @@ describe('Matching Page', () => {
 
     cy.visit('/explore');
     cy.findByText('GruppeA').parent().findByText('Match').click();
-    cy.get('.MuiSelect-select').click();
+    cy.get('#group-select').click();
     cy.get('.MuiList-root').findByText('GruppeB').click();
     cy.findByText('Confirm').click();
     cy.contains('Match initiated!');
