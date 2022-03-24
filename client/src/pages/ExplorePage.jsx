@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
-  Alert,
+  Alert, Box,
   Button,
-  Card,
+  Card, CardMedia,
   Container,
   Dialog,
   DialogTitle,
@@ -146,20 +146,37 @@ export default function ExplorePage() {
         style={{width: '75%', display: 'table', float: 'right'}}>
         <Stack spacing={2}>
           {Array.from(allGroups).map((group) => (
-            <Card key={group.groupId} sx={{padding: '2rem'}}>
-              <h2>{group.name}</h2>
-              <Button
-                variant='contained'
-                onClick={() => {
-                  setSelectedGroupA(group);
-                  setSelectedGroupBId('');
-                  setGroupMembership('standard');
-                  fetchIncompleteMatches(group.groupId);
-                  setDialogOpen(true);
-                }}
-              >
-              Match
-              </Button>
+            <Card sx = {{display: 'flex'}} key={group.groupId}>
+              <Box sx={{padding: '2rem'}}>
+                <h2>{group.name}</h2>
+                <Button
+                  variant='contained'
+                  onClick={() => {
+                    setSelectedGroupA(group);
+                    setSelectedGroupBId('');
+                    setGroupMembership('standard');
+                    fetchIncompleteMatches(group.groupId);
+                    setDialogOpen(true);
+                  }}
+                >
+                            Match
+                </Button>
+                <Button
+                  onClick={() => setAndOpenGroupDialog(group.groupId)}
+                >
+                            Group info
+                </Button>
+
+              </Box>
+
+              <CardMedia
+                component="img"
+                sx={{width: 151}}
+                image={group.image}
+                alt="Live from space album cover"
+                style={{marginLeft: 'auto'}}
+              />
+
             </Card>
           ))}
         </Stack>
