@@ -297,6 +297,7 @@ export default function ExplorePage() {
             <FormControl fullWidth>
               <InputLabel id="group-select-label">Group</InputLabel>
               <Select
+                id={'group-select'}
                 labelId='group-select-label'
                 label='Group'
                 value={selectedGroupBId}

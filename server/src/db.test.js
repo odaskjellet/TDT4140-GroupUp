@@ -322,7 +322,69 @@ test('get groups of with average age between given age', () => {
   }
   ]);
 });
- 
+
+test('get groups that have superliked my group', () => {
+  db.insertUser('henrik', 'henrik123', 20);
+  db.insertUser('per', 'passord123', 24);
+  db.insertGroup(0, 'A');
+  db.insertGroup(1, 'B');
+  db.addUserToGroup(0, 'henrik');
+  db.addUserToGroup(1, 'per');
+  db.matchGroups(0, 1, 'true');
+  expect(db.getSuperLikes(0)). toEqual([
+    {
+      groupId: 1,
+      name: 'B'
+    }
+  ]);
+});
+
+test('dowgrading a superlike to a regular like', () => {
+  db.insertUser('henrik', 'henrik123', 20);
+  db.insertUser('per', 'passord123', 24);
+  db.insertGroup(0, 'A');
+  db.insertGroup(1, 'B');
+  db.addUserToGroup(0, 'henrik');
+  db.addUserToGroup(1, 'per');
+  db.matchGroups(0, 1, 'true');
+  expect(db.getSuperLikes(0)). toEqual([
+    {
+      groupId: 1,
+      name: 'B'
+    }
+  ]);
+  db.downgradeSuperlike(0, 1);
+  expect(db.getSuperLikes(0)).toEqual([]);
+});
+
+test('invite new users to group', () => {
+  db.insertUser('henrik', 'henrik123', 20);
+  db.insertUser('per', 'passord123', 24);
+  db.insertGroup(0, 'A');
+  db.addUserToGroup(0, 'henrik');
+  db.inviteUserToGroup('per', 0);
+  expect(db.getGroupInvitations(0)).toEqual([
+    {
+      username: 'per'
+    }
+  ]);
+  expect(db.getUserInvitations('per')).toEqual([
+    {
+      groupId: 0,
+      name: 'A'
+    }
+  ]);
+  db.answerGroupInvitation('per', true, 0);
+  expect(db.getGroupMembers(0)).toEqual([
+    {
+      username: 'henrik',
+    },
+    {
+      username: 'per', 
+    }
+    
+  ])
+})
 
 
 /*
