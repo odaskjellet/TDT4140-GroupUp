@@ -1,5 +1,25 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Container, Stack, Card, Grid, Button, Dialog, DialogTitle, Select, MenuItem, FormControl, InputLabel, Snackbar, Alert, List, ListItem, ListItemText, Chip, Box}
+import {
+  Container,
+  Stack,
+  Card,
+  Grid,
+  Button,
+  Dialog,
+  DialogTitle,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Snackbar,
+  Alert,
+  List,
+  ListItem,
+  ListItemText,
+  Chip,
+  Box,
+  CardMedia
+}
   from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../contexts/User';
@@ -173,26 +193,39 @@ export default function ExplorePage() {
       style={{width:"75%",display:"table", float:"right"}}>
       <Stack spacing={2}>
         {Array.from(allGroups).map((group) => (
-          <Card key={group.groupId} sx={{padding: '2rem'}}>
-            <h2>{group.name}</h2>
-            <Button
-              variant='contained'
-              onClick={() => {
-                setSelectedGroupA(group);
-                setSelectedGroupBId('');
-                setGroupMembership('standard');
-                fetchIncompleteMatches(group.groupId);
-                setDialogOpen(true);
-              }}
-            >
-              Match
-            </Button>
-            <Button   
-              onClick={() => setAndOpenGroupDialog(group.groupId)}
-            >
-              Group info
-            </Button>
+            <Card sx = {{display: 'flex'}} key={group.groupId}>
+            <Box sx={{padding: '2rem'}}>
+                <h2>{group.name}</h2>
+                <Button
+                    variant='contained'
+                    onClick={() => {
+                      setSelectedGroupA(group);
+                      setSelectedGroupBId('');
+                      setGroupMembership('standard');
+                      fetchIncompleteMatches(group.groupId);
+                      setDialogOpen(true);
+                    }}
+                >
+                  Match
+                </Button>
+                <Button
+                    onClick={() => setAndOpenGroupDialog(group.groupId)}
+                >
+                  Group info
+                </Button>
+
+            </Box>
+
+            <CardMedia
+                component="img"
+                sx={{ width: 151 }}
+                image={group.image}
+                alt="Live from space album cover"
+                style={{marginLeft: 'auto'}}
+            />
+
           </Card>
+
         ))}
       </Stack>
       </div>
