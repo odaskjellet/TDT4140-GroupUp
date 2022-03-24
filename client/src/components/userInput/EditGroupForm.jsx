@@ -41,7 +41,7 @@ export default function EditGroupForm() {
       }),
     }).then((res) => res.json()).
         then((result) => {
-          setInterests(result);
+          setInterests(result.map(e => e.interest));
         });
   };
 
@@ -156,7 +156,7 @@ export default function EditGroupForm() {
             multiple
             freeSolo
             autoSelect
-            defaultValue={interests.map(e => e.interest)}
+            defaultValue={interests}
             options={interestOptions}
             getOptionLabel={(option) => option}
             onChange={(event, value) => {

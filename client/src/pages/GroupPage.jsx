@@ -216,7 +216,6 @@ export default function GroupPage() {
       }),
     }).then((res) => res.json()).then((result) => {
       setContactInfo(result);
-      console.log(result);
     })
   }
 
