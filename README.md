@@ -1,12 +1,10 @@
-
 <div align="center">
-    <img src="docs/images/logo.png"
+    <img src="docs/images/logoGU.png"
         width="250"
         alt="Logo." algin="center"/>
 </div>
 
 # TDT4140 - GroupUp
-
 
 ## Get started
 
@@ -14,11 +12,10 @@
 2. Run `npm run install:all`
 3. Run `npm run start`
 
-
 ## Commands
 
 | command                    | description                                                  |
-|----------------------------|--------------------------------------------------------------|
+| -------------------------- | ------------------------------------------------------------ |
 | `npm run install:all`      | Installs node modules in root, server and client directories |
 | `npm run start`            | Starts both the server, and the client                       |
 | `npm run test`             | Runs server and client unit tests (Jest) and shows coverage  |
@@ -27,6 +24,6 @@
 | `npm run lint:fix`         | Analyses and fixes code style (ESLint)                       |
 
 ## Documentation
+
 - [Project structure](docs/project_structure.md)
 - [Database](docs/database.md)
-
