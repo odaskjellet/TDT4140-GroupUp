@@ -1,14 +1,7 @@
-import {Button, Card, Container, Grid, Dialog, DialogTitle,
-  Box, List, ListItem, ListItemText, Snackbar,
-  Alert, Chip} from '@mui/material';
+import {Button, Card, Container, Grid, Dialog, DialogTitle, Box, List, ListItem, ListItemText, Snackbar, Alert, Chip} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 
-/**
- * returns the home page to a group.
- * @return {JSX.Element}
- * @constructor
- */
 export default function GroupPage() {
   const {groupId} = useParams();
   const [groupInfo, setGroupInfo] = useState({});
@@ -48,7 +41,7 @@ export default function GroupPage() {
     }).then((res) => res.json())
         .then((result) => {
           setGroupInfo(result);
-          fetchAdminEmail(result.admin);
+          fetchAdminEmail(result.admin)
         });
   };
   const fetchMatchInfo = async (groupId) => {
@@ -59,7 +52,7 @@ export default function GroupPage() {
     }).then((res) => res.json())
         .then((result) => {
           setMatchInfo(result);
-          fetchMatchAdminEmail(result.admin);
+          fetchMatchAdminEmail(result.admin)
         });
   };
   const fetchMatches = async () => {
@@ -86,13 +79,13 @@ export default function GroupPage() {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        groupId: groupId,
+        groupId: groupId
       }),
-    }).then((res) => res.json())
-        .then((result) => {
-          setGroupSuperlikes(result);
-        });
-  };
+    }).then(res => res.json())
+    .then(result => {
+      setGroupSuperlikes(result);
+    });
+  }
 
   const sendInvite = async (username) => {
     await fetch('/api/invite-user-to-group', {
@@ -160,13 +153,13 @@ export default function GroupPage() {
       }),
     }).then((res) => {
       if (res.ok) {
-        console.log('Declined!');
+        console.log('Declined!')
         fetchSuperLikes();
       } else {
-        console.log('Could not decline!');
+        console.log('Could not decline!')
       }
     });
-  };
+  }
 
   const acceptMatch = async (primaryId) => {
     fetch('/api/match-groups', {
@@ -179,11 +172,11 @@ export default function GroupPage() {
       }),
     }).then((res) => {
       if (res.ok) {
-        console.log('Accepted superlike match!');
+        console.log('Accepted superlike match!')
         fetchMatches();
         fetchSuperLikes();
       } else {
-        console.log('Failed to accept superlike match!');
+        console.log('Failed to accept superlike match!')
       }
     });
   };
@@ -210,12 +203,12 @@ export default function GroupPage() {
         groupId: groupId,
       }),
     }).then((res) => res.json()).
-        then((result) => {
-          setInterests(result);
-        });
+    then((result) => {
+      setInterests(result);
+    });
   };
 
-  const fetchAdminEmail = async (user) => {
+  const fetchAdminEmail = async(user) => {
     await fetch('/api/get-user', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
@@ -223,11 +216,10 @@ export default function GroupPage() {
       }),
     }).then((res) => res.json()).then((result) => {
       setContactInfo(result);
-      console.log(result);
-    });
-  };
+    })
+  }
 
-  const fetchMatchAdminEmail = async (user) => {
+  const fetchMatchAdminEmail = async(user) => {
     await fetch('/api/get-user', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
@@ -235,8 +227,8 @@ export default function GroupPage() {
       }),
     }).then((res) => res.json()).then((result) => {
       setMatchContactInfo(result);
-    });
-  };
+    })
+  }
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -246,11 +238,12 @@ export default function GroupPage() {
   };
 
   const setAndOpenGroupDialog = (groupId) => {
-    fetchMatchGroupInterest(groupId);
+    fetchMatchGroupInterest(groupId)
     fetchMatchInfo(groupId);
     fetchMatchMembers(groupId);
     setGroupDialogOpen(true);
-  };
+    
+  }
 
 
   const styles = {
@@ -298,15 +291,12 @@ export default function GroupPage() {
     </Button>
 
     <br/>
-
+    
     {/* <p>Image link: {groupInfo.image}</p> */}
-    <img src={groupInfo.image} alt="" style=
-      {{maxWidth: '500px', maxHeight: '500px', borderRadius: '15px'}}/>
+    <img src={groupInfo.image} alt="" style={{maxWidth: '500px', maxHeight: '500px', borderRadius: '15px'}}/>
     <h1>Welcome to {groupInfo.name}</h1>
     {interests.map((interest) => (
-      <Chip label={interest.interest} sx=
-        {{margin: '0.5rem'}} color='primary'
-      key = {interest.interest}/>
+      <Chip label={interest.interest} sx={{margin: '0.5rem'}} color='primary'/>
     ))}
     {/* <p>ID: {groupId} </p> */}
     <p>Admin: {groupInfo.admin} </p>
@@ -314,6 +304,7 @@ export default function GroupPage() {
     <p>Location: {groupInfo.location}</p>
     <p>Description: {groupInfo.description} </p>
     <br />
+
 
 
     <h2>Matches</h2>
@@ -328,7 +319,7 @@ export default function GroupPage() {
             <Card sx={{padding: '1rem'}} elevation={3}>
               <h1>{match.name}</h1>
               <Button
-
+              
                 onClick={() => setAndOpenGroupDialog(match.groupId)}
               >
                 Visit
@@ -356,41 +347,35 @@ export default function GroupPage() {
       </Grid>
     </Card>
 
-    <Dialog style={{minHeight: '100%', maxHeight: '100%'}}
-      onClose={() => setGroupDialogOpen(false)}
-      open={groupDialogOpen}>
+    <Dialog style={{minHeight: '100%', maxHeight: '100%'}}    onClose={() => groupDialogOpen(false)} open={groupDialogOpen}>
       <Container sx={{padding: '1rem'}} >
         {/* <p>Image link: {groupInfo.image}</p> */}
-        <img src={matchInfo.image} alt="" style=
-          {{borderRadius: '15px', display: 'block',
-            marginLeft: 'auto', marginRight: 'auto', width: '80%'}}/>
+        <img src={matchInfo.image} alt="" style={{borderRadius: '15px' , display: 'block', marginLeft: 'auto', marginRight: 'auto', width: '80%',}}/>
 
         <DialogTitle style={{textAlign: 'center',
           position: 'relative',
-          textTransform: 'uppercase'}}>{matchInfo.name}</DialogTitle>
+          textTransform: 'uppercase',}}>{matchInfo.name}</DialogTitle>
 
-        <p id={'group-admin'}>Admin: {matchInfo.admin} </p>
-        <p id={'group-contactinfo'}>Contact: {matchContactInfo.email}</p>
-        <p id={'group-location'}>Location: {matchInfo.location}</p>
-        <p id={'group-description'}>Description: {matchInfo.description} </p>
+        <p id={"group-admin"}>Admin: {matchInfo.admin} </p>
+        <p id={"group-contactinfo"}>Contact: {matchContactInfo.email}</p>
+        <p id={"group-location"}>Location: {matchInfo.location}</p>
+        <p id={"group-description"}>Description: {matchInfo.description} </p>
 
         <p>Members: </p>
-        <List style={{maxHeight: 150, overflow: 'auto'}}>
+        <List style={{maxHeight: 150, overflow: 'auto',}}>
           {Array.from(matchMembers).map((user) =>
             <ListItem
               key={user.username}
               value={user.username}>
-              <ListItemText primary={user.username}/>
-            </ListItem>)
-          }
-        </List>
+              <ListItemText primary={user.username}></ListItemText>
+          </ListItem>)
+        }
+      </List>
         <p>Interests: </p>
         {interests.map((interest) => (
-          <Chip sx={{margin: '0.5rem'}}
-            color='primary' label={interest.interest}
-            key = {interest.interest}/>
+            <Chip sx={{margin: '0.5rem'}} color='primary' label={interest.interest}/>
         ))}
-
+ 
         <Box textAlign='center'>
           <Button
             sx={{margin: '1rem'}}
@@ -410,7 +395,7 @@ export default function GroupPage() {
           style={{textAlign: 'center'}}
           key={user.username}
           value={user.username}>
-          <ListItemText primary={user.username}/>
+          <ListItemText primary={user.username}></ListItemText>
         </ListItem>)
       }
     </List>
@@ -423,17 +408,16 @@ export default function GroupPage() {
       Add Members
     </Button>
 
-    <Dialog onClose={() => setInviteDialogOpen(false)}
-      open={inviteDialogOpen}>
+    <Dialog onClose={() => inviteDialogOpen(false)} open={inviteDialogOpen}>
       <Container sx={{padding: '1rem'}} >
         <DialogTitle>Add new member</DialogTitle>
-        <p>Who do you want to invite?</p>
+        <p textalign='center'>Who do you want to invite?</p>
         <br />
 
         {Boolean(!allUsers.some((user) => (
           !groupMembers.some((e) => e.username === user.username)
         ))) && <div>
-          <p>There is no-one to invite!</p>
+          <p>There are noone to invite!</p>
         </div>}
         {Boolean(groupMembers.length) &&
           <List style={{maxHeight: 150, overflow: 'auto'}}>
@@ -443,7 +427,7 @@ export default function GroupPage() {
               <ListItem
                 key={user.username}
                 value={user.username}>
-                <ListItemText primary={user.username}/>
+                <ListItemText primary={user.username}></ListItemText>
                 <Button
                   variant='contained'
                   disabled=
@@ -457,7 +441,7 @@ export default function GroupPage() {
             }
           </List>
         }
-
+        
         <Box textAlign='center'>
           <Button
             variant='outlined'
@@ -474,8 +458,7 @@ export default function GroupPage() {
       autoHideDuration={4000}
       onClose={handleSnackbarClose}
     >
-      <Alert onClose={handleSnackbarClose}
-        severity="success" sx={{width: '100%'}}>
+      <Alert onClose={handleSnackbarClose} severity="success" sx={{width: '100%'}}>
           Invite sent!
       </Alert>
     </Snackbar>

@@ -1,19 +1,16 @@
-
 <div align="center">
-    <img src="docs/images/logo.png"
+    <img src="docs/images/logoGU.png"
         width="250"
         alt="Logo." algin="center"/>
 </div>
 
 # TDT4140 - GroupUp
 
-
 ## Get started
 
 1. Clone the project, or pull the latest changes
 2. Run `npm run install:all`
 3. Run `npm run start`
-
 
 ## Commands
 
@@ -27,6 +24,6 @@
 | `npm run lint:fix`         | Analyses and fixes code style (ESLint)                       |
 
 ## Documentation
+
 - [Project structure](docs/project_structure.md)
 - [Database](docs/database.md)
-

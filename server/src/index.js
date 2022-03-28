@@ -164,10 +164,9 @@ server.put('/api/get-group-invitations', (request, result) => {
 });
 
 server.put('/api/update-group-attributes', (request, result) => {
-  db.updateGroupAttributes(request.body.groupId, request.body.name
-      , request.body.description, request.body.location, request.body.image);
+  db.updateGroupAttributes(request.body.groupId, request.body.name, request.body.description, request.body.location, request.body.image);
+
   const interests = db.getGroupInterests(request.body.groupId);
-  console.log(interests);
   interests.forEach((interest)=> {
     db.deleteGroupInterest(request.body.groupId, interest.interest);
   });
@@ -175,7 +174,7 @@ server.put('/api/update-group-attributes', (request, result) => {
   if (request.body.interests) {
     request.body.interests.forEach((interest) => {
       db.addGroupInterest(request.body.groupId, interest);
-    });
+    })
   }
   result.send('OK');
 });
