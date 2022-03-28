@@ -76,7 +76,9 @@ export default function EditGroupForm() {
     return (
       <Card elevation={5}>
         <form style={{padding: '2rem'}} onSubmit={handleSubmit(onSubmit)}>
+
           <h2>Edit group</h2>
+
           <div>
             <TextField
               required
@@ -106,27 +108,6 @@ export default function EditGroupForm() {
               {...register('description', {required: true})}
             />
           </div>
-
-          <div>
-            <FormControl fullWidth margin="normal" required>
-              <InputLabel id="member-label">Membership</InputLabel>
-              <Controller
-                name='membership'
-                inputProps={{'data-testid': 'membership-option'}}
-                labelId="membership-label"
-                label='membership'
-                defaultValue={groupInfo.membership}
-                control={control}
-                render={({field}) => (
-                  <Select {...field}>
-                    <MenuItem value={'standard'}>Standard</MenuItem>
-                    <MenuItem value={'Gold'}>Gold</MenuItem>
-                  </Select>
-                )}
-              />
-            </FormControl>
-          </div>
-
 
           <div>
             <TextField
