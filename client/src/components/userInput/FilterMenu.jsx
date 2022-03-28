@@ -15,6 +15,7 @@ import classes from './FilterMenu.module.css';
 
 /**
  * Filters stuff
+ // eslint-disable-next-line valid-jsdoc
  * @param props
  * @return {JSX.Element}
  * @constructor
@@ -96,6 +97,7 @@ function FilterMenu(props) {
       }),
     }).then((res) => res.json())
         .then((result) => {
+          // eslint-disable-next-line react/prop-types
           props.filterCallback(result);
         });
   };

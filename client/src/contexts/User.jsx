@@ -15,6 +15,7 @@ export const UserContext = React.createContext({
   dispatch: () => null,
 });
 
+// eslint-disable-next-line react/prop-types
 export const UserProvider = ({children}) => {
   const reducer = (state, action) => {
     let newState;

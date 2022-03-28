@@ -164,7 +164,8 @@ server.put('/api/get-group-invitations', (request, result) => {
 });
 
 server.put('/api/update-group-attributes', (request, result) => {
-  db.updateGroupAttributes(request.body.groupId, request.body.name, request.body.description, request.body.location, request.body.image);
+  db.updateGroupAttributes(request.body.groupId, request.body.name
+      , request.body.description, request.body.location, request.body.image);
 
   const interests = db.getGroupInterests(request.body.groupId);
   interests.forEach((interest)=> {
@@ -174,7 +175,7 @@ server.put('/api/update-group-attributes', (request, result) => {
   if (request.body.interests) {
     request.body.interests.forEach((interest) => {
       db.addGroupInterest(request.body.groupId, interest);
-    })
+    });
   }
   result.send('OK');
 });
@@ -315,6 +316,7 @@ function validEmail(email) {
 
 /**
  * returns a list of errors.
+ // eslint-disable-next-line valid-jsdoc
  * @param registrationErrors
  * @return {{error: *}}
  */
@@ -339,6 +341,7 @@ function clearErrors(registrationErrors) {
 
 /**
  * Filters groups based on data.
+ // eslint-disable-next-line valid-jsdoc
  * @param data
  * @return {*} a new array
  */

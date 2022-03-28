@@ -13,6 +13,7 @@ function LoginForm() {
   const [badLogin, setBadLogin] = useState(false);
   const {register, formState: {errors}, handleSubmit} = useForm();
   const navigate = useNavigate();
+  // eslint-disable-next-line no-unused-vars
   const [_, userDispatch] = useContext(UserContext);
   const onSubmit = async (data) => {
     setBadLogin(false);

@@ -20,6 +20,7 @@ function RegisterForm() {
   } = useForm();
 
   const navigate = useNavigate();
+  // eslint-disable-next-line no-unused-vars
   const [userState, userDispatch] = useContext(UserContext);
   const onSubmit = async (data) => {
     fetch('/api/insert-user', {
