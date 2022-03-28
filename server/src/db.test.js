@@ -242,14 +242,13 @@ test('get groups of size', () => {
   db.insertGroup(1, 'B');
 
   db.addUserToGroup(0, 'per');
+  db.addUserToGroup(0, 'henrik');
   db.addUserToGroup(1, 'per');
 
-  db.addUserToGroup(0, 'henrik');
-
-  expect(db.getGroupsOfSize(1)).toEqual([
+  expect(db.getGroupsOfSize(1, 1)).toEqual([
     {groupId: 1},
   ]);
-  expect(db.getGroupsOfSize(2)).toEqual([
+  expect(db.getGroupsOfSize(2, 2)).toEqual([
     {groupId: 0},
   ]);
 });
@@ -275,27 +274,6 @@ test('get groups of with average age between given age', () => {
       groupId: 1,
       groupId: 0,
     },
-  ]);
-});
-
-
-test('get groups of size', () => {
-  db.insertUser('henrik', 'henrik123', 20);
-  db.insertUser('per', 'passord123', 21);
-
-  db.insertGroup(0, 'A');
-  db.insertGroup(1, 'B');
-
-  db.addUserToGroup(0, 'per');
-  db.addUserToGroup(1, 'per');
-
-  db.addUserToGroup(0, 'henrik');
-
-  expect(db.getGroupsOfSize(1)).toEqual([
-    {groupId: 1},
-  ]);
-  expect(db.getGroupsOfSize(2)).toEqual([
-    {groupId: 0},
   ]);
 });
 
