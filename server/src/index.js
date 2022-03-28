@@ -163,7 +163,7 @@ server.put('/api/get-group-invitations', (request, result) => {
 });
 
 server.put('/api/update-group-attributes', (request, result) => {
-  db.updateGroupAttributes(request.body.groupId, request.body.name, 
+  db.updateGroupAttributes(request.body.groupId, request.body.name,
       request.body.description, request.body.location, request.body.image);
 
   const interests = db.getGroupInterests(request.body.groupId);

@@ -1,8 +1,8 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {useForm, Controller} from 'react-hook-form';
-import {Card, Button, Stack, TextField, Alert, FormControl, InputLabel
-  , Select, MenuItem, Autocomplete, createFilterOptions} from '@mui/material';
+import {useForm} from 'react-hook-form';
+import {Card, Button, Stack, TextField, Alert,
+  Autocomplete, createFilterOptions} from '@mui/material';
 
 /**
  * Form to edit an existing group.
@@ -12,7 +12,7 @@ import {Card, Button, Stack, TextField, Alert, FormControl, InputLabel
 export default function EditGroupForm() {
   const {groupId} = useParams();
   const [badRequest, setBadRequest] = useState(false);
-  const {register, formState: {errors}, handleSubmit, control} = useForm();
+  const {register, formState: {errors}, handleSubmit} = useForm();
   const [interests, setInterests] = useState([]);
   const navigate = useNavigate();
   const filter = createFilterOptions();

@@ -225,15 +225,15 @@ export default function ExplorePage() {
                 </Button>
 
               </Box>
-              
-              { group.image && 
+
+              { group.image &&
                 <CardMedia
-                component="img"
-                sx={{width: 160}}
-                image={group.image}
-                alt="Group image"
-                style={{marginLeft: 'auto'}}
-              />
+                  component="img"
+                  sx={{width: 160}}
+                  image={group.image}
+                  alt="Group image"
+                  style={{marginLeft: 'auto'}}
+                />
               }
 
             </Card>
