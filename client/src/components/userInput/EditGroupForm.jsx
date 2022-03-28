@@ -3,7 +3,6 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {useForm, Controller} from 'react-hook-form';
 import {Card, Button, Stack, TextField, Alert, FormControl, InputLabel
   , Select, MenuItem, Autocomplete, createFilterOptions} from '@mui/material';
-import {UserContext} from '../../contexts/User';
 
 /**
  * Form to edit an existing group.
@@ -14,8 +13,6 @@ export default function EditGroupForm() {
   const {groupId} = useParams();
   const [badRequest, setBadRequest] = useState(false);
   const {register, formState: {errors}, handleSubmit, control} = useForm();
-  // eslint-disable-next-line no-unused-vars
-  const [userState, _] = useContext(UserContext);
   const [interests, setInterests] = useState([]);
   const navigate = useNavigate();
   const filter = createFilterOptions();
@@ -65,7 +62,7 @@ export default function EditGroupForm() {
         navigate('/group/' + data.groupId);
       } else {
         setBadRequest(true);
-        console.log('Could not register group!'); // TODO
+        console.log('Could not register group!');
         const errorMessage = await (res.json());
         console.log(errorMessage);
         alert(errorMessage);

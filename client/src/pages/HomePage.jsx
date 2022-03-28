@@ -152,32 +152,6 @@ function HomePage() {
           </Grid>
         </Card>
 
-        {/*
-        <h2>Interests</h2>
-        <Card sx={{padding: '2rem'}} variant="outlined">
-          <Grid
-            container
-            spacing={{xs: 2, md: 3}}
-            columns={{xs: 4, sm: 8, md: 12}}
-          >
-          </Grid>
-
-          <Stack
-            sx={{padding: '1rem'}}
-            spacing={2}
-            direction="row"
-            justifyContent="flex-end"
-            alignItems="center"
-          >
-            <Button
-              variant="contained"
-            >
-              Add interest
-            </Button>
-          </Stack>
-        </Card> */}
-
-
         <h2>Groups</h2>
         <Card sx={{padding: '2rem'}} variant="outlined">
           <Grid
@@ -225,27 +199,9 @@ function HomePage() {
             </Button>
           </Stack>
         </Card>
-
-        {/*
-        <h2>Feed</h2>
-        <Card sx={{padding: '2rem'}} variant="outlined">
-          <Grid
-            container
-            spacing={{xs: 2, md: 3}}
-            columns={{xs: 4, sm: 8, md: 12}}
-          >
-          </Grid>
-        </Card> */}
-
       </Stack>
     </Container>;
   }
 }
 
 export default HomePage;
-
-/**
- * TODO:
- * Legge til "pending invites" oversikt
- *
- */
