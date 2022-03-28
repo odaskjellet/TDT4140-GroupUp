@@ -1,30 +1,33 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
-  Container,
-  Stack,
-  Card,
-  Grid,
+  Alert,
+  Box,
   Button,
+  Card,
+  CardMedia,
+  Chip,
+  Container,
   Dialog,
   DialogTitle,
-  Select,
-  MenuItem,
   FormControl,
   InputLabel,
-  Snackbar,
-  Alert,
   List,
   ListItem,
   ListItemText,
-  Chip,
-  Box,
-  CardMedia
-}
-  from '@mui/material';
+  MenuItem,
+  Select,
+  Snackbar,
+  Stack,
+} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../contexts/User';
 import FilterMenu from '../components/userInput/FilterMenu';
 
+/**
+ * returns a page used to explore other groups.
+ * @return {JSX.Element}
+ * @constructor
+ */
 export default function ExplorePage() {
   const navigate = useNavigate();
   const [allGroups, setAllGroups] = useState([]);
@@ -32,6 +35,7 @@ export default function ExplorePage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedGroupA, setSelectedGroupA] = useState({});
   const [selectedGroupBId, setSelectedGroupBId] = useState('');
+  // eslint-disable-next-line no-unused-vars
   const [userState, _] = useContext(UserContext);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [incompleteMatches, setIncompleteMatches] = useState([]);
@@ -97,7 +101,7 @@ export default function ExplorePage() {
   const onSelect = async (e) => {
     setSelectedGroupBId(e.target.value);
     await getGroupMembership(e.target.value);
-  }
+  };
 
   const getGroupMembership = async (groupId) => {
     fetch('/api/get-group-membership', {
@@ -105,9 +109,9 @@ export default function ExplorePage() {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({groupId: groupId}),
     }).then((res) => res.json())
-      .then((result) => {
-        setGroupMembership(result.membership);
-    });
+        .then((result) => {
+          setGroupMembership(result.membership);
+        });
   };
 
   const handleSnackbarClose = (event, reason) => {
@@ -125,9 +129,9 @@ export default function ExplorePage() {
         groupId: groupId,
       }),
     }).then((res) => res.json()).
-    then((result) => {
-      setInterests(result);
-    });
+        then((result) => {
+          setInterests(result);
+        });
   };
 
   const fetchGroupMembers = async (groupId) => {
@@ -156,23 +160,28 @@ export default function ExplorePage() {
 
 
   const setAndOpenGroupDialog = (groupId) => {
-    fetchGroupInterest(groupId)
+    fetchGroupInterest(groupId);
     fetchGroupInfo(groupId);
     fetchGroupMembers(groupId);
     setGroupDialogOpen(true);
-    
-  }
+  };
 
+  /**
+   * set groups according to data.
+   // eslint-disable-next-line valid-jsdoc
+   * @param data
+   */
   function filterCallback(data) {
     setAllGroups(data);
   }
 
-  let matchExists = Boolean(incompleteMatches.some((e) => e.groupId === selectedGroupBId))
+  const matchExists = Boolean(incompleteMatches.some((e) =>
+    e.groupId === selectedGroupBId));
 
-  let superLikeButtonStyle = (!matchExists && groupMembership === 'gold')
-    ? {backgroundColor: 'gold', color: 'black'}
-    : {}
-  
+  const superLikeButtonStyle = (!matchExists && groupMembership === 'gold') ?
+    {backgroundColor: 'gold', color: 'black'} :
+    {};
+
   return (
     <Container>
       <br />
@@ -186,92 +195,95 @@ export default function ExplorePage() {
       <h1>Explore groups</h1>
       <p>Find the perfect match.</p>
       <div
-      style={{width:"20%",height:"46%",display:"table",float:"left",position:"sticky",}}>
+        style={{width: '20%', height: '46%', display: 'table', float: 'left',
+          position: 'sticky'}}>
         <FilterMenu filterCallback={filterCallback} />
       </div>
       <div
-      style={{width:"75%",display:"table", float:"right"}}>
-      <Stack spacing={2}>
-        {Array.from(allGroups).map((group) => (
+        style={{width: '75%', display: 'table', float: 'right'}}>
+        <Stack spacing={2}>
+          {Array.from(allGroups).map((group) => (
             <Card sx = {{display: 'flex'}} key={group.groupId}>
-            <Box sx={{padding: '2rem'}}>
+              <Box sx={{padding: '2rem'}}>
                 <h2>{group.name}</h2>
                 <Button
-                    variant='contained'
-                    onClick={() => {
-                      setSelectedGroupA(group);
-                      setSelectedGroupBId('');
-                      setGroupMembership('standard');
-                      fetchIncompleteMatches(group.groupId);
-                      setDialogOpen(true);
-                    }}
+                  variant='contained'
+                  onClick={() => {
+                    setSelectedGroupA(group);
+                    setSelectedGroupBId('');
+                    setGroupMembership('standard');
+                    fetchIncompleteMatches(group.groupId);
+                    setDialogOpen(true);
+                  }}
                 >
                   Match
                 </Button>
                 <Button
-                    onClick={() => setAndOpenGroupDialog(group.groupId)}
+                  onClick={() => setAndOpenGroupDialog(group.groupId)}
                 >
                   Group info
                 </Button>
 
-            </Box>
+              </Box>
 
-            <CardMedia
+              <CardMedia
                 component="img"
-                sx={{ width: 151 }}
+                sx={{width: 151}}
                 image={group.image}
                 alt="Live from space album cover"
                 style={{marginLeft: 'auto'}}
-            />
+              />
 
-          </Card>
+            </Card>
 
-        ))}
-      </Stack>
+          ))}
+        </Stack>
       </div>
 
-      <Dialog style={{minHeight: '100%', maxHeight: '100%'}}    onClose={() => groupDialogOpen(false)} open={groupDialogOpen}>
-      <Container sx={{padding: '1rem'}} >
-        {/* <p>Image link: {groupInfo.image}</p> */}
-        <img src={groupInfo.image} alt="" style={{borderRadius: '15px' , display: 'block', marginLeft: 'auto', marginRight: 'auto', width: '80%',}}/>
+      <Dialog style={{minHeight: '100%', maxHeight: '100%'}} onClose={() =>
+        setGroupDialogOpen(false)} open={groupDialogOpen}>
+        <Container sx={{padding: '1rem'}} >
+          {/* <p>Image link: {groupInfo.image}</p> */}
+          <img src={groupInfo.image} alt="" style={{borderRadius: '15px',
+            display: 'block', marginLeft: 'auto',
+            marginRight: 'auto', width: '80%'}}/>
 
-        <DialogTitle style={{textAlign: 'center',
-          position: 'relative',
-          textTransform: 'uppercase',}}>{groupInfo.name}</DialogTitle>
+          <DialogTitle style={{textAlign: 'center',
+            position: 'relative',
+            textTransform: 'uppercase'}}>{groupInfo.name}</DialogTitle>
 
-        <p id={"group-admin"}>Admin: {groupInfo.admin} </p>
-        <p id={"group-location"}>Location: {groupInfo.location}</p>
-        <p id={"group-description"}>Description: {groupInfo.description} </p>
+          <p id={'group-admin'}>Admin: {groupInfo.admin} </p>
+          <p id={'group-location'}>Location: {groupInfo.location}</p>
+          <p id={'group-description'}>Description: {groupInfo.description} </p>
 
-        <p>Members: </p>
-        <List style={{maxHeight: 150, overflow: 'auto',}}>
-          {Array.from(groupMembers).map((user) =>
-            <ListItem
-              key={user.username}
-              value={user.username}>
-              <ListItemText primary={user.username}></ListItemText>
-          </ListItem>)
-        }
-      </List>
-        <p>Interests: </p>
-        {interests.map((interest) => (
-            <Chip sx={{margin: '0.5rem'}} color='primary' label={interest.interest}/>
-        ))}
- 
-        <Box textAlign='center'>
-          <Button
-            sx={{margin: '1rem'}}
-            variant='outlined'
-            onClick={() => setGroupDialogOpen(false)}
-          >
+          <p>Members: </p>
+          <List style={{maxHeight: 150, overflow: 'auto'}}>
+            {Array.from(groupMembers).map((user) =>
+              <ListItem
+                key={user.username}
+                value={user.username}>
+                <ListItemText primary={user.username}/>
+              </ListItem>)
+            }
+          </List>
+          <p>Interests: </p>
+          {interests.map((interest) => (
+            // eslint-disable-next-line react/jsx-key
+            <Chip sx={{margin: '0.5rem'}} color='primary'
+              label={interest.interest}/>
+          ))}
+
+          <Box textAlign='center'>
+            <Button
+              sx={{margin: '1rem'}}
+              variant='outlined'
+              onClick={() => setGroupDialogOpen(false)}
+            >
               Close
-          </Button>
-        </Box>
-      </Container>
-    </Dialog>
-
-
-
+            </Button>
+          </Box>
+        </Container>
+      </Dialog>
 
 
       <Dialog onClose={() => setDialogOpen(false)} open={dialogOpen}>
@@ -292,7 +304,8 @@ export default function ExplorePage() {
             </Stack>
           </div>}
           {Boolean(myGroups.length) && <div>
-            <p>What group do you want to match <b>{selectedGroupA.name}</b> with?</p>
+            <p>What group do you want to match <b>
+              {selectedGroupA.name}</b> with?</p>
             <br />
             <FormControl fullWidth>
               <InputLabel id="group-select-label">Group</InputLabel>
@@ -333,16 +346,16 @@ export default function ExplorePage() {
                 disabled={matchExists || groupMembership !== 'gold'}
                 style={superLikeButtonStyle}
                 onClick={() => {
-                  createMatch("true");
+                  createMatch('true');
                   setDialogOpen(false);
                 }}>
-                  <span>Super Like!</span>
+                <span>Super Like!</span>
               </Button>
               <Button
                 variant='contained'
                 disabled={matchExists || selectedGroupBId === '' }
                 onClick={() => {
-                  createMatch("false");
+                  createMatch('false');
                   setDialogOpen(false);
                 }}
               >
@@ -363,7 +376,8 @@ export default function ExplorePage() {
         autoHideDuration={4000}
         onClose={handleSnackbarClose}
       >
-        <Alert onClose={handleSnackbarClose} severity="success" sx={{width: '100%'}}>
+        <Alert onClose={handleSnackbarClose}
+          severity="success" sx={{width: '100%'}}>
           Match initiated!
         </Alert>
       </Snackbar>

@@ -1,16 +1,16 @@
 import React from 'react';
-import {useContext} from 'react';
-import {useNavigate} from 'react-router-dom';
-import MyProfileDescription
-  from '../components/myProfileComponents/MyProfileDescription';
-import MyProfilePicture
-  from '../components/myProfileComponents/MyProfilePicture';
-import Settings from '../components/myProfileComponents/Settings';
-import {UserContext} from '../contexts/User';
+import MyProfileDescription from
+  '../components/myProfileComponents/MyProfileDescription';
+import MyProfilePicture from
+  '../components/myProfileComponents/MyProfilePicture';
+import Settings from
+  '../components/myProfileComponents/Settings';
 
 
 /**
  * A page for userprofile information.
+ * @return {JSX.Element}
+ * @constructor
  */
 function MyProfilePage() {
   return <section>

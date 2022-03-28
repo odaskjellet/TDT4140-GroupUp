@@ -15,6 +15,7 @@ export const UserContext = React.createContext({
   dispatch: () => null,
 });
 
+// eslint-disable-next-line react/prop-types
 export const UserProvider = ({children}) => {
   const reducer = (state, action) => {
     let newState;
@@ -41,10 +42,9 @@ export const UserProvider = ({children}) => {
   };
 
   const [state, dispatch] = React.useReducer(reducer, initialState);
-
   return (
     <UserContext.Provider value={[state, dispatch]}>
-    	{ children }
+      {children}
     </UserContext.Provider>
   );
 };

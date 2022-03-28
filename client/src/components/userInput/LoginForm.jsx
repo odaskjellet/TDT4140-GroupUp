@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../../contexts/User';
-import {useContext} from 'react';
 import {Alert, Button, Card, Stack, TextField} from '@mui/material';
 
 /**
@@ -14,6 +13,7 @@ function LoginForm() {
   const [badLogin, setBadLogin] = useState(false);
   const {register, formState: {errors}, handleSubmit} = useForm();
   const navigate = useNavigate();
+  // eslint-disable-next-line no-unused-vars
   const [_, userDispatch] = useContext(UserContext);
   const onSubmit = async (data) => {
     setBadLogin(false);

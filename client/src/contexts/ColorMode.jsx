@@ -5,10 +5,11 @@ export const ColorModeContext = React.createContext(
     {toggleColorMode: () => {}},
 );
 
+// eslint-disable-next-line react/prop-types
 export const ColorModeProvider = ({children}) => {
   const storedMode = localStorage.getItem('colormode');
   const [mode, setMode] = React.useState(
-      storedMode == 'null' ? '' : storedMode);
+      storedMode === 'null' ? '' : storedMode);
   const colorMode = React.useMemo(
       () => ({
         toggleColorMode: () => {

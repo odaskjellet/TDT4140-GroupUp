@@ -69,20 +69,21 @@ describe('api', () => {
     expect(result.status).to.equal(400);
   });
 
-  it('should not be able to insert a user with invalid email-address', async () => {
-    const requestOptions = {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        username: 'elskersurdeit',
-        password: 'glutenerfett',
-        age: '29',
-        email: 'v@g.com',
-      }),
-    };
-    const result = await fetch('/api/insert-user', requestOptions);
-    expect(result.status).to.equal(400);
-  });
+  it('should not be able to insert a user with invalid email-address'
+      , async () => {
+        const requestOptions = {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            username: 'elskersurdeit',
+            password: 'glutenerfett',
+            age: '29',
+            email: 'v@g.com',
+          }),
+        };
+        const result = await fetch('/api/insert-user', requestOptions);
+        expect(result.status).to.equal(400);
+      });
 
   it('should be able to log in', async () => {
     const requestOptions = {
@@ -237,7 +238,7 @@ describe('api', () => {
       body: JSON.stringify({
         groupId: 'g1',
       }),
-    }).then(res => res.json());
+    }).then((res) => res.json());
 
     expect(result).to.deep.equal([{interest: 'chess'}]);
 
@@ -256,74 +257,73 @@ describe('api', () => {
       body: JSON.stringify({
         groupId: 'g1',
       }),
-    }).then(res => res.json());
+    }).then((res) => res.json());
 
     expect(result2).to.deep.equal([]);
-
-  });
- 
-  it('should be able to superlike groups, and get superlikes for a given group', async () => {
-    await fetch('/api/match-groups', {
-      method: 'PUT',
-      headers: {'Content-type': 'application/json'},
-      body: JSON.stringify({
-        primaryId: 'g1',
-        secondaryId: 'g2',
-        isSuperLike: 'true'
-      })
-    });
-
-    const result = await fetch('/api/get-group-superlikes', {
-      method: 'PUT',
-      headers: {'Content-type': 'application/json'},
-      body: JSON.stringify({
-        groupId: 'g1'
-      })
-    }).then(res => res.json());
-    expect(result).to.deep.equal([{groupId: 'g2', name: 'Gruppe'}]);
   });
 
-  it('should be able to dowgrade the super like to a regular like', async () => {
-    await fetch('/api/downgrade-superlike', {
-      method: 'PUT',
-      headers: {'Content-type': 'application/json'},
-      body: JSON.stringify({
-        primaryId: 'g1',
-        secondaryId: 'g2'
-      })
-    });
+  it('should be able to superlike groups, and get superlikes for a given group'
+      , async () => {
+        await fetch('/api/match-groups', {
+          method: 'PUT',
+          headers: {'Content-type': 'application/json'},
+          body: JSON.stringify({
+            primaryId: 'g1',
+            secondaryId: 'g2',
+            isSuperLike: 'true',
+          }),
+        });
 
-    const result = await fetch('/api/get-group-superlikes', {
-      method: 'PUT',
-      headers: {'Content-type': 'application/json'},
-      body: JSON.stringify({
-        groupId: 'g1'
-      })
-    }).then(res => res.json());
-      expect(result).to.deep.equal([]);
-    });
+        const result = await fetch('/api/get-group-superlikes', {
+          method: 'PUT',
+          headers: {'Content-type': 'application/json'},
+          body: JSON.stringify({
+            groupId: 'g1',
+          }),
+        }).then((res) => res.json());
+        expect(result).to.deep.equal([{groupId: 'g2', name: 'Gruppe'}]);
+      });
 
-  
+  it('should be able to dowgrade the super like to a regular like'
+      , async () => {
+        await fetch('/api/downgrade-superlike', {
+          method: 'PUT',
+          headers: {'Content-type': 'application/json'},
+          body: JSON.stringify({
+            primaryId: 'g1',
+            secondaryId: 'g2',
+          }),
+        });
+
+        const result = await fetch('/api/get-group-superlikes', {
+          method: 'PUT',
+          headers: {'Content-type': 'application/json'},
+          body: JSON.stringify({
+            groupId: 'g1',
+          }),
+        }).then((res) => res.json());
+        expect(result).to.deep.equal([]);
+      });
+
+
   it('should be able to match groups', async () => {
-    
     await fetch('/api/match-groups', {
       method: 'PUT',
       headers: {'Content-type': 'application/json'},
       body: JSON.stringify({
         primaryId: 'g2',
-        secondaryId: 'g1'
-      })
+        secondaryId: 'g1',
+      }),
     });
-    
+
 
     const result = await fetch('/api/get-group-matches', {
       method: 'PUT',
       headers: {'Content-type': 'application/json'},
       body: JSON.stringify({
-        groupId: 'g1'
-      })
-    }).then(res => res.json());
+        groupId: 'g1',
+      }),
+    }).then((res) => res.json());
     expect(result).to.deep.equal([{groupId: 'g2', name: 'Gruppe'}]);
   });
-
 });

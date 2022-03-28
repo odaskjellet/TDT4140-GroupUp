@@ -1,7 +1,7 @@
-import React from 'react';
-import {useContext, useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../contexts/User';
+
 
 /**
  * The index page, which redirects to either /login or /home
@@ -9,7 +9,7 @@ import {UserContext} from '../contexts/User';
  * @constructor
  */
 function IndexPage() {
-  const [userState, _] = useContext(UserContext);
+  const [userState] = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {

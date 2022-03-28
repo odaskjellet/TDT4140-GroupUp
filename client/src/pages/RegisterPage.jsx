@@ -2,6 +2,7 @@ import React from 'react';
 import {Container} from '@mui/material';
 import RegisterForm from '../components/userInput/RegisterForm';
 
+
 /**
  * A page for user registration.
  * @return {JSX.Element}

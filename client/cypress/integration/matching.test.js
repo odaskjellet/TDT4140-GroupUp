@@ -77,7 +77,8 @@ describe('Matching Page', () => {
     cy.findByText('GruppeB').parent().findByText('Match').click();
     cy.get('#group-select').click();
     cy.get('.MuiList-root').findByText('GruppeA').click();
-    cy.get('.MuiButton-root').contains(/Match already initiated/i).parent().should('be.disabled');
+    cy.get('.MuiButton-root').contains(/Match already initiated/i)
+        .parent().should('be.disabled');
 
     cy.get('.MuiButton-root').contains(/Cancel/i).click()
         .then(() => {

@@ -1,6 +1,5 @@
-import React from 'react';
-import {Container, Stack, Card, Avatar, Grid, Button} from '@mui/material';
-import {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
+import {Avatar, Button, Card, Container, Grid, Stack} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../contexts/User';
 import AddIcon from '@mui/icons-material/Add';
@@ -86,7 +85,7 @@ function HomePage() {
 
   if (!userState.verified) {
     navigate('/');
-    return <div></div>;
+    return <div/>;
   } else {
     return <Container>
       <Stack spacing={2}>
@@ -188,7 +187,8 @@ function HomePage() {
           >
             {Array.from(groups).map((group) =>
               <Grid item xs={2} sm={4} md={4} key={group.groupId}>
-                <Card sx={{padding: '1rem', backgroundColor: group.membership}} elevation={3}>
+                <Card sx={{padding: '1rem',
+                  backgroundColor: group.membership}} elevation={3}>
                   <h1>{group.name}</h1>
                   <Button
                     onClick={() => navigate('/group/' + group.groupId)}

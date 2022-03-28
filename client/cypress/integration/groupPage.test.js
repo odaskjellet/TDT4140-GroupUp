@@ -1,10 +1,9 @@
 
 describe('Pop up match info', () => {
-
   it('should start empty, but with a user', async () => {
     await fetch('/api/debug/clear', {method: 'DELETE'});
     const result = await fetch('/api/get-users', {method: 'GET'})
-      .then((res) => res.json());
+        .then((res) => res.json());
 
     expect(result).to.be.empty;
 
@@ -21,7 +20,7 @@ describe('Pop up match info', () => {
 
     sessionStorage.setItem('user.verified', true);
     sessionStorage.setItem('user.username', 'henrik');
-  
+
     await fetch('/api/insert-group', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
@@ -32,7 +31,8 @@ describe('Pop up match info', () => {
         description: 'En fin gruppe.',
         location: 'Oslo',
         membership: 'standard',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/' +
+            'Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg',
         interests: ['Fishing', 'Golf'],
       }),
     });
@@ -47,7 +47,8 @@ describe('Pop up match info', () => {
         description: 'En fin gruppe.',
         location: 'Oslo',
         membership: 'standard',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/' +
+            'Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg',
         interests: ['Fishing', 'Golf'],
       }),
     });
@@ -69,7 +70,7 @@ describe('Pop up match info', () => {
         secondaryId: 'g2',
       }),
     });
-  })
+  });
 
 
   it('existing values should appear', () => {
@@ -80,8 +81,11 @@ describe('Pop up match info', () => {
     cy.contains(/Visit/i).click();
 
     cy.get('#group-admin', {timeout: 500}).should('be.visible');
-    cy.get('#group-admin', {timeout: 500}).invoke('text').should('eq', 'Admin: henrik ')
-    cy.get('#group-location').invoke('text').should('eq', 'Location: Oslo');
-    cy.get('#group-description').invoke('text').should('eq', 'Description: En fin gruppe. ');
-  })
-})
+    cy.get('#group-admin', {timeout: 500}).invoke('text')
+        .should('eq', 'Admin: henrik ');
+    cy.get('#group-location').invoke('text')
+        .should('eq', 'Location: Oslo');
+    cy.get('#group-description').invoke('text')
+        .should('eq', 'Description: En fin gruppe. ');
+  });
+});
