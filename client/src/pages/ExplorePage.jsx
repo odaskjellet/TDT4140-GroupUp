@@ -226,13 +226,15 @@ export default function ExplorePage() {
 
               </Box>
 
-              <CardMedia
-                component="img"
-                sx={{width: 151}}
-                image={group.image}
-                alt="Live from space album cover"
-                style={{marginLeft: 'auto'}}
-              />
+              { group.image &&
+                <CardMedia
+                  component="img"
+                  sx={{width: 160}}
+                  image={group.image}
+                  alt="Group image"
+                  style={{marginLeft: 'auto'}}
+                />
+              }
 
             </Card>
 

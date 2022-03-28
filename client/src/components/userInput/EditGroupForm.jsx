@@ -1,9 +1,8 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {useForm, Controller} from 'react-hook-form';
-import {Card, Button, Stack, TextField, Alert, FormControl, InputLabel
-  , Select, MenuItem, Autocomplete, createFilterOptions} from '@mui/material';
-import {UserContext} from '../../contexts/User';
+import {useForm} from 'react-hook-form';
+import {Card, Button, Stack, TextField, Alert,
+  Autocomplete, createFilterOptions} from '@mui/material';
 
 /**
  * Form to edit an existing group.
@@ -13,9 +12,7 @@ import {UserContext} from '../../contexts/User';
 export default function EditGroupForm() {
   const {groupId} = useParams();
   const [badRequest, setBadRequest] = useState(false);
-  const {register, formState: {errors}, handleSubmit, control} = useForm();
-  // eslint-disable-next-line no-unused-vars
-  const [userState, _] = useContext(UserContext);
+  const {register, formState: {errors}, handleSubmit} = useForm();
   const [interests, setInterests] = useState([]);
   const navigate = useNavigate();
   const filter = createFilterOptions();
@@ -65,7 +62,7 @@ export default function EditGroupForm() {
         navigate('/group/' + data.groupId);
       } else {
         setBadRequest(true);
-        console.log('Could not register group!'); // TODO
+        console.log('Could not register group!');
         const errorMessage = await (res.json());
         console.log(errorMessage);
         alert(errorMessage);
@@ -79,7 +76,9 @@ export default function EditGroupForm() {
     return (
       <Card elevation={5}>
         <form style={{padding: '2rem'}} onSubmit={handleSubmit(onSubmit)}>
+
           <h2>Edit group</h2>
+
           <div>
             <TextField
               required
@@ -109,27 +108,6 @@ export default function EditGroupForm() {
               {...register('description', {required: true})}
             />
           </div>
-
-          <div>
-            <FormControl fullWidth margin="normal" required>
-              <InputLabel id="member-label">Membership</InputLabel>
-              <Controller
-                name='membership'
-                inputProps={{'data-testid': 'membership-option'}}
-                labelId="membership-label"
-                label='membership'
-                defaultValue={groupInfo.membership}
-                control={control}
-                render={({field}) => (
-                  <Select {...field}>
-                    <MenuItem value={'standard'}>Standard</MenuItem>
-                    <MenuItem value={'Gold'}>Gold</MenuItem>
-                  </Select>
-                )}
-              />
-            </FormControl>
-          </div>
-
 
           <div>
             <TextField

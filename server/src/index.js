@@ -54,7 +54,6 @@ server.put('/api/try-login', (request, result) => {
 });
 
 server.put('/api/insert-group', (request, result) => {
-  console.log('\n\n\nBODY', request.body, '\n\n\n');
   if (validGroupName(request.body.name)) {
     db.insertGroup(request.body.groupId, request.body.name,
         request.body.admin, request.body.description, request.body.membership,
@@ -164,8 +163,8 @@ server.put('/api/get-group-invitations', (request, result) => {
 });
 
 server.put('/api/update-group-attributes', (request, result) => {
-  db.updateGroupAttributes(request.body.groupId, request.body.name
-      , request.body.description, request.body.location, request.body.image);
+  db.updateGroupAttributes(request.body.groupId, request.body.name,
+      request.body.description, request.body.location, request.body.image);
 
   const interests = db.getGroupInterests(request.body.groupId);
   interests.forEach((interest)=> {
@@ -346,7 +345,6 @@ function clearErrors(registrationErrors) {
  * @return {*} a new array
  */
 function filterGroups(data) {
-  console.log(data);
   const arrays = [db.getAllGroups()];
 
   if (data.interests !== undefined) {
